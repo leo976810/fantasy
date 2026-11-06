@@ -194,6 +194,7 @@ try { // league activity: adds/drops in the last 3 days
   const tr = await get(L + '?view=mTransactions2');
   const teamName = {}; meta.teams.forEach(t => teamName[t.id] = nm(t));
   const since = Date.now() - 3 * 86400000;
+  const cnt = {}; (tr.transactions || []).forEach(t => { const k = t.type + '/' + t.status + '/' + (t.processDate ? 'p' : '-') + (t.proposedDate ? 'q' : '-'); cnt[k] = (cnt[k] || 0) + 1; }); log.push('tx kinds ' + JSON.stringify(cnt) + ' keys ' + Object.keys((tr.transactions || [])[0] || {}).join(','));
   const tx = (tr.transactions || []).filter(t => t.status === 'EXECUTED' && (t.type === 'FREEAGENT' || t.type === 'WAIVER') && (t.processDate || t.proposedDate) >= since);
   const ids = new Set(); tx.forEach(t => (t.items || []).forEach(i => ids.add(i.playerId)));
   const known = {}; Object.values(RO).forEach(a => a.forEach(p => known[p.id] = p)); FAL.forEach(p => known[p.id] = p);
