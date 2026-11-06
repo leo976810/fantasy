@@ -376,9 +376,11 @@ function live(D) {
       var mm = opp[meId];
       if (mm && nm(mm.on) === D.matchup.opp) {
         D.matchup.meScore = rd(mm.s); D.matchup.oppScore = rd(mm.o);
-        var mp = null;
-        try { mp = j.settings.scheduleSettings.matchupPeriods[String(cur)]; } catch (e) {}
-        var base = mp && mp.length ? Math.min.apply(null, mp) : 14 + 7 * (cur - 4);
+        var base = 14 + 7 * (cur - 3);
+        try {
+          var ks = Object.keys(mm.g.home.pointsByScoringPeriod || {}).map(Number).filter(function (n) { return n >= base - 1; });
+          if (ks.length) base = Math.min.apply(null, ks);
+        } catch (e) {}
         var side = function (x) { return mm.side === 'home' ? mm.g.home : mm.g.away; };
         var other = mm.side === 'home' ? mm.g.away : mm.g.home;
         var pick = function (g) {

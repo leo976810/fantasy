@@ -19,8 +19,13 @@ const abbr = {}, games = {};
 cal.settings.proTeams.forEach(p => { abbr[p.id] = p.abbrev; games[p.id] = p.proGamesByScoringPeriod || {}; });
 const cur = meta.status.currentMatchupPeriod;
 const today = meta.scoringPeriodId;
-let mp = null; try { mp = meta.settings.scheduleSettings.matchupPeriods[String(cur)]; } catch (e) {}
-const base = mp && mp.length ? Math.min(...mp) : 14 + 7 * (cur - 4);
+// Matchup period 3 started on scoring period 14 (Mon 11/2); each matchup period is 7 scoring periods.
+let base = 14 + 7 * (cur - 3);
+try {
+  const g0 = meta.schedule.find(g => g.matchupPeriodId === cur && g.home && g.home.pointsByScoringPeriod);
+  const ks = Object.keys(g0.home.pointsByScoringPeriod).map(Number).filter(n => n >= base - 1);
+  if (ks.length) base = Math.min(...ks);
+} catch (e) {}
 const hasGame = (tid, sp) => (games[tid] && (games[tid][String(sp)] || []).length > 0) ? 1 : 0;
 const nextWeek = tid => { let n = 0; for (let i = 7; i < 14; i++) n += hasGame(tid, base + i); return n; };
 
