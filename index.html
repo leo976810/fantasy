@@ -1,72 +1,405 @@
-<!doctype html><html lang="zh-Hant"><head><title>AESPA 直連測試</title>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AESPA 日報</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
 <style>
-/* Layout: one narrow column, a status banner on top, then the raw proof underneath. */
+/* Layout: scoreboard, today-actions panel, then tabs (戰況 / 陣容與增補 / 消息 / 更新紀錄). */
 :root {
-  --bg: #f4f5f7; --fg: #14181f; --muted: #5b6573; --line: #d9dde3; --card: #ffffff;
-  --ok: #0f7a4a; --ok-soft: #dff3e8; --bad: #b3261e; --bad-soft: #fbe3e1; --wait: #8a6100; --wait-soft: #fbefc9;
-  --f-body: "Noto Sans TC", system-ui, sans-serif; --f-num: "Barlow Condensed", "Noto Sans TC", sans-serif;
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --surface-2: #e6eaf0;
+  --fg: #141d29;
+  --muted: #5b6676;
+  --line: #d3d9e2;
+  --accent: #2457f5;
+  --accent-soft: #dfe7ff;
+  --good: #14804a;
+  --good-soft: #d9f2e4;
+  --warn: #9a6200;
+  --warn-soft: #fbecc9;
+  --bad: #b3261e;
+  --bad-soft: #fadbd8;
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #12151b; --fg: #e8ebf0; --muted: #9aa4b2; --line: #2b323d; --card: #1a1f27;
-  --ok: #5fd39a; --ok-soft: #14301f; --bad: #ff8f86; --bad-soft: #3a1815; --wait: #f1c75b; --wait-soft: #33290d; color-scheme: dark; } }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f151e; --surface: #17202c; --surface-2: #202b3a; --fg: #e8edf4; --muted: #96a2b4; --line: #2b3748;
+    --accent: #7c9bff; --accent-soft: #1f2d5c; --good: #4cc98a; --good-soft: #14352a; --warn: #e5b34d; --warn-soft: #3a2d10; --bad: #ff8a80; --bad-soft: #3e1d1b;
+    color-scheme: dark;
+  }
+}
 :root[data-theme="dark"] {
-  --bg: #12151b; --fg: #e8ebf0; --muted: #9aa4b2; --line: #2b323d; --card: #1a1f27;
-  --ok: #5fd39a; --ok-soft: #14301f; --bad: #ff8f86; --bad-soft: #3a1815; --wait: #f1c75b; --wait-soft: #33290d; color-scheme: dark; }
-body { background: var(--bg); color: var(--fg); font-family: var(--f-body); padding-block: 24px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-main { max-width: 640px; margin: 0 auto; display: grid; gap: 14px; min-width: 0; }
-h1 { font-size: 22px; margin: 0; text-wrap: balance; }
-p { margin: 0; line-height: 1.6; color: var(--muted); font-size: 14px; }
-.banner { border-radius: 8px; padding: 14px 16px; font-weight: 700; font-size: 16px; background: var(--wait-soft); color: var(--wait); }
-.banner.ok { background: var(--ok-soft); color: var(--ok); }
-.banner.bad { background: var(--bad-soft); color: var(--bad); }
-.banner small { display: block; font-weight: 400; margin-top: 4px; font-size: 13px; line-height: 1.5; word-break: break-word; }
-.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
-table { border-collapse: collapse; width: 100%; font-size: 14px; }
-th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
-th { color: var(--muted); font-weight: 500; font-size: 12px; letter-spacing: .04em; }
-td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
-td.n { font-family: var(--f-num); font-size: 18px; }
-button { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; justify-self: start; }
-button:focus-visible { outline: 2px solid var(--ok); outline-offset: 2px; }
-</style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+  --bg: #0f151e; --surface: #17202c; --surface-2: #202b3a; --fg: #e8edf4; --muted: #96a2b4; --line: #2b3748;
+  --accent: #7c9bff; --accent-soft: #1f2d5c; --good: #4cc98a; --good-soft: #14352a; --warn: #e5b34d; --warn-soft: #3a2d10; --bad: #ff8a80; --bad-soft: #3e1d1b;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+.num { font-family: var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+.label { font-size: 12px; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; }
 
-</head><body><main>
-  <h1>AESPA 直連測試</h1>
-  <p>這一頁在你的瀏覽器裡直接讀 ESPN 公開聯盟資料,不經過我、也不用你登入。下面顯示讀得到還是被擋。</p>
-  <div id="banner" class="banner">讀取中…</div>
-  <div class="scroll"><table><thead><tr><th>隊伍</th><th class="n">戰績</th><th class="n">總得分</th></tr></thead><tbody id="rows"><tr><td colspan="3">尚無資料</td></tr></tbody></table></div>
-  <button id="again" type="button">重新讀取</button>
-  <p id="note"></p>
-</main>
+/* scoreboard */
+.board { background: var(--fg); color: var(--bg); border-radius: 10px; padding: 18px 22px; display: grid; grid-template-columns: 1fr auto; gap: 16px 28px; align-items: center; }
+.board .top { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+.board h1 { font-family: var(--font-display); font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: 0.02em; }
+.board .sub { font-size: 13px; opacity: 0.75; }
+.score { display: flex; align-items: center; gap: 18px; }
+.team { text-align: center; min-width: 0; }
+.team .pts { font-size: 52px; font-weight: 700; line-height: 1; }
+.team .nm { font-size: 13px; opacity: 0.8; }
+.vs { font-family: var(--font-display); font-size: 18px; opacity: 0.6; }
+.lead { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; border-top: 1px solid rgba(128,140,160,0.35); padding-top: 12px; }
+.lead b { font-family: var(--font-display); font-size: 17px; letter-spacing: 0.02em; }
+
+/* desk */
+.desk { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.panel h2 { font-size: 17px; font-weight: 700; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.panel h2 .label { font-weight: 400; }
+.note { color: var(--muted); font-size: 13px; margin: 0; }
+.callout { background: var(--warn-soft); color: var(--fg); border-radius: 6px; padding: 10px 12px; font-size: 13.5px; }
+
+.games { display: flex; flex-wrap: wrap; gap: 8px; }
+.game { background: var(--surface-2); border-radius: 6px; padding: 8px 12px; font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: 0.02em; }
+.game small { font-family: var(--font-body); font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 6px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.scroll { overflow-x: auto; }
+th { text-align: left; font-size: 11.5px; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.name { font-weight: 500; white-space: nowrap; }
+td.name small { color: var(--muted); font-weight: 400; margin-left: 6px; }
+.fp { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+
+.chip { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px; font-weight: 500; white-space: nowrap; }
+.c-core { background: var(--accent-soft); color: var(--accent); }
+.c-ok { background: var(--good-soft); color: var(--good); }
+.c-watch { background: var(--warn-soft); color: var(--warn); }
+.c-drop { background: var(--bad-soft); color: var(--bad); }
+.c-ir { background: var(--surface-2); color: var(--muted); }
+.days { display: inline-flex; gap: 3px; }
+.d { width: 24px; text-align: center; font-size: 11px; border-radius: 4px; padding: 1px 0; background: var(--surface-2); color: var(--muted); }
+.d.on { background: var(--accent); color: var(--surface); font-weight: 700; }
+.up { color: var(--good); } .down { color: var(--bad); }
+
+ul.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+ul.list li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; }
+.tag { font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 4px; white-space: nowrap; }
+.t-out { background: var(--bad-soft); color: var(--bad); }
+.t-dtd { background: var(--warn-soft); color: var(--warn); }
+.t-ok { background: var(--good-soft); color: var(--good); }
+.who { font-weight: 700; }
+
+.pick { border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 4px; }
+.pick.first { border-color: var(--accent); background: var(--accent-soft); }
+.pick .hd { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.pick .hd b { font-size: 16px; }
+.picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.stat { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.foot { color: var(--muted); font-size: 12.5px; display: flex; flex-direction: column; gap: 4px; }
+.sched { display: flex; flex-wrap: wrap; gap: 6px; }
+.sched span { background: var(--surface-2); border-radius: 4px; padding: 1px 8px; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.row-lbl { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 860px) {
+  .desk { grid-template-columns: minmax(0, 1fr); }
+  .board { grid-template-columns: 1fr; }
+  .team .pts { font-size: 44px; }
+}
+
+.sched span.hl { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.ret { font-family: var(--font-display); font-size: 16px; font-weight: 600; white-space: nowrap; }
+ul.list.inj li { grid-template-columns: auto 1fr auto; }
+@media (max-width: 520px) { ul.list.inj li { grid-template-columns: auto 1fr; } ul.list.inj li .ret { grid-column: 2; } }
+.src a { color: var(--accent); font-weight: 600; text-decoration: none; }
+.src a:hover { text-decoration: underline; }
+.src small { color: var(--muted); }
+table.mx td.hi { color: var(--accent); font-weight: 700; }
+
+.pane { display: flex; flex-direction: column; gap: 20px; }
+.pane[hidden] { display: none; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.tabs button { font: inherit; font-weight: 700; font-size: 14px; background: none; color: var(--muted); border: 0; border-bottom: 3px solid transparent; padding: 8px 14px; cursor: pointer; }
+.tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.todo { border-color: var(--accent); }
+.todo ol { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; counter-reset: n; }
+.todo li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; }
+.todo li b { display: block; font-size: 15px; }
+.todo li span.d2 { color: var(--muted); font-size: 13px; }
+.muted { color: var(--muted); font-weight: 400; }
+.pc { color: var(--muted); font-size: 11px; font-weight: 400; }
+.small, table.small { font-size: 12px; }
+table.small td, table.small th { padding: 4px 8px; }
+.row-lbl.small { margin-top: 6px; color: var(--muted); }
+.tm { border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 6px; }
+.tm .hd { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.tm .hd b { font-size: 16px; }
+.tm p { margin: 0; font-size: 13.5px; }
+.tm .lbl { color: var(--muted); font-size: 12px; margin-right: 6px; }
+.tms { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; }
+td .chip { white-space: normal; display: inline-block; border-radius: 6px; line-height: 1.4; }
+details.tm > summary { cursor: pointer; list-style: none; display: grid; gap: 6px; }
+details.tm > summary::-webkit-details-marker { display: none; }
+details.tm > summary .more { color: var(--accent); font-size: 12.5px; font-weight: 700; }
+details.tm[open] > summary .more::after { content: ' ▲'; }
+details.tm:not([open]) > summary .more::after { content: ' ▼'; }
+details.tm .body { display: grid; gap: 8px; margin-top: 8px; }
+.tms.one { grid-template-columns: minmax(0, 1fr); }
+</style>
+
+</head><body>
+<div class="wrap" id="app">
+  <header class="board">
+    <div>
+      <div class="top"><h1>AESPA 日報</h1><span class="sub" id="asof"></span></div>
+      <div class="sub" id="leagueline"></div>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="lead" id="lead"></div>
+  </header>
+
+  <section class="panel todo" id="todo"></section>
+
+  <nav class="tabs" role="tablist" aria-label="日報分頁">
+    <button role="tab" data-tab="war" aria-selected="true">戰況</button>
+    <button role="tab" data-tab="team" aria-selected="false">陣容與增補</button>
+    <button role="tab" data-tab="league" aria-selected="false">聯盟成員</button>
+    <button role="tab" data-tab="news" aria-selected="false">消息</button>
+    <button role="tab" data-tab="log" aria-selected="false">更新紀錄</button>
+  </nav>
+
+  <div class="pane" id="pane-war">
+    <section class="panel" id="mdays"></section>
+    <section class="panel" id="recap"></section>
+    <section class="panel" id="sched"></section>
+  </div>
+  <div class="pane" id="pane-team" hidden>
+    <section class="panel" id="roster"></section>
+    <section class="panel" id="picks"></section>
+    <section class="panel" id="stream"></section>
+    <section class="panel" id="sleep"></section>
+  </div>
+  <div class="pane" id="pane-league" hidden>
+    <section class="panel" id="league"></section>
+  </div>
+  <div class="pane" id="pane-news" hidden>
+    <section class="panel" id="inj"></section>
+    <section class="panel" id="threads"></section>
+  </div>
+  <div class="pane" id="pane-log" hidden>
+    <section class="panel" id="chg"></section>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
 
 <script>
-(function () {
-  var URL_ = 'https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/406470928?view=mTeam';
-  var b = document.getElementById('banner'), rows = document.getElementById('rows'), note = document.getElementById('note');
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function run() {
-    b.className = 'banner'; b.textContent = '讀取中…'; note.textContent = '';
-    fetch(URL_, { credentials: 'omit' }).then(function (r) {
-      if (!r.ok) throw new Error('ESPN 回應 HTTP ' + r.status + (r.status === 401 ? '(聯盟還不是公開,或需要登入)' : ''));
-      return r.json();
-    }).then(function (d) {
-      var t = (d.teams || []).slice().sort(function (x, y) { return y.record.overall.wins - x.record.overall.wins || y.record.overall.pointsFor - x.record.overall.pointsFor; });
-      if (!t.length) throw new Error('有回應,但沒有球隊資料');
-      b.className = 'banner ok'; b.innerHTML = '可以直連<small>讀到 ' + t.length + ' 隊,資料時間 ' + new Date().toLocaleString('zh-TW') + '</small>';
-      rows.innerHTML = t.map(function (x) {
-        var o = x.record.overall;
-        return '<tr><td>' + esc(x.name || ((x.location || '') + ' ' + (x.nickname || ''))) + '</td><td class="n">' + o.wins + '-' + o.losses + '</td><td class="n">' + Math.round(o.pointsFor) + '</td></tr>';
-      }).join('');
-    }).catch(function (e) {
-      b.className = 'banner bad'; b.innerHTML = '讀不到<small>' + esc(e && e.message ? e.message : e) + '</small>';
-      note.textContent = '如果訊息是 Failed to fetch,通常是頁面的安全規則不允許連到 ESPN,或 ESPN 沒有開放跨網站讀取。';
+
+function render(D) {
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var f1 = function (v) { return v == null ? '—' : Number(v).toFixed(1); };
+
+  $('asof').textContent = '資料截至 ' + D.asof;
+  $('leagueline').textContent = 'TPBL · 10 隊 H2H 積分 · 戰績 ' + D.record;
+
+  var m = D.matchup, diff = m.meScore - m.oppScore;
+  $('score').innerHTML =
+    '<div class="team"><div class="pts num">' + m.meScore + '</div><div class="nm">' + esc(m.me) + '</div></div>' +
+    '<div class="vs">VS</div>' +
+    '<div class="team"><div class="pts num">' + m.oppScore + '</div><div class="nm">' + esc(m.opp) + '</div></div>';
+  $('lead').innerHTML = '<span>領先 <b>' + (diff >= 0 ? '+' : '') + diff + '</b> 分</span><span>剩餘 ' + esc(m.daysLeft) + '</span><span>' + esc(m.oppNote) + '</span>';
+
+  var r = D.recap;
+  $('recap').innerHTML =
+    '<h2>昨日賽後<span class="label">' + esc(r.date) + '</span></h2>' +
+    '<div class="games">' + r.games.map(function (g) { return '<div class="game">' + esc(g[0]) + '<small>' + esc(g[1]) + '</small></div>'; }).join('') + '</div>' +
+    '<div class="row-lbl">你的球員(合計 ' + r.mineTotal + ' 分)</div>' +
+    '<div class="scroll"><table><thead><tr><th>球員</th><th>數據</th><th class="n">得分</th></tr></thead><tbody>' +
+    r.mine.map(function (p) { return '<tr><td class="name">' + esc(p[0]) + '<small>' + esc(p[1]) + '</small></td><td>' + esc(p[2]) + '</td><td class="n fp">' + p[3] + '</td></tr>'; }).join('') +
+    '</tbody></table></div>' +
+    '<div class="row-lbl">全場最高(TPBL 計分)</div>' +
+    '<div class="scroll"><table><tbody>' +
+    r.others.map(function (p) { return '<tr><td class="name">' + esc(p[0]) + '<small>' + esc(p[1]) + '</small></td><td>' + esc(p[2]) + (p[4] ? '<br><span class="note">' + esc(p[4]) + '</span>' : '') + '</td><td class="n fp">' + p[3] + '</td></tr>'; }).join('') +
+    '</tbody></table></div>';
+
+  var tagMap = { out: ['t-out', 'OUT'], dtd: ['t-dtd', 'DTD'], ok: ['t-ok', 'OK'] };
+  $('inj').innerHTML = '<h2>傷兵快報<span class="label">預計回歸日(ESPN 預估)</span></h2><ul class="list inj">' +
+    D.injuries.map(function (i) { var t = tagMap[i[0]]; return '<li><span class="tag ' + t[0] + '">' + t[1] + '</span><span><span class="who">' + esc(i[1]) + '</span> ' + esc(i[2]) + '</span><span class="ret chip c-ir">回歸 ' + esc(i[3]) + '</span></li>'; }).join('') + '</ul>';
+
+  var TU = 'https://www.threads.com';
+  var lk = function (x) { return '<a href="' + TU + esc(x.post) + '" target="_blank" rel="noopener">@' + esc(x.handle) + '</a>'; };
+  var T = D.threads;
+  $('threads').innerHTML = '<h2>Threads 動態</h2><p class="note">' + esc(T.note) + '</p>' +
+    '<div class="row-lbl">追蹤清單的最新貼文</div><ul class="list src">' +
+    T.accounts.map(function (x) { return '<li><span class="tag t-ok">' + esc(x.label) + '</span><span>' + lk(x) + ' <small>' + esc(x.age) + '</small><br>' + esc(x.sum) + '</span></li>'; }).join('') + '</ul>' +
+    '<div class="row-lbl">關鍵字「NBA fantasy」最近 5 篇</div><ul class="list src">' +
+    T.search.map(function (x) { return '<li><span class="tag t-ok">' + esc(x.age) + '</span><span>' + lk(x) + '<br>' + esc(x.sum) + '</span></li>'; }).join('') + '</ul>' +
+    '<p class="note">' + esc(T.skipped) + '</p>';
+  var M = D.matchupDays, PJ = M.proj, AC = M.actual, EP = M.estPast;
+  var sum = function (a) { return a.reduce(function (x, y) { return x + (y || 0); }, 0); };
+  var nPast = AC.me.filter(function (v) { return v != null; }).length;
+  var tm = [['aespa', M.me, AC.me, PJ.me, EP.me], [M.opp, M.op, AC.op, PJ.op, EP.op]];
+  $('mdays').innerHTML = '<h2>本週對戰<span class="label">aespa vs ' + esc(M.opp) + '</span></h2><div class="scroll"><table class="mx"><thead><tr><th>球隊</th>' +
+    M.days.map(function (d) { return '<th class="n">' + d + '</th>'; }).join('') + '<th class="n">合計</th><th class="n">週五到週日</th></tr></thead><tbody>' +
+    tm.map(function (t) { return '<tr><td class="name">' + esc(t[0]) + '</td>' + t[1].map(function (v) { return '<td class="n">' + v + '</td>'; }).join('') + '<td class="n fp">' + sum(t[1]) + '</td><td class="n fp">' + sum(t[1].slice(nPast)) + '</td></tr>'; }).join('') +
+    '</tbody></table></div><p class="note">' + esc(M.note) + '</p>' +
+    '<div class="row-lbl">預估得分(近 7 場 fantasy 平均,已打完的日子用實際得分)</div><div class="scroll"><table class="mx"><thead><tr><th>球隊</th>' +
+    M.days.map(function (d) { return '<th class="n">' + d + '</th>'; }).join('') + '<th class="n">預估最終</th></tr></thead><tbody>' +
+    tm.map(function (t) { var tot = sum(t[2]); return '<tr><td class="name">' + esc(t[0]) + '</td>' + t[1].map(function (n, i) {
+      if (t[2][i] != null) { var d = Math.round((t[2][i] - t[4][i]) * 10) / 10; return '<td class="n"><span class="fp">' + t[2][i] + '</span> <small class="' + (d > 0 ? 'up' : d < 0 ? 'down' : 'muted') + '">(' + (d > 0 ? '+' : '') + f1(d) + ')</small></td>'; }
+      var pr = t[3][i - nPast]; tot += pr ? pr[1] : 0; return '<td class="n muted">~' + (pr ? f1(pr[1]) : '—') + '</td>'; }).join('') + '<td class="n fp">' + f1(tot) + '</td></tr>'; }).join('') +
+    '</tbody></table></div><p class="note">' + esc(PJ.note) + ' ' + esc(M.estNote) + '</p>';
+  var days = function (a) { return '<span class="days">' + ['五', '六', '日'].map(function (l, i) { return '<span class="d' + (a[i] ? ' on' : '') + '">' + l + '</span>'; }).join('') + '</span>'; };
+  $('roster').innerHTML =
+    '<h2>陣容評估<span class="label">今年 / 近 7 場 / 去年 平均得分</span></h2>' +
+    '<div class="scroll"><table><thead><tr><th>位置</th><th>球員</th><th class="n">今年</th><th class="n">近7場</th><th class="n">去年</th><th class="n">持有%</th><th>本週</th><th class="n">下週</th><th>判斷</th></tr></thead><tbody>' +
+    D.roster.map(function (p) {
+      return '<tr><td>' + esc(p[0]) + '</td><td class="name">' + esc(p[1]) + '<small>' + esc(p[2]) + '</small></td>' +
+        '<td class="n fp">' + f1(p[3]) + '</td><td class="n ' + (p[4] >= p[3] ? 'up' : 'down') + '">' + f1(p[4]) + '</td><td class="n">' + f1(p[5]) + '</td><td class="n">' + f1(p[6]) + '</td>' +
+        '<td>' + days(p[7]) + '</td><td class="n">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
+    }).join('') + '</tbody></table></div>' +
+    '<div class="callout">' + esc(D.fridayLineup) + '</div>';
+
+  var tier = function (a, b, c) {
+    var v = [a, b].filter(function (x) { return x != null; });
+    var m = v.length ? v.reduce(function (x, y) { return x + y; }, 0) / v.length : c;
+    if (m == null) return '';
+    var t = m >= 40 ? ['core', '核心'] : m >= 32 ? ['ok', '主力'] : m >= 25 ? ['watch', '輪換'] : ['drop', '低產出'];
+    return '<span class="chip c-' + t[0] + '">' + t[1] + '</span>';
+  };
+  $('picks').innerHTML = '<h2>增補建議<span class="label">依今年、去年與賽程排序</span></h2>' +
+    '<div class="callout">' + esc(D.pickNote) + '</div>' +
+    '<div class="picks">' + D.picks.map(function (p) {
+      return '<div class="pick' + (p.first ? ' first' : '') + '"><div class="hd"><b>' + esc(p.name) + '</b><span class="note">' + esc(p.pos) + '</span>' + tier(p.s27, p.s26, p.l7) + '<span class="chip ' + (p.status === 'FA' ? 'c-ok' : 'c-watch') + '">' + esc(p.status) + '</span></div>' +
+        '<div class="stat">今年 ' + f1(p.s27) + ' · 近7場 ' + f1(p.l7) + ' · 去年 ' + f1(p.s26) + ' · 持有 ' + f1(p.own) + '%</div>' +
+        '<div class="stat">本週 ' + esc(p.games) + ' · 下週 ' + p.next + ' 場</div><div>' + esc(p.why) + '</div></div>';
+    }).join('') + '</div><p class="note">' + esc(D.acqNote) + '</p>';
+
+  var s = D.sched;
+  var s = D.sched;
+  var chips = function (a, cls) { return '<div class="sched">' + a.map(function (t) { return '<span' + (cls ? ' class="' + cls + '"' : '') + '>' + esc(t) + '</span>'; }).join('') + '</div>'; };
+  $('sched').innerHTML = '<h2>賽程場次<span class="label">本週與下週</span></h2>' +
+    '<div class="row-lbl">本週剩餘</div><div class="sched">' + s.rest.map(function (x) { return '<span>' + esc(x[0]) + ' ' + esc(x[1]) + '</span>'; }).join('') + '</div>' +
+    '<div class="row-lbl">本週出賽最多:整週 4 場(' + s.full.length + ' 隊)</div>' + chips(s.full, 'hl') +
+    '<p class="note">' + esc(s.done) + '</p>' +
+    '<div class="row-lbl">週五到週日還有 2 場的球隊</div>' +
+    s.rest2.map(function (r) { return '<div class="note">' + esc(r[0]) + '</div>' + chips(r[1], 'hl'); }).join('') +
+    '<p class="note">整週只打 3 場:' + esc(s.three) + '</p>' +
+    '<div class="row-lbl">下週(11/9–11/15)</div><p class="note">打 4 場:' + esc(s.four) + '<br>只打 2 場:' + esc(s.two_next) + '</p>';
+
+  var st = D.stream;
+  $('stream').innerHTML = '<h2>本週 Streaming<span class="label">自由市場 · 週五到週日 2 場</span></h2><p class="note">' + esc(st.note) + '</p>' +
+    '<div class="scroll"><table><thead><tr><th>球員</th><th class="n">今年</th><th class="n">近7場</th><th class="n">去年</th><th class="n">持有%</th><th>出賽日</th><th class="n">下週</th><th>備註</th></tr></thead><tbody>' +
+    st.rows.map(function (p) {
+      return '<tr><td class="name">' + esc(p[0]) + '<small>' + esc(p[1]) + ' · ' + esc(p[2]) + '</small>' + tier(p[3], p[5], p[4]) + '</td><td class="n fp">' + f1(p[3]) + '</td><td class="n">' + f1(p[4]) + '</td><td class="n">' + f1(p[5]) + '</td><td class="n">' + f1(p[6]) + '</td><td>' + esc(p[7]) + '</td><td class="n">' + p[8] + ' 場</td><td>' + esc(p[9]) + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+
+  $('chg').innerHTML = '<h2>更新紀錄<span class="label">目前版本 ' + esc(D.version) + '</span></h2><ul class="list">' +
+    D.changelog.map(function (c) { return '<li><span class="tag t-ok">' + esc(c.v) + '</span><span><small>' + esc(c.date) + '</small><br>' + c.items.map(esc).join('<br>') + '</span></li>'; }).join('') + '</ul>';
+  var lvCls = { '先做': 't-out', '建議': 't-ok', '留意': 't-dtd' };
+  $('todo').innerHTML = '<h2>今天要做的事<span class="label">依優先順序</span></h2><ol>' +
+    D.todo.map(function (x) { return '<li><span class="tag ' + (lvCls[x.lv] || 't-ok') + '">' + esc(x.lv) + '</span><span><b>' + esc(x.t) + '</b><span class="d2">' + esc(x.d) + '</span></span></li>'; }).join('') + '</ol>';
+  var tabs = document.querySelectorAll('.tabs button');
+  var show = function (k) {
+    tabs.forEach(function (b) { b.setAttribute('aria-selected', b.getAttribute('data-tab') === k ? 'true' : 'false'); });
+    document.querySelectorAll('.pane').forEach(function (p) { p.hidden = p.id !== 'pane-' + k; });
+    try { sessionStorage.setItem('aespaTab', k); } catch (e) {}
+  };
+  tabs.forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-tab')); }); });
+  try { var sv = sessionStorage.getItem('aespaTab'); if (sv && document.getElementById('pane-' + sv)) show(sv); } catch (e) {}
+  var SP = D.sleepers;
+  $('sleep').innerHTML = '<h2>潛力發掘<span class="label">上場分鐘變多 · 球隊有主力缺陣</span></h2><p class="note">' + esc(SP.note) + '</p>' +
+    '<div class="scroll"><table><thead><tr><th>球員</th><th class="n">持有%</th><th class="n">分鐘 近7場/今年</th><th class="n">分 近7場</th><th class="n">今年</th><th class="n">去年</th><th>球隊缺陣</th><th>評語</th></tr></thead><tbody>' +
+    SP.rows.map(function (r) { return '<tr><td class="name">' + esc(r[0]) + '<small>' + esc(r[1]) + '</small>' + tier(r[6], r[7], r[5]) + '</td><td class="n">' + f1(r[2]) + '</td><td class="n">' + f1(r[3]) + ' / ' + f1(r[4]) + '</td><td class="n fp">' + f1(r[5]) + '</td><td class="n">' + f1(r[6]) + '</td><td class="n">' + f1(r[7]) + '</td><td>' + esc(r[8]) + '</td><td>' + esc(r[9]) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  var LG = D.league;
+  var sorted = [LG.you].concat(LG.teams).sort(function (x, y) { var a = parseInt(x[1]), b = parseInt(y[1]); return b - a || y[2] - x[2]; });
+  $('league').innerHTML = '<h2>聯盟成員<span class="label">依戰績與總得分排序</span></h2><p class="note">' + esc(LG.note) + '</p>' +
+    '<div class="scroll"><table><thead><tr><th>隊伍</th><th class="n">戰績</th><th class="n">總得分</th><th class="n">失分</th><th>本週對戰</th></tr></thead><tbody>' +
+    sorted.map(function (r) { return '<tr><td class="name">' + esc(r[0]) + (r[0] === 'aespa' ? ' <span class="chip c-core">你</span>' : '') + '</td><td class="n">' + esc(r[1]) + '</td><td class="n fp">' + r[2] + '</td><td class="n">' + r[3] + '</td><td>' + esc(r[4]) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+    '<div class="row-lbl">各隊陣容判斷(點開看完整陣容)</div><div class="tms one">' +
+    LG.teams.map(function (r) {
+      var rows = (LG.rosters && LG.rosters[r[0]]) || [];
+      return '<details class="tm"><summary><div class="hd"><b>' + esc(r[0]) + '</b><span class="chip c-ok">' + esc(r[1]) + '</span><span class="more">展開陣容</span></div><p><span class="lbl">核心</span>' + esc(r[5]) + '</p></summary><div class="body"><p><span class="lbl">判斷</span>' + esc(r[6]) + '</p><p><span class="lbl">對你</span>' + esc(r[7]) + '</p>' +
+        '<div class="scroll"><table><thead><tr><th>位置</th><th>球員</th><th class="n">今年</th><th class="n">近7場</th><th class="n">去年</th><th class="n">持有%</th><th>本週</th><th class="n">下週</th><th>判斷</th></tr></thead><tbody>' +
+        rows.map(function (p) {
+          return '<tr><td>' + esc(p[0]) + '</td><td class="name">' + esc(p[1]) + '<small>' + esc(p[2]) + '</small></td><td class="n fp">' + f1(p[3]) + '</td><td class="n ' + (p[3] != null && p[4] != null ? (p[4] >= p[3] ? 'up' : 'down') : '') + '">' + f1(p[4]) + '</td><td class="n">' + f1(p[5]) + '</td><td class="n">' + f1(p[6]) + '</td><td>' + days(p[7]) + '</td><td class="n">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
+        }).join('') + '</tbody></table></div></div></details>';
+    }).join('') + '</div>';
+  $('foot').innerHTML = D.foot.map(function (t) { return '<div>' + esc(t) + '</div>'; }).join('');
+}
+
+var BASE = 'https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/406470928';
+function withTimeout(p, ms) { return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout')); }, ms); })]); }
+function live(D) {
+  return withTimeout(fetch(BASE + '?view=mTeam&view=mMatchupScore&view=mSettings').then(function (r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }), 12000).then(function (j) {
+    var nm = function (t) { return t.name || ((t.location || '') + ' ' + (t.nickname || '')).trim(); };
+    var byId = {}; j.teams.forEach(function (t) { byId[t.id] = t; });
+    var cur = j.status.currentMatchupPeriod;
+    var games = j.schedule.filter(function (g) { return g.matchupPeriodId === cur && g.away; });
+    var opp = {};
+    games.forEach(function (g) {
+      opp[g.home.teamId] = { s: g.home.totalPointsLive, o: g.away.totalPointsLive, on: byId[g.away.teamId], g: g, side: 'home' };
+      opp[g.away.teamId] = { s: g.away.totalPointsLive, o: g.home.totalPointsLive, on: byId[g.home.teamId], g: g, side: 'away' };
     });
-  }
-  document.getElementById('again').addEventListener('click', run);
-  run();
-})();
+    var rd = function (v) { return Math.round(v); };
+    var rows = [D.league.you].concat(D.league.teams);
+    var idByName = {};
+    j.teams.forEach(function (t) { idByName[nm(t)] = t.id; });
+    rows.forEach(function (r) {
+      var id = idByName[r[0]]; if (id == null) return;
+      var t = byId[id], o = t.record.overall;
+      r[1] = o.wins + '-' + o.losses; r[2] = rd(o.pointsFor); r[3] = rd(o.pointsAgainst);
+      var m = opp[id];
+      if (m && m.s != null) {
+        var full = nm(m.on), old = String(r[4]).match(/^[\d.]+–[\d.]+ (.*)$/);
+        var short = old && full.indexOf(old[1]) === 0 ? old[1] : full.split(' ')[0];
+        r[4] = rd(m.s) + '–' + rd(m.o) + ' ' + short;
+      }
+    });
+    var meId = idByName[D.matchup.me];
+    if (meId != null) {
+      D.record = byId[meId].record.overall.wins + '-' + byId[meId].record.overall.losses;
+      var mm = opp[meId];
+      if (mm && nm(mm.on) === D.matchup.opp) {
+        D.matchup.meScore = rd(mm.s); D.matchup.oppScore = rd(mm.o);
+        var mp = null;
+        try { mp = j.settings.scheduleSettings.matchupPeriods[String(cur)]; } catch (e) {}
+        var base = mp && mp.length ? Math.min.apply(null, mp) : 14 + 7 * (cur - 4);
+        var side = function (x) { return mm.side === 'home' ? mm.g.home : mm.g.away; };
+        var other = mm.side === 'home' ? mm.g.away : mm.g.home;
+        var pick = function (g) {
+          var p = g.pointsByScoringPeriod || {};
+          return D.matchupDays.days.map(function (_, i) { var v = p[String(base + i)]; return v == null ? null : Math.round(v * 10) / 10; });
+        };
+        D.matchupDays.actual = { me: pick(side()), op: pick(other) };
+      }
+    }
+    var tp = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
+    D.asofLive = tp;
+    D.asof = '分數與戰績即時讀取 ' + tp + '(台北)· 陣容與評語更新 ' + D.asof;
+    return true;
+  });
+}
+fetch('data.json?t=' + Date.now()).then(function (r) { return r.json(); }).then(function (D) {
+  return live(D).catch(function (e) {
+    D.foot = (D.foot || []).concat(['即時讀取 ESPN 失敗(' + e.message + '),分數與戰績是上次更新時的資料。']);
+  }).then(function () { render(D); });
+}).catch(function (e) {
+  document.getElementById('app').innerHTML = '<p style="padding:16px">資料讀取失敗:' + String(e.message) + '</p>';
+});
 </script>
 </body></html>
