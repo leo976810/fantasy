@@ -164,6 +164,73 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
   log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length);
 } catch (e) { log.push('decision FAIL ' + e.message); }
 
+try { // Streaming plan: add a free agent, drop one of mine, compare per-day top-10 totals
+  if (!CTX) throw new Error('no ctx');
+  const { abbr, today, base, has, avgPts, RO, FAL, nm } = CTX;
+  const meId = (meta.teams.find(t => nm(t) === 'aespa') || {}).id;
+  const blend = p => { const v = [avgPts(p, '002027'), avgPts(p, '002026'), avgPts(p, '012027')].filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  const pool = RO[meId].filter(p => p.slot !== 13 && p.injuryStatus !== 'OUT').map(p => ({ p, e: blend(p) })).filter(x => x.e != null);
+  const dayTot = (list, sps) => sps.reduce((a, sp) => a + list.filter(x => has(x.p.proTeamId, sp)).map(x => x.e).sort((x, y) => y - x).slice(0, 10).reduce((u, v) => u + v, 0), 0);
+  const cands = FAL.filter(p => p.injuryStatus !== 'OUT').map(p => ({ p, e: blend(p) })).filter(x => x.e != null && x.e >= 15);
+  const mk = sps => { const b0 = dayTot(pool, sps); const rows = [];
+    cands.forEach(c => { const g = sps.filter(sp => has(c.p.proTeamId, sp)).length; if (!g) return; let bestG = 0, bo = null;
+      pool.forEach(o => { const nl = pool.filter(x => x !== o).concat([c]); const gain = dayTot(nl, sps) - b0; if (gain > bestG) { bestG = gain; bo = o; } });
+      if (bo) rows.push([c.p.fullName, abbr[c.p.proTeamId], c.p.own, r1(c.p.ownership && c.p.ownership.percentOwned), r1(c.e), g, bo.p.fullName, r1(bo.e), sps.filter(sp => has(bo.p.proTeamId, sp)).length, r1(bestG), avgPts(c.p, '002027'), avgPts(c.p, '012027'), avgPts(c.p, '002026')]); });
+    return rows.sort((a, b) => b[9] - a[9]).slice(0, 8); };
+  const dn = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
+  const dstr = k => { const d = new Date(Date.UTC(2026, 10, 2 + (base - 14) + k)); return (d.getUTCMonth() + 1) + '/' + d.getUTCDate(); };
+  const thisSp = []; for (let sp = today; sp < base + 7; sp++) thisSp.push(sp);
+  const nextSp = []; for (let sp = base + 7; sp < base + 14; sp++) nextSp.push(sp);
+  const w = [];
+  if (thisSp.length) w.push({ label: '本週剩餘(' + thisSp.length + ' 個比賽日:' + dn[thisSp[0] - base] + '到週日)', rows: mk(thisSp) });
+  w.push({ label: '下週 ' + dstr(7) + '–' + dstr(13) + '(本週額度已滿時用這份)', rows: mk(nextSp) });
+  A.streamPlan = Object.assign({}, A.streamPlan, { asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false }) + '(台北時間)', windows: w });
+  log.push('streamPlan ' + w.map(x => x.rows.length).join('/'));
+} catch (e) { log.push('streamPlan FAIL ' + e.message); }
+
+try { // league activity: adds/drops in the last 3 days
+  if (!CTX) throw new Error('no ctx');
+  const { abbr, today, avgPts, RO, FAL, nm } = CTX;
+  const tr = await get(L + '?view=mTransactions2');
+  const teamName = {}; meta.teams.forEach(t => teamName[t.id] = nm(t));
+  const since = Date.now() - 3 * 86400000;
+  const tx = (tr.transactions || []).filter(t => t.status === 'EXECUTED' && (t.type === 'FREEAGENT' || t.type === 'WAIVER') && (t.processDate || t.proposedDate) >= since);
+  const ids = new Set(); tx.forEach(t => (t.items || []).forEach(i => ids.add(i.playerId)));
+  const known = {}; Object.values(RO).forEach(a => a.forEach(p => known[p.id] = p)); FAL.forEach(p => known[p.id] = p);
+  const need = [...ids].filter(i => !known[i]);
+  if (need.length) { const f = { players: { filterIds: { value: need }, filterStatsForTopScoringPeriodIds: { value: 5, additionalValue: ['002027', '012027', '022027', '002026'] } } };
+    const j = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(f) }); (j.players || []).forEach(x => { const p = x.player; known[p.id] = p; }); }
+  const blend = p => { const v = [avgPts(p, '002027'), avgPts(p, '002026'), avgPts(p, '012027')].filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  const lab = (p, wv) => { const e = blend(p); const fl = [wv ? 'waiver' : null, p.injuryStatus === 'OUT' ? 'OUT' : p.injuryStatus === 'DAY_TO_DAY' ? 'DTD' : null].filter(Boolean); return p.fullName + '(' + (e == null ? '—' : r1(e)) + (fl.length ? ',' + fl.join(',') : '') + ')'; };
+  const grp = {};
+  tx.sort((a, b) => (b.processDate || b.proposedDate) - (a.processDate || a.proposedDate)).forEach(t => {
+    const d = new Date(t.processDate || t.proposedDate); const ds = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei', month: 'numeric', day: 'numeric' }).format(d);
+    (t.items || []).forEach(i => { const p = known[i.playerId]; if (!p) return; const k = ds + '|' + t.teamId + '|' + (t.id || '') ; const g = grp[k] = grp[k] || { ds, team: teamName[t.teamId], add: [], drop: [] };
+      if (i.type === 'ADD') g.add.push(lab(p, t.type === 'WAIVER')); else if (i.type === 'DROP') g.drop.push(lab(p, false)); }); });
+  const rows = Object.values(grp).map(g => [g.ds, g.team, [g.add.length ? '撿 ' + g.add.join('、') : '', g.drop.length ? '丟 ' + g.drop.join('、') : ''].filter(Boolean).join(',')]);
+  A.activity = Object.assign({}, A.activity, { note: '最近 3 天聯盟內的撿人、丟人(括號是預估每場分數)。資料時間 ' + new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false }) + '(台北時間)。', rows });
+  log.push('activity ' + rows.length + ' (tx ' + tx.length + ')');
+} catch (e) { log.push('activity FAIL ' + e.message); }
+
+try { // per-game logs for every rostered player and the top free agents
+  if (!CTX) throw new Error('no ctx');
+  const { abbr, games, avgPts, RO, FAL, base } = CTX;
+  const dd = sp => { const d = new Date(Date.UTC(2026, 10, 2 + (sp - 14))); return (d.getUTCMonth() + 1) + '/' + d.getUTCDate(); };
+  const all = {}; Object.values(RO).forEach(a => a.forEach(p => all[p.id] = p)); FAL.slice(0, 30).forEach(p => all[p.id] = p);
+  const ids = Object.keys(all).map(Number); const LG = {};
+  for (let k = 0; k < ids.length; k += 30) {
+    const f = { players: { filterIds: { value: ids.slice(k, k + 30) }, filterStatsForTopScoringPeriodIds: { value: 10, additionalValue: ['002027', '012027', '022027', '002026'] } } };
+    const j = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(f) });
+    (j.players || []).forEach(x => { const p = x.player; const base0 = all[p.id] || p;
+      const gl = (p.stats || []).filter(s => s.statSplitTypeId === 5 && s.seasonId === 2027 && s.stats && s.stats['40'] != null && s.stats['40'] > 0).sort((a, b) => b.scoringPeriodId - a.scoringPeriodId).slice(0, 10).map(s => {
+        const gm = ((games[s.proTeamId] || {})[String(s.scoringPeriodId)] || [])[0]; const opp = gm ? (gm.homeProTeamId === s.proTeamId ? 'vs ' + abbr[gm.awayProTeamId] : '@ ' + abbr[gm.homeProTeamId]) : '';
+        const v = i => s.stats[String(i)] == null ? 0 : Math.round(s.stats[String(i)]);
+        return [dd(s.scoringPeriodId), opp, r1(s.appliedTotal), v(0), v(6), v(3), v(2), v(1), v(11), v(40)]; });
+      LG[p.id] = [p.fullName, abbr[p.proTeamId], avgPts(p, '002027'), avgPts(p, '012027'), avgPts(p, '022027'), avgPts(p, '002026'), r1((base0.ownership || p.ownership || {}).percentOwned), p.injuryStatus || null, gl]; });
+  }
+  if (Object.keys(LG).length > 100) { A.logs = LG; log.push('logs ' + Object.keys(LG).length + ' sample games ' + JSON.stringify(Object.values(LG)[0][8].slice(0, 2))); } else log.push('logs too few');
+} catch (e) { log.push('logs FAIL ' + e.message); }
+
 A.builtAt = new Date().toISOString();
 const json = JSON.stringify(A).replace(/</g, '\\u003c');
 html = html.replace(RE, (m, a, b, c) => a + json + c);
