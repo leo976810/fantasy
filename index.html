@@ -390,7 +390,7 @@ function live(D) {
     }
     var tp = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
     D.asofLive = tp;
-    D.asof = '分數與戰績即時讀取 ' + tp + '(台北)· 陣容與評語更新 ' + D.asof;
+    D.asof = '分數與戰績即時讀取 ' + tp + '(台北)· 陣容數字自動更新 ' + (D.autoAsof || D.asof) + ' · 評語更新 ' + D.asof;
     return true;
   });
 }
