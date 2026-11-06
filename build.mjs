@@ -191,7 +191,8 @@ try { // Streaming plan: add a free agent, drop one of mine, compare per-day top
 try { // league activity: adds/drops in the last 3 days
   if (!CTX) throw new Error('no ctx');
   const { abbr, today, avgPts, RO, FAL, nm } = CTX;
-  const tr = await get(L + '?view=mTransactions2');
+  const tr = { transactions: [] }; const seen = new Set();
+  for (let sp = today - 3; sp <= today + 1; sp++) { const j = await get(L + '?view=mTransactions2&scoringPeriodId=' + sp); (j.transactions || []).forEach(t => { if (!seen.has(t.id)) { seen.add(t.id); tr.transactions.push(t); } }); }
   const teamName = {}; meta.teams.forEach(t => teamName[t.id] = nm(t));
   const since = Date.now() - 3 * 86400000;
   const cnt = {}; (tr.transactions || []).forEach(t => { const k = t.type + '/' + t.status + '/' + (t.processDate ? 'p' : '-') + (t.proposedDate ? 'q' : '-'); cnt[k] = (cnt[k] || 0) + 1; }); log.push('tx kinds ' + JSON.stringify(cnt) + ' keys ' + Object.keys((tr.transactions || [])[0] || {}).join(','));
