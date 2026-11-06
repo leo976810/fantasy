@@ -72,8 +72,7 @@ try { // cmp: every rostered player + top free agents
   const mins = (p, id) => { const s = stat(p, id); const a = s && s.averageStats; const v = a && (a['40'] != null ? a['40'] : a['28']); return v == null ? null : r1(v); };
   const nm = t => t.name || ((t.location || '') + ' ' + (t.nickname || '')).trim();
   const PN = { 1: 'PG', 2: 'SG', 3: 'SF', 4: 'PF', 5: 'C' };
-  const posOf = (p, slots) => { const d = PN[p.defaultPositionId]; const rest = [0, 1, 2, 3, 4].filter(s => (slots || []).includes(s)).map(s => PN[s + 1]);
-    const all = [d].concat(rest.filter(x => x !== d)).filter(Boolean); return all.join('/'); };
+  const posOf = (p, slots) => [0, 1, 2, 3, 4].filter(s => (slots || []).includes(s)).map(s => PN[s + 1]).join('/') || PN[p.defaultPositionId] || '';
   const line = (p, owner, slots) => [p.id, p.fullName, abbr[p.proTeamId], posOf(p, slots || p.eligibleSlots), owner,
     p.injuryStatus === 'OUT' ? 'OUT' : p.injuryStatus === 'DAY_TO_DAY' ? 'DTD' : '',
     avgPts(p, '002027'), avgPts(p, '012027'), avgPts(p, '022027'), avgPts(p, '002026'), mins(p, '012027'), mins(p, '002027'),
@@ -87,7 +86,7 @@ try { // cmp: every rostered player + top free agents
   }
   const filt = { players: { filterStatus: { value: ['FREEAGENT', 'WAIVERS'] }, limit: 200, sortPercOwned: { sortPriority: 1, sortAsc: false }, filterStatsForTopScoringPeriodIds: { value: 5, additionalValue: ['002027', '012027', '022027', '002026'] } } };
   const fa = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(filt) });
-  (fa.players || []).forEach(x => { const p = x.player || x.playerPoolEntry.player; if (x.onTeamId === 0 || x.status === 'FREEAGENT' || x.status === 'WAIVERS' || x.onTeamId == null) out.push(line(p, x.status === 'WAIVERS' ? 'FA' : 'FA', p.eligibleSlots)); });
+  (fa.players || []).forEach(x => { const p = x.player || x.playerPoolEntry.player; if (x.onTeamId === 0 || x.status === 'FREEAGENT' || x.status === 'WAIVERS' || x.onTeamId == null) out.push(line(p, x.status === 'WAIVERS' ? 'Waiver' : 'FA', p.eligibleSlots)); });
   if (out.length > 150) {
     A.cmp = out; log.push('cmp ' + out.length);
     A.rosterExtra = Object.fromEntries(Object.entries(A.rosterExtra || {}).map(([k, v]) => [k, Object.assign({}, v, mine[k] ? { m7: mine[k].m7, m27: mine[k].m27 } : {})]));
