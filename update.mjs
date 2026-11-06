@@ -91,7 +91,8 @@ D.record = byId[meId].record.overall.wins + '-' + byId[meId].record.overall.loss
 // matchup
 const mm = opp[meId]; const oppId = mm.id; const oppName = nm(byId[oppId]);
 const DAYS = D.matchupDays.days;
-const pickPts = g => DAYS.map((_, i) => { const v = (g.pointsByScoringPeriod || {})[String(base + i)]; return v == null ? null : r1(v); });
+// today's scoring period is still in progress (or not started), so it counts as not finished
+const pickPts = g => DAYS.map((_, i) => { const v = (g.pointsByScoringPeriod || {})[String(base + i)]; return v == null || base + i >= today ? null : r1(v); });
 const act = { me: pickPts(mm.me), op: pickPts(mm.other) };
 const counts = arr => DAYS.map((_, i) => arr.filter(x => x.slot !== 'IR' && hasGame(x.tid, base + i)).length);
 const val = x => x.l7 != null ? x.l7 : x.l15 != null ? x.l15 : x.s27 != null ? x.s27 : x.s26 != null ? x.s26 : 0;

@@ -385,7 +385,7 @@ function live(D) {
         var other = mm.side === 'home' ? mm.g.away : mm.g.home;
         var pick = function (g) {
           var p = g.pointsByScoringPeriod || {};
-          return D.matchupDays.days.map(function (_, i) { var v = p[String(base + i)]; return v == null ? null : Math.round(v * 10) / 10; });
+          return D.matchupDays.days.map(function (_, i) { var v = p[String(base + i)]; return v == null || base + i >= j.scoringPeriodId ? null : Math.round(v * 10) / 10; });
         };
         D.matchupDays.actual = { me: pick(side()), op: pick(other) };
       }
