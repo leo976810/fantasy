@@ -793,7 +793,7 @@ async function fetchToday(ME) {
   }
   function render(T, live) {
     var act = function (r) { return r.slot !== 12 && r.slot !== 13 && r.ms != null; }, sum = function (a) { return a.filter(act).reduce(function (s, r) { return s + (r.pts || 0); }, 0); };
-    var n = function (a) { return a.filter(function (r) { return r.ms != null; }).length; };
+    var n = function (a) { return a.filter(function (r) { return r.slot !== 13 && r.ms != null; }).length; };
     var warn = T.me.filter(function (r) { return act(r) && r.inj; }).sort(function (a, b) { return a.ms - b.ms; });
     host.innerHTML = '<h2><span>今天的比賽<small class="tcnt">(你 ' + n(T.me) + ' 人有比賽,對手 ' + n(T.op) + ' 人)</small></span><span class="label">' + esc(T.label) + ',時間是台北時間</span></h2>' +
       (warn.length ? '<div class="twarn">⚠ 開打前留意:' + warn.map(function (r) { return esc(r.name) + '(' + r.inj + ',' + tm(r.ms) + ' 開打)'; }).join('、') + '。如果開打前確定不能打,記得換人。</div>' : '') +
