@@ -396,7 +396,13 @@ function live(D) {
     return true;
   });
 }
-fetch('data.json?t=' + Date.now()).then(function (r) { return r.json(); }).then(function (D) {
+// data.json is rewritten by an automatic job; read it straight from the repository so it is never stale.
+fetch('https://raw.githubusercontent.com/leo976810/fantasy/main/data.json?t=' + Date.now()).then(function (r) {
+  if (!r.ok) throw new Error('raw ' + r.status);
+  return r.json();
+}).catch(function () {
+  return fetch('data.json?t=' + Date.now()).then(function (r) { return r.json(); });
+}).then(function (D) {
   return live(D).catch(function (e) {
     D.foot = (D.foot || []).concat(['即時讀取 ESPN 失敗(' + e.message + '),分數與戰績是上次更新時的資料。']);
   }).then(function () { render(D); });
