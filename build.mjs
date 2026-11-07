@@ -168,15 +168,27 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
   log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length);
 } catch (e) { log.push('decision FAIL ' + e.message); }
 
-try { // DEBUG probe: inspect schedule/settings shape for v2 (future matchups, playoff format)
+try { // v2: full-season matchup schedule + playoff standings context (used by the v2 tab's playoff & future-opponent sections)
   const full2 = await get(L + '?view=mTeam&view=mMatchupScore&view=mSettings');
-  log.push('v2probe status ' + JSON.stringify(full2.status));
-  log.push('v2probe scheduleSettings ' + JSON.stringify(full2.settings.scheduleSettings));
-  log.push('v2probe teams sample ' + JSON.stringify(full2.teams.slice(0, 2).map(t => ({ id: t.id, name: t.name, location: t.location, nickname: t.nickname }))));
-  log.push('v2probe schedule length ' + full2.schedule.length + ' sample ' + JSON.stringify(full2.schedule.filter(g => g.away).slice(0, 2)));
-  log.push('v2probe max matchupPeriodId ' + Math.max(...full2.schedule.filter(g => g.away).map(s => s.matchupPeriodId)));
-  log.push('v2probe meta.team0 ' + JSON.stringify((meta.teams || []).slice(0, 1)));
-} catch (e) { log.push('v2probe FAIL ' + e.message); }
+  const nm2 = t => t.name || ((t.location || '') + ' ' + (t.nickname || '')).trim();
+  const idToName = {}; full2.teams.forEach(t => idToName[t.id] = nm2(t));
+  const cur = full2.status.currentMatchupPeriod;
+  const ss = full2.settings.scheduleSettings || {};
+  const standings = full2.teams.map(t => {
+    const o = (t.record || {}).overall || {};
+    return { name: nm2(t), w: o.wins || 0, l: o.losses || 0, pf: o.pointsFor || 0, pa: o.pointsAgainst || 0, seed: t.playoffSeed || null, projRank: t.currentProjectedRank || null };
+  }).sort((a, b) => b.w - a.w || b.pf - a.pf);
+  const wksPlayed = Math.max(cur - 1, 1);
+  const avgPF = {}; standings.forEach(s => avgPF[s.name] = s.pf / Math.max(s.w + s.l, wksPlayed));
+  const future = {};
+  full2.schedule.filter(g => g.matchupPeriodId > cur && g.away).forEach(g => {
+    const add = (id, oid) => { const n = idToName[id]; (future[n] = future[n] || []).push({ w: g.matchupPeriodId, opp: idToName[oid] }); };
+    add(g.home.teamId, g.away.teamId); add(g.away.teamId, g.home.teamId);
+  });
+  Object.keys(future).forEach(k => { future[k].sort((a, b) => a.w - b.w); future[k] = future[k].slice(0, 6).map(x => Object.assign({}, x, { sos: r1(avgPF[x.opp]) })); });
+  A.v2 = Object.assign({}, A.v2, { curWeek: cur, regWeeks: ss.matchupPeriodCount || null, playoffTeamCount: ss.playoffTeamCount || null, standings, future });
+  log.push('v2 standings ' + standings.length + ' future-teams ' + Object.keys(future).length + ' curWeek ' + cur + '/' + ss.matchupPeriodCount + ' playoffTeamCount ' + ss.playoffTeamCount);
+} catch (e) { log.push('v2 FAIL ' + e.message); }
 
 try { // Streaming plan: add a free agent, drop one of mine, compare per-day top-10 totals
   if (!CTX) throw new Error('no ctx');
