@@ -7,6 +7,8 @@ const L = BASE + '/segments/0/leagues/406470928';
 const SITE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
 const get = async (u, h) => { const r = await fetch(u, { headers: h || {} }); if (!r.ok) throw new Error(u + ' -> HTTP ' + r.status); return r.json(); };
 const r1 = v => v == null || isNaN(v) ? null : Math.round(v * 10) / 10;
+const normCdf = z => { const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989423 * Math.exp(-z * z / 2);
+  const prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return z > 0 ? 1 - prob : prob; };
 const RE = /(<script id="data" type="application\/json">)([\s\S]*?)(<\/script>)/;
 let html = fs.readFileSync('v2/index.html', 'utf8');
 const A = JSON.parse(html.match(RE)[2]);
@@ -164,8 +166,47 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
       dd[k][i] = { rows, extra, est: r1(rows.reduce((a, r) => a + r[1], 0)), act: pts != null ? Math.round(pts) : Math.round(list.filter(x => x.slot < 12).reduce((a, x) => a + x.act, 0)) }; });
   }
   A.dayDetail = dd;
-  A.insights = Object.assign({}, A.insights, { LU, INJ, hot, weak: r1(weak) });
-  log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length);
+
+  // (e) next week: opponent analysis + win estimate, computed fresh every run (same roster/schedule
+  // data already fetched above for this week's LU/INJ) instead of being a one-time frozen snapshot.
+  let OPP = null, WINNEXT = null;
+  try {
+    const g2 = full.schedule.find(x => x.matchupPeriodId === cur + 1 && x.away && (x.home.teamId === meId || x.away.teamId === meId));
+    if (g2) {
+      const opId2 = (g2.home.teamId === meId ? g2.away : g2.home).teamId;
+      const name2 = nm(full.teams.find(t => t.id === opId2));
+      const standings2 = full.teams.map(t => { const o = (t.record || {}).overall || {}; return { id: t.id, name: nm(t), w: o.wins || 0, l: o.losses || 0, pf: o.pointsFor || 0 }; }).sort((a, b) => b.w - a.w || b.pf - a.pf);
+      const rank2 = standings2.findIndex(s => s.id === opId2) + 1;
+      const rec2 = standings2.find(s => s.id === opId2);
+      const teamScore = sd => Object.values(sd.pointsByScoringPeriod || {}).reduce((a, v) => a + (v || 0), 0);
+      const hist = [];
+      for (let w = Math.max(1, cur - 3); w < cur; w++) {
+        const gh = full.schedule.find(x => x.matchupPeriodId === w && x.away && (x.home.teamId === opId2 || x.away.teamId === opId2));
+        if (!gh) continue;
+        const mine2 = gh.home.teamId === opId2 ? gh.home : gh.away, their = gh.home.teamId === opId2 ? gh.away : gh.home;
+        hist.push([w, r1(teamScore(mine2)), r1(teamScore(their))]);
+      }
+      const PN2 = { 1: 'PG', 2: 'SG', 3: 'SF', 4: 'PF', 5: 'C' };
+      const ro2 = (RO[opId2] || []).filter(p => p.slot !== 13);
+      const top2 = ro2.map(p => ({ p, e: blend(p) })).filter(c => c.e != null).sort((a, b) => b.e - a.e).slice(0, 6)
+        .map(c => [c.p.fullName, abbr[c.p.proTeamId], PN2[c.p.defaultPositionId] || '', r1(c.e), next(c.p.proTeamId), inj(c.p)]);
+      const out2 = ro2.filter(p => p.injuryStatus === 'OUT').map(p => p.fullName);
+      const games2 = ro2.reduce((a, p) => a + next(p.proTeamId), 0);
+      OPP = { name: name2, rec: rec2 ? rec2.w + '-' + rec2.l : '', rank: rank2, pf: rec2 ? Math.round(rec2.pf) : null, games: games2, hist, top: top2, out: out2 };
+
+      const weekEst = (roster, sps) => { const usable = (roster || []).filter(p => p.slot !== 13 && p.injuryStatus !== 'OUT').map(p => ({ p, e: blend(p) })).filter(c => c.e != null);
+        let total = 0; sps.forEach(sp => { total += usable.filter(c => has(c.p.proTeamId, sp)).map(c => c.e).sort((a, b) => b - a).slice(0, slots.length).reduce((a, v) => a + v, 0); }); return r1(total); };
+      const nextSps = []; for (let sp = base + 7; sp < base + 14; sp++) nextSps.push(sp);
+      const meEst = weekEst(RO[meId], nextSps), opEst = weekEst(RO[opId2], nextSps);
+      const gm2 = RO[meId].filter(p => p.slot !== 13).reduce((a, p) => a + next(p.proTeamId), 0);
+      const sd2 = 13 * Math.sqrt(Math.max(1, gm2 + games2));
+      const p2 = Math.max(1, Math.min(99, Math.round(100 * normCdf((meEst - opEst) / (sd2 * Math.SQRT2)))));
+      WINNEXT = { opp: name2, meEst, opEst, p: p2 };
+    }
+  } catch (e) { log.push('next-week opp FAIL ' + e.message); }
+
+  A.insights = Object.assign({}, A.insights, { LU, INJ, hot, weak: r1(weak), opp: OPP, win: { next: WINNEXT } });
+  log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length + ' nextOpp ' + (OPP ? OPP.name : 'none'));
 } catch (e) { log.push('decision FAIL ' + e.message); }
 
 try { // v2: full-season matchup schedule + playoff standings context (used by the v2 tab's playoff & future-opponent sections)
