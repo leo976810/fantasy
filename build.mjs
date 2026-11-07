@@ -175,6 +175,7 @@ try { // DEBUG probe: inspect schedule/settings shape for v2 (future matchups, p
   log.push('v2probe teams sample ' + JSON.stringify(full2.teams.slice(0, 2).map(t => ({ id: t.id, name: t.name, location: t.location, nickname: t.nickname }))));
   log.push('v2probe schedule length ' + full2.schedule.length + ' sample ' + JSON.stringify(full2.schedule.filter(g => g.away).slice(0, 2)));
   log.push('v2probe max matchupPeriodId ' + Math.max(...full2.schedule.filter(g => g.away).map(s => s.matchupPeriodId)));
+  log.push('v2probe meta.team0 ' + JSON.stringify((meta.teams || []).slice(0, 1)));
 } catch (e) { log.push('v2probe FAIL ' + e.message); }
 
 try { // Streaming plan: add a free agent, drop one of mine, compare per-day top-10 totals
