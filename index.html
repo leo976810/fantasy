@@ -951,3 +951,56 @@ async function fetchToday(ME) {
  document.head.appendChild(st);
  }catch(e){} },2000); })();
 </script>
+
+
+<script>
+(function () { try {
+  var D = JSON.parse(document.getElementById('data').textContent), host = document.getElementById('todo'); if (!host || !D.insights || !D.cmp) return;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function f1(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+  var own = {}; D.cmp.forEach(function (l) { var a = l.split('|'); own[a[1]] = a[4]; });
+  var free = function (n) { var o = own[n]; return o == null || o === '' || o === 'FA' || o === 'Waiver'; };
+  var I = D.insights, W = (D.streamPlan || {}).windows || [], items = [];
+  // 1) lineup days that need changes
+  var need = (I.LU || []).filter(function (d) { return d.n > 10 && d.best - d.cur > 0.05; });
+  if (need.length) items.push(['先做', '先發要調整:' + need.map(function (d) { return d.d; }).join('、'), need.map(function (d) { return d.d + ' 換上 ' + (d.ins.join('、') || '—') + '(最佳 ' + f1(d.best) + ',現在 ' + f1(d.cur) + ')'; }).join(';') + '。']);
+  else if ((I.LU || []).length) items.push(['留意', '本週先發不用調整', (I.LU || []).map(function (d) { return d.d + ' ' + d.n + ' 人有比賽'; }).join('、') + ',放得下所有人。']);
+  // 2) injured starters
+  var inj = (I.INJ || []).filter(function (r) { return r[2] === '先發'; });
+  if (inj.length) items.push(['先做', '先發有傷兵要確認', inj.map(function (r) { return r[0] + '(' + r[1] + ',本週 ' + r[4] + ' 場)'; }).join('、') + '。上場前再看一次 ESPN 狀態,OUT 的先換下來。']);
+  // 3) best add (next week first, because the weekly add limit is usually used up by then)
+  var pick = null, label = '';
+  for (var k = W.length - 1; k >= 0 && !pick; k--) { var rows = (W[k].rows || []).filter(function (r) { return free(r[0]); }); if (rows.length) { pick = rows; label = W[k].label; } }
+  if (pick) { var r = pick[0], r2 = pick[1];
+    items.push(['建議', '增補首選:放 ' + r[6] + ' 加 ' + r[0], label.replace(/(.*?)(\(.*)/, '$1') + ':' + r[0] + '(' + r[1] + ',' + r[2] + ',持有 ' + f1(r[3]) + '%)預估場均 ' + f1(r[4]) + '、' + r[5] + ' 場,換掉 ' + r[6] + '(' + f1(r[7]) + '、' + r[8] + ' 場),預估增加 ' + f1(r[9]) + ' 分。' + (r2 ? '備選:' + r2[0] + '(+' + f1(r2[9]) + ')。' : '') + (r[2] === 'Waiver' ? ' 他在 waiver,週日 08:00(美東)處理。' : '') + ' 本週額度已滿時留到下週一。']); }
+  // 4) matchup
+  var M = D.matchup || {}, P = (D.matchupDays || {}).proj || {};
+  if (M.meScore != null && P.days && P.days.length) { var sm = function (a) { return a.reduce(function (t, x) { return t + (x ? x[1] : 0); }, 0); }, wk = M.meScore - M.oppScore, fin = wk + sm(P.me) - sm(P.op);
+    items.push(['留意', '本週局勢:' + (wk >= 0 ? '領先 ' : '落後 ') + Math.abs(wk) + ' 分', '你 ' + M.meScore + '、' + M.opp + ' ' + M.oppScore + ';剩 ' + P.days.join('、') + ',預估最終' + (fin >= 0 ? '領先 ' : '落後 ') + f1(Math.abs(fin)) + ' 分(粗估)。']); }
+  if (!items.length) return;
+  var cls = { '先做': 't-out', '建議': 't-ok', '留意': 't-dtd' };
+  var box = document.createElement('div'); box.className = 'autotodo';
+  box.innerHTML = '<div class="row-lbl">自動整理(依最新資料,重新整理會更新)</div><ol>' + items.map(function (x) { return '<li><span class="tag ' + cls[x[0]] + '">' + x[0] + '</span><span><b>' + esc(x[1]) + '</b><span class="d2">' + esc(x[2]) + '</span></span></li>'; }).join('') + '</ol>';
+  var st = document.createElement('style'); st.textContent = '.autotodo { margin: 0 0 12px; padding: 10px 12px; border: 1px dashed var(--accent); border-radius: 8px; } .autotodo ol { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; } .autotodo li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; } .autotodo li b { display: block; font-size: 14.5px; } .autotodo .d2 { color: var(--muted); font-size: 13px; }'; document.head.appendChild(st);
+  var h = host.querySelector('h2'); var after = host.querySelector('.hl1') || h; if (after) after.insertAdjacentElement('afterend', box); else host.insertBefore(box, host.firstChild);
+} catch (e) {} })();
+</script>
+
+<script>
+(function () { try {
+  var D = JSON.parse(document.getElementById('data').textContent); if (!D.cmp) return;
+  var own = {}; D.cmp.forEach(function (l) { var a = l.split('|'); own[a[1]] = a[4]; });
+  function taken(n) { var o = own[n]; return o != null && o !== '' && o !== 'FA' && o !== 'Waiver' ? o : null; }
+  var cand = {}; (D.picks || []).forEach(function (p) { cand[p.name] = 1; }); ((D.stream || {}).rows || []).forEach(function (r) { cand[r[0]] = 1; }); ((D.sleepers || {}).rows || []).forEach(function (r) { cand[r[0]] = 1; });
+  var gone = Object.keys(cand).filter(function (n) { return taken(n); });
+  if (!gone.length) return;
+  var st = document.createElement('style'); st.textContent = '.stale { opacity: .6; } .stale > * { } .stalemsg { color: var(--bad); font-size: 12.5px; font-weight: 600; margin-top: 2px; }'; document.head.appendChild(st);
+  function mark(el) { var hit = gone.filter(function (n) { return el.textContent.indexOf(n) >= 0; }); if (!hit.length || el.querySelector('.stalemsg')) return;
+    el.classList.add('stale'); var m = document.createElement('div'); m.className = 'stalemsg';
+    m.textContent = '⚠ ' + hit.map(function (n) { return n + ' 已被 ' + (taken(n) === 'aespa' ? '你' : taken(n)) + ' 持有'; }).join('、') + ',這項建議已失效,下次評語更新時會改寫。';
+    el.appendChild(m); }
+  Array.prototype.forEach.call(document.querySelectorAll('#todo ol > li, #todo li'), mark);
+  Array.prototype.forEach.call(document.querySelectorAll('#picks .pick'), mark);
+  var pn = document.getElementById('picks'); if (pn && !pn.querySelector('.pickgone')) { var d = document.createElement('p'); d.className = 'note pickgone'; d.textContent = '已被別隊撿走、不能再加的球員:' + gone.map(function (n) { return n + '(' + taken(n) + ')'; }).join('、') + '。'; pn.appendChild(d); }
+} catch (e) {} })();
+</script>

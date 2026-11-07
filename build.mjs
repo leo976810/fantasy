@@ -120,11 +120,12 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
   const dstr = i => { const d = new Date(Date.UTC(2026, 10, 2 + (base - 14) + i)); return (d.getUTCMonth() + 1) + '/' + d.getUTCDate(); };
   const mine = RO[meId].filter(p => p.slot !== 13);
   // (a) best lineup for each remaining day
-  const LU = []; let weak = null;
+  const LU = []; let weak = null; let firstEnts = null;
   const tdDone = (() => { const ds = []; Object.keys(games).forEach(t => (games[t][String(today)] || []).forEach(g => ds.push(g.date))); return ds.length > 0 && Math.max(...ds) + 3.5 * 3600000 < Date.now(); })();
   for (let sp = tdDone ? today + 1 : today; sp < base + 7; sp++) {
     const i = sp - base; const jr = await get(L + '?view=mRoster&scoringPeriodId=' + sp + '&forTeamId=' + meId);
     const ents = jr.teams.find(x => x.id === meId).roster.entries.map(e => Object.assign({}, e.playerPoolEntry.player, { slot: e.lineupSlotId }));
+    if (!firstEnts) firstEnts = ents;
     const play = ents.filter(p => p.slot !== 13 && has(p.proTeamId, sp)), ok = play.filter(p => p.injuryStatus !== 'OUT');
     const cands = ok.map(p => ({ p, e: blend(p) })).filter(c => c.e != null);
     const curStart = play.filter(p => p.slot < 12 && p.injuryStatus !== 'OUT'); const curSum = curStart.reduce((a, p) => a + (blend(p) || 0), 0);
@@ -137,6 +138,8 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
       idle: ents.filter(p => p.slot !== 13 && !has(p.proTeamId, sp)).map(p => p.fullName) });
   }
   // (b) injuries on my roster
+  const slotNow = {}; (firstEnts || []).forEach(p => slotNow[p.id] = p.slot);
+  RO[meId].forEach(p => { if (slotNow[p.id] != null) p.slot = slotNow[p.id]; });
   const INJ = RO[meId].filter(p => p.injuryStatus === 'OUT' || p.injuryStatus === 'DAY_TO_DAY').map(p => [p.fullName, inj(p), p.slot === 13 ? 'IR' : p.slot === 12 ? 'BN' : '先發', r1(blend(p)), rest(p.proTeamId), next(p.proTeamId),
     p.slot === 13 ? '在 IR,回歸前不佔名額' : inj(p) === 'OUT' ? '目前 OUT,先發要換人' : '上場前確認狀態']);
   // (c) free-agent hot list
