@@ -186,8 +186,20 @@ try { // v2: full-season matchup schedule + playoff standings context (used by t
     add(g.home.teamId, g.away.teamId); add(g.away.teamId, g.home.teamId);
   });
   Object.keys(future).forEach(k => { future[k].sort((a, b) => a.w - b.w); future[k] = future[k].slice(0, 6).map(x => Object.assign({}, x, { sos: r1(avgPF[x.opp]) })); });
-  A.v2 = Object.assign({}, A.v2, { curWeek: cur, regWeeks: ss.matchupPeriodCount || null, playoffTeamCount: ss.playoffTeamCount || null, standings, future });
-  log.push('v2 standings ' + standings.length + ' future-teams ' + Object.keys(future).length + ' curWeek ' + cur + '/' + ss.matchupPeriodCount + ' playoffTeamCount ' + ss.playoffTeamCount);
+  // weekly team score trend for completed weeks, from the same already-fetched schedule (no extra API calls)
+  const teamScore = sd => Object.values(sd.pointsByScoringPeriod || {}).reduce((a, v) => a + (v || 0), 0);
+  const weeks = []; const scores = {}; full2.teams.forEach(t => { scores[nm2(t)] = []; });
+  for (let w = 1; w < cur; w++) {
+    const gs = full2.schedule.filter(g => g.matchupPeriodId === w && g.away);
+    if (!gs.length) continue;
+    weeks.push(w);
+    const wk = {};
+    gs.forEach(g => { wk[idToName[g.home.teamId]] = r1(teamScore(g.home)); wk[idToName[g.away.teamId]] = r1(teamScore(g.away)); });
+    Object.keys(scores).forEach(n => scores[n].push(wk[n] != null ? wk[n] : null));
+  }
+  const median = weeks.map((w, i) => { const vs = Object.values(scores).map(a => a[i]).filter(v => v != null).sort((a, b) => a - b); return vs.length ? r1(vs[Math.floor(vs.length / 2)]) : null; });
+  A.v2 = Object.assign({}, A.v2, { curWeek: cur, regWeeks: ss.matchupPeriodCount || null, playoffTeamCount: ss.playoffTeamCount || null, standings, future, trend: { weeks, scores, median } });
+  log.push('v2 standings ' + standings.length + ' future-teams ' + Object.keys(future).length + ' curWeek ' + cur + '/' + ss.matchupPeriodCount + ' playoffTeamCount ' + ss.playoffTeamCount + ' trendWeeks ' + weeks.length);
 } catch (e) { log.push('v2 FAIL ' + e.message); }
 
 try { // per-player recent news (latest 3 articles mentioning each player, for the 球員分析 panel)
