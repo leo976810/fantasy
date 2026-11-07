@@ -190,6 +190,14 @@ try { // v2: full-season matchup schedule + playoff standings context (used by t
   log.push('v2 standings ' + standings.length + ' future-teams ' + Object.keys(future).length + ' curWeek ' + cur + '/' + ss.matchupPeriodCount + ' playoffTeamCount ' + ss.playoffTeamCount);
 } catch (e) { log.push('v2 FAIL ' + e.message); }
 
+try { // DEBUG probe: inspect ESPN NBA news API shape for per-player recent-news feature
+  const j = await get(SITE + '/news?limit=20');
+  log.push('newsprobe top keys ' + Object.keys(j));
+  const arts = j.articles || j.feed || [];
+  log.push('newsprobe article count ' + arts.length);
+  log.push('newsprobe article0 ' + JSON.stringify(arts[0]).slice(0, 2000));
+} catch (e) { log.push('newsprobe FAIL ' + e.message); }
+
 try { // Streaming plan: add a free agent, drop one of mine, compare per-day top-10 totals
   if (!CTX) throw new Error('no ctx');
   const { abbr, today, base, has, avgPts, RO, FAL, nm } = CTX;
