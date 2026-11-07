@@ -222,6 +222,22 @@ try { // per-game logs for every rostered player and the top free agents
   if (!CTX) throw new Error('no ctx');
   const { abbr, games, avgPts, RO, FAL, base } = CTX;
   const dd = sp => { const d = new Date(Date.UTC(2026, 10, 2 + (sp - 14))); return (d.getUTCMonth() + 1) + '/' + d.getUTCDate(); };
+  const TM = {}; let lgPts = 0, lgPoss = 0, lgFga = 0, lgFta = 0;
+  for (let id = 1; id <= 30; id++) { try { const t = await get(SITE + '/teams/' + id + '/statistics'); const ab = (t.team && t.team.abbreviation) || null; const m = {};
+    ((t.results && t.results.stats && t.results.stats.categories) || []).forEach(c => (c.stats || []).forEach(x => { m[x.name] = x.value; }));
+    if (id === 1) log.push('adv team stat names: ' + Object.keys(m).filter(k => /avg(Field|Free|Turn|Off|Points)|gamesPlayed|Possess/i.test(k)).join(','));
+    const fga = m.avgFieldGoalsAttempted, fta = m.avgFreeThrowsAttempted, to = m.avgTurnovers, orb = m.avgOffensiveRebounds, pts = m.avgPoints;
+    if (ab && [fga, fta, to, orb, pts].every(v => v != null)) { const poss = fga + 0.44 * fta - orb + to; TM[ab] = { fga, fta, to, poss, pts }; lgPts += pts; lgPoss += poss; lgFga += fga; lgFta += fta; } } catch (e) {} }
+  const tmN = Object.keys(TM).length; log.push('adv teams ' + tmN);
+  const LGAV = tmN > 20 ? { ts: r1(lgPts / (2 * (lgFga + 0.44 * lgFta)) * 100), usg: 20, per100: r1(lgPts / lgPoss * 100 / 5), poss: r1(lgPoss / tmN) } : null;
+  const ADV = {};
+  const advOf = (p, ab) => { const g = id => (p.stats || []).find(x => x.id === id); const a27 = g('002027'), a26 = g('002026'); if (!a27 || !a27.stats || !(a27.stats['42'] > 0)) return null;
+    const tsOf = st => { if (!st) return null; const d = 2 * (st['14'] + 0.44 * st['16']); return d > 0 ? r1(st['0'] / d * 100) : null; };
+    const st = a27.stats, gp = st['42'], mpg = st['40'] / gp, tm = TM[ab]; if (!tm || !mpg) return null;
+    const fga = st['14'] / gp, fta = st['16'] / gp, to = st['11'] / gp, pts = st['0'] / gp;
+    const usg = 100 * (fga + 0.44 * fta + to) * 48 / (mpg * (tm.fga + 0.44 * tm.fta + tm.to));
+    const per100 = pts * 48 * 100 / (mpg * tm.poss);
+    return [gp, r1(usg), tsOf(st), r1(per100), tsOf(a26 && a26.stats), a26 && a26.stats ? a26.stats['42'] : null, r1(pts / tm.pts * 100), r1(tm.poss)]; };
   const all = {}; Object.values(RO).forEach(a => a.forEach(p => all[p.id] = p)); FAL.slice(0, 30).forEach(p => all[p.id] = p);
   const ids = Object.keys(all).map(Number); const LG = {};
   for (let k = 0; k < ids.length; k += 30) {
@@ -232,18 +248,12 @@ try { // per-game logs for every rostered player and the top free agents
         const gm = ((games[s.proTeamId] || {})[String(s.scoringPeriodId)] || [])[0]; const opp = gm ? (gm.homeProTeamId === s.proTeamId ? 'vs ' + abbr[gm.awayProTeamId] : '@ ' + abbr[gm.homeProTeamId]) : '';
         const v = i => s.stats[String(i)] == null ? 0 : Math.round(s.stats[String(i)]);
         return [dd(s.scoringPeriodId), opp, r1(s.appliedTotal), v(0), v(6), v(3), v(2), v(1), v(11), v(40)]; });
+      try { const ad = advOf(p, abbr[p.proTeamId]); if (ad) ADV[p.id] = ad; } catch (e) {}
       LG[p.id] = [p.fullName, abbr[p.proTeamId], avgPts(p, '002027'), avgPts(p, '012027'), avgPts(p, '022027'), avgPts(p, '002026'), r1((base0.ownership || p.ownership || {}).percentOwned), p.injuryStatus || null, gl]; });
   }
+  if (LGAV && Object.keys(ADV).length > 50) { A.adv = ADV; A.advLg = LGAV; log.push('adv ' + Object.keys(ADV).length + ' lg ' + JSON.stringify(LGAV)); } else log.push('adv too few ' + Object.keys(ADV).length);
   if (Object.keys(LG).length > 100) { A.logs = LG; log.push('logs ' + Object.keys(LG).length + ' sample games ' + JSON.stringify(Object.values(LG)[0][8].slice(0, 2))); } else log.push('logs too few');
 } catch (e) { log.push('logs FAIL ' + e.message); }
-
-try { // DEBUG: raw stat shapes for advanced stats
-  const f = { players: { filterIds: { value: [3112335] }, filterStatsForTopScoringPeriodIds: { value: 3, additionalValue: ['002027', '002026'] } } };
-  const j = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(f) });
-  const p = (j.players || [])[0].player; log.push('DBG player ' + p.fullName);
-  (p.stats || []).filter(x => x.id === '002027' || x.id === '002026').forEach(x => log.push('DBG ' + x.id + ' stats ' + JSON.stringify(x.stats) + ' avg ' + JSON.stringify(x.averageStats)));
-  const t = await get(SITE + '/teams/25/statistics'); log.push('DBG team ' + JSON.stringify(t).slice(0, 1500));
-} catch (e) { log.push('DBG FAIL ' + e.message); }
 
 A.builtAt = new Date().toISOString();
 const json = JSON.stringify(A).replace(/</g, '\\u003c');
