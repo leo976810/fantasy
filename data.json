@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-07 13:30(台北時間)",
+ "asof": "2026-11-08 06:45(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2357,10 +2357,10 @@
  },
  "injuries": [
   [
-   "out",
+   "dtd",
    "Immanuel Quickley",
-   "你的 SG。左大腿後肌,ESPN 已改標 OUT,回歸日未定,本週剩餘比賽不影響。",
-   "11/6"
+   "你的 SG。左大腿後肌,ESPN 現標 DTD(原 OUT),預計 11/9 前後回歸;TOR 11/7 沒有比賽,不影響本週。",
+   "11/9"
   ],
   [
    "dtd",
@@ -3132,8 +3132,15 @@
    "11/8"
   ]
  },
- "version": "v2.10",
+ "version": "v2.11",
  "changelog": [
+  {
+   "v": "v2.11",
+   "date": "11/8",
+   "items": [
+    "早間出賽確認:ESPN 比賽日 11/7(美東)。替補(Klay、Garland、Quickley)今天都沒有比賽,IR 的 Morant、Kawhi 仍是 OUT,先發 10 人全是 ACTIVE,沒有需要換人的球員。Quickley 由 OUT 轉為 DTD(預計 11/9 回歸),已更新傷兵清單。"
+   ]
+  },
   {
    "v": "v2.10",
    "date": "11/8",
@@ -3443,6 +3450,11 @@
   }
  ],
  "todo": [
+  {
+   "lv": "留意",
+   "t": "早間檢查:今天沒有需要換人的球員",
+   "d": "我讀了 ESPN 11/7(美東)的陣容:先發 10 人全是 ACTIVE;替補 Klay(MIA)、Garland(LAC)、Quickley(TOR)與 IR 的 Morant、Kawhi 今天都沒有比賽或仍是 OUT,不用動。Quickley 現在 ESPN 標為 DTD(原本 OUT),預計 11/9 前後回歸,但 TOR 今天沒比賽,不影響。今天有比賽的先發:Murray 06:00(DEN)、Okongwu 08:30(ATL)、Mobley 與 Hartenstein 09:00(CLE、OKC)、Wagner 與 Lendeborg 09:30(ORL、GS)。"
+  },
   {
    "lv": "留意",
    "t": "Quickley 已升級為 OUT,週六日不用處理",
