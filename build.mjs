@@ -8,7 +8,7 @@ const SITE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
 const get = async (u, h) => { const r = await fetch(u, { headers: h || {} }); if (!r.ok) throw new Error(u + ' -> HTTP ' + r.status); return r.json(); };
 const r1 = v => v == null || isNaN(v) ? null : Math.round(v * 10) / 10;
 const RE = /(<script id="data" type="application\/json">)([\s\S]*?)(<\/script>)/;
-let html = fs.readFileSync('index.html', 'utf8');
+let html = fs.readFileSync('v2/index.html', 'utf8');
 const A = JSON.parse(html.match(RE)[2]);
 const B = JSON.parse(fs.readFileSync('data.json', 'utf8'));
 const log = [];
@@ -311,5 +311,5 @@ try { // per-game logs for every rostered player and the top free agents
 A.builtAt = new Date().toISOString();
 const json = JSON.stringify(A).replace(/</g, '\\u003c');
 html = html.replace(RE, (m, a, b, c) => a + json + c);
-fs.writeFileSync('index.html', html);
+fs.writeFileSync('v2/index.html', html);
 console.log(log.join('\n'));
