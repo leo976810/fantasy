@@ -1,7 +1,7 @@
 name: update-data
 on:
   schedule:
-    - cron: '17 */4 * * *'
+    - cron: '17,47 * * * *'
   workflow_dispatch:
   push:
     paths: ['data.json', 'build.mjs', 'update.mjs']

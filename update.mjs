@@ -26,6 +26,8 @@ try {
   const ks = Object.keys(g0.home.pointsByScoringPeriod).map(Number).filter(n => n >= base - 1);
   if (ks.length) base = Math.min(...ks);
 } catch (e) {}
+// a scoring day counts as finished when its scoring period has passed, or all of today's NBA games started 3.5+ hours ago
+const dayDone = sp => { if (sp < today) return true; if (sp > today) return false; const ds = []; Object.keys(games).forEach(t => (games[t][String(sp)] || []).forEach(g => ds.push(g.date))); return ds.length > 0 && Math.max(...ds) + 3.5 * 3600000 < Date.now(); };
 const hasGame = (tid, sp) => (games[tid] && (games[tid][String(sp)] || []).length > 0) ? 1 : 0;
 const nextWeek = tid => { let n = 0; for (let i = 7; i < 14; i++) n += hasGame(tid, base + i); return n; };
 
@@ -92,7 +94,7 @@ D.record = byId[meId].record.overall.wins + '-' + byId[meId].record.overall.loss
 const mm = opp[meId]; const oppId = mm.id; const oppName = nm(byId[oppId]);
 const DAYS = D.matchupDays.days;
 // today's scoring period is still in progress (or not started), so it counts as not finished
-const pickPts = g => DAYS.map((_, i) => { const v = (g.pointsByScoringPeriod || {})[String(base + i)]; return v == null || base + i >= today ? null : r1(v); });
+const pickPts = g => DAYS.map((_, i) => { const v = (g.pointsByScoringPeriod || {})[String(base + i)]; return v == null || !dayDone(base + i) ? null : r1(v); });
 const act = { me: pickPts(mm.me), op: pickPts(mm.other) };
 const counts = arr => DAYS.map((_, i) => arr.filter(x => x.slot !== 'IR' && hasGame(x.tid, base + i)).length);
 const val = x => x.l7 != null ? x.l7 : x.l15 != null ? x.l15 : x.s27 != null ? x.s27 : x.s26 != null ? x.s26 : 0;

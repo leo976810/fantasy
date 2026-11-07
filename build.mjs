@@ -121,7 +121,8 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
   const mine = RO[meId].filter(p => p.slot !== 13);
   // (a) best lineup for each remaining day
   const LU = []; let weak = null;
-  for (let sp = today; sp < base + 7; sp++) {
+  const tdDone = (() => { const ds = []; Object.keys(games).forEach(t => (games[t][String(today)] || []).forEach(g => ds.push(g.date))); return ds.length > 0 && Math.max(...ds) + 3.5 * 3600000 < Date.now(); })();
+  for (let sp = tdDone ? today + 1 : today; sp < base + 7; sp++) {
     const i = sp - base; const jr = await get(L + '?view=mRoster&scoringPeriodId=' + sp + '&forTeamId=' + meId);
     const ents = jr.teams.find(x => x.id === meId).roster.entries.map(e => Object.assign({}, e.playerPoolEntry.player, { slot: e.lineupSlotId }));
     const play = ents.filter(p => p.slot !== 13 && has(p.proTeamId, sp)), ok = play.filter(p => p.injuryStatus !== 'OUT');
