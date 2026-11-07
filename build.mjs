@@ -190,17 +190,24 @@ try { // v2: full-season matchup schedule + playoff standings context (used by t
   log.push('v2 standings ' + standings.length + ' future-teams ' + Object.keys(future).length + ' curWeek ' + cur + '/' + ss.matchupPeriodCount + ' playoffTeamCount ' + ss.playoffTeamCount);
 } catch (e) { log.push('v2 FAIL ' + e.message); }
 
-try { // DEBUG probe 2: athlete category shape + name-matching test against a known roster player
+try { // per-player recent news (latest 3 articles mentioning each player, for the 球員分析 panel)
+  if (!CTX) throw new Error('no ctx');
   const j = await get(SITE + '/news?limit=50');
   const arts = j.articles || [];
-  log.push('newsprobe2 article count ' + arts.length);
-  const athleteCats = [];
-  arts.forEach(a => (a.categories || []).forEach(c => { if (c.type === 'athlete') athleteCats.push({ id: c.id, uid: c.uid, description: c.description, headline: a.headline, published: a.published, link: (a.links && a.links.web && a.links.web.href) || null }); }));
-  log.push('newsprobe2 athlete-category count ' + athleteCats.length);
-  log.push('newsprobe2 sample ' + JSON.stringify(athleteCats.slice(0, 5)));
-  const hit = athleteCats.filter(c => (c.description || '').indexOf('Cunningham') >= 0 || (c.headline || '').indexOf('Cunningham') >= 0);
-  log.push('newsprobe2 Cunningham hits ' + JSON.stringify(hit));
-} catch (e) { log.push('newsprobe2 FAIL ' + e.message); }
+  const allNames = new Set((A.cmp || []).map(l => l.split('|')[1]));
+  const byName = {};
+  arts.forEach(a => {
+    const link = (a.links && a.links.web && a.links.web.href) || null;
+    (a.categories || []).forEach(c => {
+      if (c.type !== 'athlete' || !c.description || !allNames.has(c.description)) return;
+      (byName[c.description] = byName[c.description] || []).push({ h: a.headline, p: a.published, u: link });
+    });
+  });
+  const NEWS = {};
+  Object.keys(byName).forEach(n => { NEWS[n] = byName[n].sort((a, b) => (b.p || '').localeCompare(a.p || '')).slice(0, 3).map(x => ({ h: x.h, d: md(x.p), u: x.u })); });
+  A.news = NEWS;
+  log.push('news ' + Object.keys(NEWS).length + ' players, from ' + arts.length + ' articles');
+} catch (e) { log.push('news FAIL ' + e.message); }
 
 try { // Streaming plan: add a free agent, drop one of mine, compare per-day top-10 totals
   if (!CTX) throw new Error('no ctx');
