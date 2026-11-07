@@ -4,7 +4,7 @@ on:
     - cron: '17,47 * * * *'
   workflow_dispatch:
   push:
-    paths: ['data.json', 'build.mjs', 'update.mjs']
+    paths: ['data.json', 'build.mjs', 'update.mjs', 'gate.mjs']
 permissions:
   contents: write
 concurrency:
@@ -18,9 +18,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: node update.mjs
-      - run: node build.mjs
+      - id: gate
+        run: node gate.mjs
+      - if: steps.gate.outputs.run == 'true'
+        run: node update.mjs
+      - if: steps.gate.outputs.run == 'true'
+        run: node build.mjs
       - name: Commit if changed
+        if: steps.gate.outputs.run == 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "actions@users.noreply.github.com"

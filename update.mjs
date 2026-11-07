@@ -109,6 +109,7 @@ D.matchupDays = Object.assign({}, D.matchupDays, { opp: oppName, me: counts(mine
   proj: Object.assign({}, D.matchupDays.proj, { days: rem.map(i => DAYS[i]), me: rem.map(i => dayPts(mine, i)), op: rem.map(i => dayPts(theirs, i)) }),
   estPast: { me: DAYS.map((_, i) => act.me[i] != null ? dayPts(mine, i)[1] : null), op: DAYS.map((_, i) => act.op[i] != null ? dayPts(theirs, i)[1] : null) } });
 
+D.doneSp = dayDone(today) ? today : today - 1;
 D.autoAsof = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
 fs.writeFileSync('data.json', JSON.stringify(D, null, 1));
 console.log('updated', D.autoAsof, 'period', cur, 'today', today, 'base', base, 'opp', oppName, 'past days', nPast);
