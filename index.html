@@ -869,3 +869,43 @@ async function fetchToday(ME) {
   });
 })();
 </script>
+
+<script>
+(function () { try {
+  var D = JSON.parse(document.getElementById('data').textContent), M = D.matchupDays || {}, DD = D.dayDetail || {}, host = document.getElementById('todo'); if (!host || !M.actual) return;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function f1(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+  var i = -1; for (var k = 0; k < M.days.length; k++) { if (M.actual.me[k] != null && M.actual.me[k] > 0 && DD.me && DD.me[k] && DD.me[k].rows.length) i = k; }
+  if (i < 0) return;
+  var me = DD.me[i], op = DD.op[i], opN = M.opp, mine = M.actual.me[i], theirs = M.actual.op[i];
+  function dif(d) { return d.rows.filter(function (r) { return r[1] != null && r[3] === 'S'; }).map(function (r) { return { n: r[0], e: r[1], a: r[2], d: r[2] - r[1] }; }); }
+  function names(a, sign) { return a.map(function (x) { return x.n + '(' + x.a + ',預估 ' + f1(x.e) + ')'; }).join('、'); }
+  var m = dif(me), o = dif(op), L = [];
+  var gap = mine - theirs;
+  L.push('這天你 ' + mine + '、' + opN + ' ' + theirs + ',' + (gap >= 0 ? '你贏 ' + gap : '你輸 ' + (-gap)) + ' 分。預估你 ' + f1(me.est) + '、對手 ' + f1(op.est) + '(你' + (mine - me.est >= 0 ? '多' : '少') + '打 ' + f1(Math.abs(mine - me.est)) + ',對手' + (theirs - op.est >= 0 ? '多' : '少') + '打 ' + f1(Math.abs(theirs - op.est)) + ')。');
+  var short = Math.max(0, me.est - mine), over = Math.max(0, theirs - op.est);
+  if (gap < 0 && short + over > 0) L[0] += '差距約有 ' + Math.round(short / (short + over) * 100) + '% 來自你這邊沒打出預估,' + (100 - Math.round(short / (short + over) * 100)) + '% 來自對手超水準。';
+  var zero = m.filter(function (x) { return x.a === 0; }), low = m.filter(function (x) { return x.a > 0 && x.d <= -8; }).sort(function (x, y) { return x.d - y.d; }).slice(0, 3), hi = m.filter(function (x) { return x.d >= 8; }).sort(function (x, y) { return y.d - x.d; }).slice(0, 3);
+  if (zero.length) L.push('先發卻 0 分(可能缺陣或沒上場):' + zero.map(function (x) { return x.n + '(預估 ' + f1(x.e) + ')'; }).join('、') + '。');
+  if (low.length) L.push('你這邊低於預估:' + names(low) + '。');
+  if (hi.length) L.push('你這邊高於預估:' + names(hi) + '。');
+  var ohi = o.filter(function (x) { return x.d >= 8; }).sort(function (x, y) { return y.d - x.d; }).slice(0, 3), olo = o.filter(function (x) { return x.d <= -8; }).sort(function (x, y) { return x.d - y.d; }).slice(0, 2);
+  if (ohi.length) L.push('對手高於預估:' + names(ohi) + '。');
+  if (olo.length) L.push('對手低於預估:' + names(olo) + '。');
+  var MM = D.matchup || {}, wk = (MM.meScore != null && MM.oppScore != null) ? MM.meScore - MM.oppScore : null, P = M.proj || {};
+  if (P.days && P.days.length && wk != null) {
+    var sm = function (a) { return a.reduce(function (t, r) { return t + (r ? r[1] : 0); }, 0); }, rm = sm(P.me), ro = sm(P.op), fin = wk + rm - ro;
+    var more = []; P.days.forEach(function (d, j) { if (P.op[j] && P.me[j] && P.op[j][0] > P.me[j][0]) more.push(d + '(對手 ' + P.op[j][0] + ' 人、你 ' + P.me[j][0] + ' 人)'); });
+    L.push('本週目前你 ' + MM.meScore + '、對手 ' + MM.oppScore + ',' + (wk >= 0 ? '領先 ' : '落後 ') + Math.abs(wk) + ' 分。剩下 ' + P.days.join('、') + ',預估你再得 ' + f1(rm) + '、對手 ' + f1(ro) + ',預估最終' + (fin >= 0 ? '你領先 ' : '你落後 ') + f1(Math.abs(fin)) + ' 分' + (more.length ? ';對手人數比你多的日子:' + more.join('、') : '') + '。');
+  }
+  var inj = ((D.insights || {}).INJ || []).filter(function (r) { return r[2] === '先發'; });
+  if (inj.length) L.push('先發名單目前有傷病:' + inj.map(function (r) { return r[0] + '(' + r[1] + ')'; }).join('、') + ',上場前先確認。');
+  L.push('以上由頁面依 ESPN 資料自動產生:預估 = 近 7 場平均(已打完的日子用目前陣容回算),單場差距 8 分以上才列出。');
+  var det = document.createElement('details'); det.className = 'tnote'; det.open = true;
+  det.innerHTML = '<summary>' + esc(M.days[i] + ' ' + (M.dates ? M.dates[i] : '') + ' 賽後評語(自動產生)') + '</summary>' + L.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('');
+  var h = host.querySelector('h2'); if (h) h.insertAdjacentElement('afterend', det); else host.insertBefore(det, host.firstChild);
+  var st = document.createElement('style');
+  st.textContent = '.tnote { margin: 0 0 12px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); } .tnote summary { cursor: pointer; font-weight: 700; } .tnote p { margin: 8px 0 0; font-size: 14px; line-height: 1.6; }';
+  document.head.appendChild(st);
+} catch (e) {} })();
+</script>
