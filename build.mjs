@@ -237,6 +237,14 @@ try { // per-game logs for every rostered player and the top free agents
   if (Object.keys(LG).length > 100) { A.logs = LG; log.push('logs ' + Object.keys(LG).length + ' sample games ' + JSON.stringify(Object.values(LG)[0][8].slice(0, 2))); } else log.push('logs too few');
 } catch (e) { log.push('logs FAIL ' + e.message); }
 
+try { // DEBUG: raw stat shapes for advanced stats
+  const f = { players: { filterIds: { value: [3112335] }, filterStatsForTopScoringPeriodIds: { value: 3, additionalValue: ['002027', '002026'] } } };
+  const j = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(f) });
+  const p = (j.players || [])[0].player; log.push('DBG player ' + p.fullName);
+  (p.stats || []).filter(x => x.id === '002027' || x.id === '002026').forEach(x => log.push('DBG ' + x.id + ' stats ' + JSON.stringify(x.stats) + ' avg ' + JSON.stringify(x.averageStats)));
+  const t = await get(SITE + '/teams/25/statistics'); log.push('DBG team ' + JSON.stringify(t).slice(0, 1500));
+} catch (e) { log.push('DBG FAIL ' + e.message); }
+
 A.builtAt = new Date().toISOString();
 const json = JSON.stringify(A).replace(/</g, '\\u003c');
 html = html.replace(RE, (m, a, b, c) => a + json + c);
