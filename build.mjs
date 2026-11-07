@@ -168,6 +168,15 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
   log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length);
 } catch (e) { log.push('decision FAIL ' + e.message); }
 
+try { // DEBUG probe: inspect schedule/settings shape for v2 (future matchups, playoff format)
+  const full2 = await get(L + '?view=mTeam&view=mMatchupScore&view=mSettings');
+  log.push('v2probe status ' + JSON.stringify(full2.status));
+  log.push('v2probe scheduleSettings ' + JSON.stringify(full2.settings.scheduleSettings));
+  log.push('v2probe teams sample ' + JSON.stringify(full2.teams.slice(0, 2).map(t => ({ id: t.id, name: t.name, location: t.location, nickname: t.nickname }))));
+  log.push('v2probe schedule length ' + full2.schedule.length + ' sample ' + JSON.stringify(full2.schedule.filter(g => g.away).slice(0, 2)));
+  log.push('v2probe max matchupPeriodId ' + Math.max(...full2.schedule.filter(g => g.away).map(s => s.matchupPeriodId)));
+} catch (e) { log.push('v2probe FAIL ' + e.message); }
+
 try { // Streaming plan: add a free agent, drop one of mine, compare per-day top-10 totals
   if (!CTX) throw new Error('no ctx');
   const { abbr, today, base, has, avgPts, RO, FAL, nm } = CTX;
