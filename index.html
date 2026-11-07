@@ -901,11 +901,52 @@ async function fetchToday(ME) {
   var inj = ((D.insights || {}).INJ || []).filter(function (r) { return r[2] === '先發'; });
   if (inj.length) L.push('先發名單目前有傷病:' + inj.map(function (r) { return r[0] + '(' + r[1] + ')'; }).join('、') + ',上場前先確認。');
   L.push('以上由頁面依 ESPN 資料自動產生:預估 = 近 7 場平均(已打完的日子用目前陣容回算),單場差距 8 分以上才列出。');
-  var det = document.createElement('details'); det.className = 'tnote'; det.open = true;
+  var det = document.createElement('details'); det.className = 'tnote'; det.open = false;
   det.innerHTML = '<summary>' + esc(M.days[i] + ' ' + (M.dates ? M.dates[i] : '') + ' 賽後評語(自動產生)') + '</summary>' + L.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('');
   var h = host.querySelector('h2'); if (h) h.insertAdjacentElement('afterend', det); else host.insertBefore(det, host.firstChild);
   var st = document.createElement('style');
   st.textContent = '.tnote { margin: 0 0 12px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); } .tnote summary { cursor: pointer; font-weight: 700; } .tnote p { margin: 8px 0 0; font-size: 14px; line-height: 1.6; }';
   document.head.appendChild(st);
 } catch (e) {} })();
+</script>
+<script>
+/* PREVIEW: first-page tidy-up. Runs after the other scripts. */
+(function(){ function go(){ try{
+  var D=JSON.parse(document.getElementById('data').textContent), host=document.getElementById('todo'); if(!host) return;
+  var ol=host.querySelector('ol'); if(!ol) return;
+  var lis=[].slice.call(ol.children), rank=function(li){var t=li.textContent; return t.indexOf('先做')>-1&&t.indexOf('先做')<6?0:(t.indexOf('建議')>-1&&t.indexOf('建議')<6?1:2);};
+  lis.sort(function(a,b){return rank(a)-rank(b)}).forEach(function(li){ol.appendChild(li)});
+  var urgent=lis.filter(function(li){return rank(li)<2&&li.textContent.indexOf('已確認')<0&&li.textContent.indexOf('不用')<0}).length;
+  var MM=D.matchup||{}, wk=(MM.meScore!=null&&MM.oppScore!=null)?MM.meScore-MM.oppScore:null;
+  var inj=((D.insights||{}).INJ||[]).filter(function(r){return r[2]==='先發'});
+  var line=document.createElement('div'); line.className='hl1';
+  line.innerHTML='<div class="hl1-main">'+(wk==null?'':(wk>=0?'目前領先 ':'目前落後 ')+'<b>'+Math.abs(wk)+'</b> 分 · ')+(urgent? '有 <b>'+urgent+'</b> 件事要處理':'今天沒有要立刻處理的事')+'</div>'+
+    '<div class="hl1-sub">'+(inj.length?'先發傷病:'+inj.map(function(r){return r[0]+'('+r[1]+')'}).join('、'):'先發沒有傷病')+'</div>';
+  var h=host.querySelector('h2'); if(h) h.insertAdjacentElement('afterend',line);
+  if(lis.length>3){ var det=document.createElement('details'); det.className='more3'; det.innerHTML='<summary>其他 '+(lis.length-3)+' 項提醒</summary>';
+    var ol2=document.createElement('ol'); ol2.className=ol.className; lis.slice(3).forEach(function(li){ol2.appendChild(li)}); det.appendChild(ol2); ol.insertAdjacentElement('afterend',det); }
+  var st=document.createElement('style'); st.textContent='.hl1{margin:0 0 12px;padding:10px 14px;border-radius:8px;background:var(--accent-soft)} .hl1-main{font-size:18px;font-weight:700} .hl1-main b{font-size:22px;font-family:var(--font-display)} .hl1-sub{font-size:13px;color:var(--muted);margin-top:2px} .more3{margin-top:12px} .more3 summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:13.5px} .more3 ol{margin-top:10px} .tnote{font-size:13px} .tnote summary{font-weight:500;color:var(--muted)}';
+  var tn=host.querySelector('.tnote'); if(tn){ tn.querySelector('summary').textContent='昨日賽後評語(點開看預估對照)'; host.appendChild(tn); tn.style.marginTop='12px'; }
+ document.head.appendChild(st);
+ }catch(e){console.log(e)} }
+ setTimeout(go,1500);
+})();
+</script>
+<script>
+(function(){ setTimeout(function(){ try{
+ var host=document.getElementById('todo'); if(!host) return;
+ var key='todoDone:'+new Date().toISOString().slice(0,10), saved={};
+ try{ saved=JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+ function save(){ try{ localStorage.setItem(key,JSON.stringify(saved)); }catch(e){} }
+ host.querySelectorAll('li').forEach(function(li){
+  var tt=li.querySelector('b'); if(!tt) return; var id=tt.textContent.trim();
+  var c=document.createElement('input'); c.type='checkbox'; c.className='tdchk'; c.setAttribute('aria-label','完成:'+id);
+  function apply(){ li.classList.toggle('tddone',c.checked); }
+  c.checked=!!saved[id]; apply();
+  c.addEventListener('change',function(){ if(c.checked) saved[id]=1; else delete saved[id]; save(); apply(); });
+  li.insertBefore(c,li.firstChild);
+ });
+ var st=document.createElement('style'); st.textContent='.todo li{grid-template-columns:auto auto 1fr!important;align-items:start!important} .tdchk{width:20px;height:20px;margin:2px 0 0;accent-color:var(--good);cursor:pointer} .tddone{opacity:.55} .tddone b{text-decoration:line-through} .tddone .d2{display:none}';
+ document.head.appendChild(st);
+ }catch(e){} },2000); })();
 </script>
