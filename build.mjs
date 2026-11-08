@@ -364,6 +364,46 @@ try { // per-game logs for every rostered player and the top free agents
   }
   if (LGAV && Object.keys(ADV).length > 50) { A.adv = ADV; A.advLg = LGAV; log.push('adv ' + Object.keys(ADV).length + ' lg ' + JSON.stringify(LGAV)); } else log.push('adv too few ' + Object.keys(ADV).length);
   if (Object.keys(LG).length > 100) { A.logs = LG; log.push('logs ' + Object.keys(LG).length + ' sample games ' + JSON.stringify(Object.values(LG)[0][8].slice(0, 2))); } else log.push('logs too few');
+
+  // ---------- daily burst/bust leaderboard + weekly tally ----------
+  // Reuses the per-player game logs just built above (no extra API calls). For the day that
+  // just finished (B.doneSp, set by update.mjs), compares each player's actual fantasy score
+  // to their own expected baseline (season avg, falling back to last year / last-15 when the
+  // season sample is thin) and ranks the biggest positive/negative gaps. Only players with an
+  // expected baseline >= 10 count, so a garbage-time bench stat line can't swing the list.
+  // Also keeps a running weekly tally (reset when the matchup week's Monday scoring period
+  // changes) to auto-write a one-line comment on anyone who keeps showing up either way.
+  try {
+    const dayLabel = dd(B.doneSp);
+    const rows = [];
+    Object.keys(all).forEach(id => {
+      const p = all[id], L0 = LG[id]; if (!L0) return;
+      const gl = L0[8]; if (!gl || !gl.length) return;
+      const g0 = gl[0]; if (g0[0] !== dayLabel) return; // only the day that just finished
+      const [, opp, score, pts, reb, ast, stl, blk, to] = g0;
+      const s27 = L0[2], l15 = L0[4], s26 = L0[5];
+      const exp = s27 != null ? s27 : (s26 != null ? s26 : l15);
+      if (exp == null || exp < 10) return;
+      rows.push({ id: +id, name: p.fullName, team: abbr[p.proTeamId], opp, score, exp: r1(exp), diff: r1(score - exp), pts, reb, ast, stl, blk, to, own: L0[6] });
+    });
+    rows.sort((a, b) => b.diff - a.diff);
+    const up = rows.filter(r => r.diff > 0).slice(0, 10);
+    const down = rows.filter(r => r.diff < 0).sort((a, b) => a.diff - b.diff).slice(0, 10);
+    const prevWeek = (A.burstWeek && A.burstWeek.base === base) ? A.burstWeek : { base, tally: {} };
+    const tally = prevWeek.tally;
+    const bump = (r, dir) => { const t = tally[r.id] = tally[r.id] || { name: r.name, up: 0, down: 0, best: 0, worst: 0 };
+      if (dir > 0) { t.up++; t.best = Math.max(t.best, r.diff); } else { t.down++; t.worst = Math.min(t.worst || 0, r.diff); } };
+    up.forEach(r => bump(r, 1)); down.forEach(r => bump(r, -1));
+    const notable = Object.values(tally).filter(t => t.up >= 2 || t.down >= 2).sort((a, b) => (b.up - b.down) - (a.up - a.down));
+    const weekComment = notable.slice(0, 4).map(t => t.up >= 2 && t.up > t.down
+      ? t.name + ' 本週已 ' + t.up + ' 次登上爆走榜(單場最高 +' + r1(t.best) + ')'
+      : t.down >= 2 && t.down > t.up
+        ? t.name + ' 本週已 ' + t.down + ' 次爆胎(單場最差 ' + r1(t.worst) + ')'
+        : t.name + ' 本週忽冷忽熱,爆走 ' + t.up + ' 次、爆胎 ' + t.down + ' 次').join('；');
+    A.burstWeek = { base, tally };
+    A.burst = { day: dayLabel, up, down, weekComment: weekComment || null };
+    log.push('burst up ' + up.length + ' down ' + down.length + ' weekTally ' + Object.keys(tally).length);
+  } catch (e) { log.push('burst FAIL ' + e.message); }
 } catch (e) { log.push('logs FAIL ' + e.message); }
 
 A.builtAt = new Date().toISOString();
