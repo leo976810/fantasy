@@ -2439,6 +2439,13 @@
   "note": "下方先列追蹤清單裡每位推主的最新貼文,再列「NBA fantasy」關鍵字搜尋(依最近排序)的最新 5 篇。摘要是我用自己的話整理,點連結看原文。",
   "accounts": [
    {
+    "handle": "fantasy.moose",
+    "label": "范特西慕斯(進階數據/選秀分級)",
+    "post": "/@fantasy.moose/post/DfeH9pPFVx1",
+    "age": "約 1 小時前",
+    "sum": "W4 週賽程策略:灰狼、籃網本週只打 2 場,可丟掉不上不下的格位;B2B 多,建議用 2-3 個 move 洗湖人→塞爾提克→獨行俠拿 6 場。Keegan/Demin 預計回歸但偏 streamer;Missi 若健康值得留意;綠塞 PG、獨行俠 Irving 預測 B2B 輪休。新秀 Burries、Flemings 進先發,MJJ 有爆發,12 人盟以上建議留意公鹿/老鷹新秀。"
+   },
+   {
     "handle": "fantasytaiwanbaseball",
     "label": "台灣 fantasy 漲跌幅榜",
     "post": "/@fantasytaiwanbaseball/post/DfXahbFD09Q",
