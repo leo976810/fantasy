@@ -77,7 +77,7 @@ h1, h2, h3 { margin: 0; text-wrap: balance; }
 .hl{outline:2px solid #f5a623;outline-offset:2px;position:relative}.hl.panel::after{content:"NEW";position:absolute;top:-10px;right:12px;background:#f5a623;color:#2b1a00;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px}
 td.hl{background:rgba(245,166,35,.16)}
 .hlnote{background:rgba(245,166,35,.16);border:1px solid #f5a623;border-radius:8px;padding:8px 12px;font-size:13px}
-.livewrap{position:absolute;top:10px;right:58px;display:flex;align-items:center;gap:8px;font-size:12px;border-radius:999px}
+.livewrap{display:flex;align-items:center;gap:8px;font-size:12px;margin-top:8px;flex-wrap:wrap}
 .livebtn{background:transparent;color:inherit;border:1px solid currentColor;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;opacity:.92;white-space:nowrap}
 .livebtn:hover{opacity:1}.livebtn:disabled{opacity:.55;cursor:default}
 .livewrap #livets{opacity:.8;font-size:11px;margin:0}
@@ -142,7 +142,6 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   .desk { grid-template-columns: minmax(0, 1fr); }
   .board { grid-template-columns: 1fr; }
   .team .pts { font-size: 44px; }
-  .livewrap { position: static; margin: 6px 0 0; }
 }
 
 .sched span.hl { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
@@ -251,10 +250,10 @@ body.locked > :not(#pwgate){display:none !important}
     <div>
       <div class="top"><h1>AESPA 日報</h1><span class="sub" id="asof"></span></div>
       <div class="sub" id="leagueline"></div>
+      <div class="livewrap" id="livewrap"><button class="livebtn" id="livebtn" type="button">⚡ 立即更新</button><span class="sub" id="livets"></span></div>
     </div>
     <div class="score" id="score"></div>
     <div class="lead" id="lead"></div>
-    <div class="livewrap" id="livewrap"><button class="livebtn" id="livebtn" type="button">⚡ 立即更新</button><span class="sub" id="livets"></span></div>
     <button class="themebtn" id="themebtn" type="button"></button>
   </header>
 
