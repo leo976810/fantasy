@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-08 20:20(台北時間)",
+ "asof": "2026-11-08 20:00(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2359,7 +2359,7 @@
   [
    "dtd",
    "Immanuel Quickley",
-   "你的 SG。右大腿後肌,ESPN 現仍標 DTD,預計 11/9 前後回歸;TOR 11/8(今天)沒有比賽,不影響換人決定。",
+   "你的 SG。左大腿後肌,ESPN 現標 DTD(原 OUT),預計 11/9 前後回歸;TOR 11/7 沒有比賽,不影響本週。",
    "11/9"
   ],
   [
@@ -2401,13 +2401,13 @@
   [
    "out",
    "Kawhi Leonard",
-   "你的 IR。左膝積水處理完成,預計 11/23 重新評估,狀態仍 OUT。",
+   "你的 IR。左膝積水處理完成,一週後重新評估。",
    "11/23"
   ],
   [
    "out",
    "Ja Morant",
-   "你的 IR。左大腿後肌 Grade 2 拉傷,球團說缺到 12/1,狀態仍 OUT。",
+   "你的 IR。左大腿後肌 Grade 2 拉傷,球團說缺 4 週。",
    "12/1"
   ],
   [
@@ -2442,71 +2442,71 @@
     "handle": "fantasy.moose",
     "label": "范特西慕斯(進階數據/選秀分級)",
     "post": "/@fantasy.moose/post/DfeH9pPFVx1",
-    "age": "約 1 小時前",
+    "age": "約 5 小時前",
     "sum": "W4 週賽程策略:灰狼、籃網本週只打 2 場,可丟掉不上不下的格位;B2B 多,建議用 2-3 個 move 洗湖人→塞爾提克→獨行俠拿 6 場。Keegan/Demin 預計回歸但偏 streamer;Missi 若健康值得留意;綠塞 PG、獨行俠 Irving 預測 B2B 輪休。新秀 Burries、Flemings 進先發,MJJ 有爆發,12 人盟以上建議留意公鹿/老鷹新秀。"
    },
    {
     "handle": "fantasytaiwanbaseball",
     "label": "台灣 fantasy 漲跌幅榜",
-    "post": "/@fantasytaiwanbaseball/post/DfXahbFD09Q",
-    "age": "約 15 小時前",
-    "sum": "11/5 漲跌幅與傷病快報。Wemby 上半場 29 分 15 板 5 阻攻,馬刺險勝;提到 Jarrett Allen 首節退場,建議撿 Hezonja。"
+    "post": "/@fantasytaiwanbaseball/post/Dfcj5-aD_mq",
+    "age": "約 20 小時前",
+    "sum": "11/7 漲跌幅與傷病快報。Doncic 手感持續火熱,拓荒者怎麼防都沒用;Tatum 帶塞爾提克輕取傷兵滿營的黃蜂;Wemby 僅打 26 分鐘就拿下 30 分 14 籃板,馬刺輕取國王。暴龍少了 Barnes、Quickley 照樣擊敗公鹿,作者建議撿 Shead;AD、Jarrett Allen 明早賽前需再確認傷勢。"
    },
    {
     "handle": "w.g_balls",
     "label": "爆走爆胎整理",
-    "post": "/@w.g_balls/post/DfY-qUyE9lC",
-    "age": "約 1 小時前",
-    "sum": "11/6 爆走爆胎榜。爆走:Booker、Curry、Carter Jr.、Brooks;爆胎:Klay Thompson 投 3/10 只拿 11 分。"
+    "post": "/@w.g_balls/post/DfeGcTakcBz",
+    "age": "約 5 小時前",
+    "sum": "11/8 爆走爆胎整理。爆走:Curry(41分)、Brunson(31分)、Jalen Johnson(30分)、Wagner(30分)、SGA(30分)、Towns(29分)、Wembanyama(29分)、D.Mitchell(37分);爆胎:C.Braun、Eason、Jase Richardson、Harrison Barnes 手感都冰冷。"
    },
    {
     "handle": "nbafantasybible",
-    "label": "Yahoo 熱門加入/交易榜(英文)",
-    "post": "/@nbafantasybible/post/DfYKpl3EWCU",
-    "age": "約 8 小時前",
-    "sum": "Yahoo 11/5 最多人加入:Klay 第 1、Ighodaro 第 2、Bassey 第 3、Brooks 第 4。同日最多人被交易第 1 名是 Lendeborg。"
+    "label": "Yahoo 熱門加入/丟棄榜(英文)",
+    "post": "/@nbafantasybible/post/DfeuFI0AoL8",
+    "age": "約 10 分鐘前",
+    "sum": "Yahoo 11/8 當日最多人丟棄榜(圖文,正文未附文字清單);同帳號另一篇列出當日最多人加入榜前 5:Morez Johnson Jr.、Brayden Burries、Nolan Traore、Brook Lopez、Derrick Jones Jr.。"
    },
    {
     "handle": "fantasy_baskets_",
     "label": "范特西籃球 Podcast",
-    "post": "/@fantasy_baskets_/post/DfZFhAtmqjb",
-    "age": "約 16 分鐘前",
-    "sum": "11/6 爆發與爆胎整理。你的 Wagner(15 分 8 板 15 助 4 抄)和 Lendeborg(17 分 8 板 6 助 3 抄)上了爆發組;爆胎組有 Wiggins、Jalen Green、Ighodaro、Portis。"
+    "post": "/@fantasy_baskets_/post/DfeIwdhGl1Y",
+    "age": "約 5 小時前",
+    "sum": "11/8 今日爆胎組:Jase Richardson、Tre Johnson、Bilal Coulibaly、Trae Young、Harden、Mikal Bridges、CJ McCollum、Aaron Gordon、Tari Eason 手感都冰冷;同帳號另一篇列出今日爆發組,Curry 41 分最亮眼。"
    }
   ],
   "search": [
    {
-    "handle": "w.g_balls",
-    "post": "/@w.g_balls/post/DfY-qUyE9lC",
-    "age": "54 分鐘",
-    "sum": "爆走爆胎整理,同上方,Klay 投 3/10 只拿 11 分。"
-   },
-   {
-    "handle": "takeoverfantasy",
-    "post": "/@takeoverfantasy/post/DfYFPajiVXs",
-    "age": "9 小時",
-    "sum": "Klay 投進 8 顆三分、拿 49 fantasy 分,但打了 35 分鐘,平常約 24 分鐘 20 分,作者的口氣是別追。"
-   },
-   {
     "handle": "clutch5.fr",
-    "post": "/@clutch5.fr/post/DfXrAdtjWc6",
-    "age": "13 小時",
-    "sum": "法文,11/4 到 11/5 的薪資帽最佳 5 人:George、SGA、Adebayo、James、Wembanyama(Yahoo 式薪資帽玩法)。"
+    "post": "/@clutch5.fr/post/DfeRNkvjcpN",
+    "age": "約 4 小時前",
+    "sum": "法文貼文,11/7 到 11/8 的薪資帽最佳 5 人:Curry、McCain、Jalen Johnson、D.Jones、Wembanyama,共 179 fantasy 分(Yahoo 式薪資帽玩法)。"
    },
    {
-    "handle": "takeoverfantasy",
-    "post": "/@takeoverfantasy/post/DfXpw7UFlzZ",
-    "age": "13 小時",
-    "sum": "Myles Turner 36 分鐘拿 53 分,來源是籃板、助攻與抄截阻攻,預估平均約 30。"
+    "handle": "jocah.lav",
+    "post": "/@jocah.lav/post/DfeQ7OyFUtO",
+    "age": "約 4 小時前",
+    "sum": "閒聊貼文:作者抱怨 Ja Morant 傷停讓他這週的 fantasy 戰績大受影響。"
    },
    {
-    "handle": "fantasytaiwanbaseball",
-    "post": "/@fantasytaiwanbaseball/post/DfXahbFD09Q",
-    "age": "15 小時",
-    "sum": "同上方的 11/5 漲跌幅榜。"
+    "handle": "fantasy_baskets_",
+    "post": "/@fantasy_baskets_/post/DfeIwdhGl1Y",
+    "age": "約 5 小時前",
+    "sum": "11/8 今日爆胎組,同上方追蹤清單摘要。"
+   },
+   {
+    "handle": "fantasy.moose",
+    "post": "/@fantasy.moose/post/DfeH9pPFVx1",
+    "age": "約 5 小時前",
+    "sum": "W4 週賽程策略,同上方追蹤清單摘要。"
+   },
+   {
+    "handle": "w.g_balls",
+    "post": "/@w.g_balls/post/DfeGcTakcBz",
+    "age": "約 5 小時前",
+    "sum": "11/8 爆走爆胎整理,同上方追蹤清單摘要。"
    }
   ],
-  "skipped": "搜尋結果裡的廣告貼文(miss_williot_only1、nerdsmix 的電玩團購)已略過。"
+  "skipped": "搜尋結果裡的廣告貼文(anita979634 的體育博彩戰績推廣、administrator1148 的下注建議)與非 NBA fantasy 的閒聊(tmill1028、bck2shyy 的美式足球 fantasy 閒聊、crossesup/beckerpatentdotcom 的 Giannis 兄弟話題、baseline.buckets.official 的新粉絲問候)已略過。"
  },
  "roster": [
   [
@@ -3136,7 +3136,7 @@
    "v": "v2.21",
    "date": "11/8",
    "items": [
-    "早間出賽確認:ESPN 比賽日 11/8(美東)。檢查陣容(mRoster)與聯盟傷兵資料(site.api.espn.com/injuries),先發與 UTIL 球員全數 ACTIVE,今天有比賽的 Cunningham(DET)、Kessler(LAL)、Maxey(PHI)、Garland(LAC)、Klay Thompson(MIA)皆可正常出賽;替補與 IR(Morant、Kawhi 仍 OUT)今天都沒有比賽,沒有需要換人的球員。順便修正傷兵清單:Quickley 的受傷部位更正為右大腿後肌(原誤植左側),Morant、Kawhi 回歸日與狀態核對後維持不變。"
+    "Threads 每日 18:00 更新:追蹤清單 5 個帳號全部成功更新(fantasy.moose 無新貼文,其餘 4 個帳號皆有新內容);關鍵字「NBA fantasy」搜尋更新為最新 5 篇,略過博彩推廣與美式足球 fantasy 等不相關貼文"
    ]
   },
   {
@@ -3525,6 +3525,11 @@
  ],
  "todo": [
   {
+   "lv": "留意",
+   "t": "Threads 已更新(台北 11/8 18:00)",
+   "d": "Curry 今天爆發 41 分(13/19 命中),38 歲仍有巨星手感;另外提醒 AD、Jarrett Allen 傷勢明早賽前要再確認。到「消息」分頁看全文。"
+  },
+  {
    "lv": "建議",
    "t": "11/9 新的一週可考慮:用 Klay 的格位跑「湖人→塞爾提克→獨行俠」洗場次鏈",
    "d": "來源:@fantasy.moose 的週策略文。我對照 ESPN 實際賽程確認可行:湖人週一、週二(背靠背)@底特律/@亞特蘭大;塞爾提克週三、週四 @76人/@暴龍;獨行俠週五、週日 @灰狼/@騎士。用同一個格位依序接:週一加湖人的 Quentin Grimes(FA,29.6% 持有,約 13.8 分/場)→週三換成塞爾提克的 Mitchell Robinson(FA,C,12.5% 持有,約 16.4 分/場)→週五換成獨行俠的 Zaccharie Risacher(FA,SF,10.9% 持有,約 21.2 分/場)。只需要 3 次異動就能吃到 6 場比賽,比空在那裡或只放一般 streamer 划算。注意:這個格位是原本放 Klay 加 Trey Murphy III 的格位,兩個建議衝突——如果想兩個都做,需要額外放掉 Garland 騰一個格位。"
@@ -3538,11 +3543,6 @@
    "lv": "留意",
    "t": "Quickley 目前 ESPN 為 DTD,週日放在 UTIL",
    "d": "ESPN 讀到 11/8(美東)Quickley 狀態 DTD,預計 11/9 前後回歸。他在 UTIL 先發,TOR 當天若沒有比賽就不影響得分;下週一再決定去留。"
-  },
-  {
-   "lv": "留意",
-   "t": "早間出賽確認:今天沒有需要換人的球員",
-   "d": "ESPN 比賽日 11/8(美東,scoring period 20)。今天有比賽的球隊:DET、LAL(Cunningham、Kessler 先發,皆 ACTIVE)、PHI(Maxey 先發,ACTIVE)、LAC(Garland 先發,ACTIVE)、MIA(Klay Thompson 先發,ACTIVE)。其餘先發/UTIL(Murray、Mobley、Boozer、Lendeborg)今天球隊沒比賽但狀態皆 ACTIVE。替補(Wagner、Okongwu、Hartenstein)與 IR(Morant、Kawhi 仍 OUT)今天都沒有比賽,沒有人從傷癒變成可出賽、也沒有先發轉為 OUT。Quickley 仍 DTD,但 TOR 今天沒有比賽,不影響先發。"
   }
  ],
  "sleepers": {
@@ -3646,7 +3646,7 @@
    ]
   ]
  },
- "autoAsof": "2026/11/8 20:18:05",
+ "autoAsof": "2026/11/8 20:00:56",
  "doneSp": 19,
  "lastTxSeen": 1794138789501
 }
