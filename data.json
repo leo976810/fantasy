@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-08 20:00(台北時間)",
+ "asof": "2026-11-08 20:20(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2359,7 +2359,7 @@
   [
    "dtd",
    "Immanuel Quickley",
-   "你的 SG。左大腿後肌,ESPN 現標 DTD(原 OUT),預計 11/9 前後回歸;TOR 11/7 沒有比賽,不影響本週。",
+   "你的 SG。右大腿後肌,ESPN 現仍標 DTD,預計 11/9 前後回歸;TOR 11/8(今天)沒有比賽,不影響換人決定。",
    "11/9"
   ],
   [
@@ -2401,13 +2401,13 @@
   [
    "out",
    "Kawhi Leonard",
-   "你的 IR。左膝積水處理完成,一週後重新評估。",
+   "你的 IR。左膝積水處理完成,預計 11/23 重新評估,狀態仍 OUT。",
    "11/23"
   ],
   [
    "out",
    "Ja Morant",
-   "你的 IR。左大腿後肌 Grade 2 拉傷,球團說缺 4 週。",
+   "你的 IR。左大腿後肌 Grade 2 拉傷,球團說缺到 12/1,狀態仍 OUT。",
    "12/1"
   ],
   [
@@ -3130,8 +3130,15 @@
    "11/8"
   ]
  },
- "version": "v2.20",
+ "version": "v2.21",
  "changelog": [
+  {
+   "v": "v2.21",
+   "date": "11/8",
+   "items": [
+    "早間出賽確認:ESPN 比賽日 11/8(美東)。檢查陣容(mRoster)與聯盟傷兵資料(site.api.espn.com/injuries),先發與 UTIL 球員全數 ACTIVE,今天有比賽的 Cunningham(DET)、Kessler(LAL)、Maxey(PHI)、Garland(LAC)、Klay Thompson(MIA)皆可正常出賽;替補與 IR(Morant、Kawhi 仍 OUT)今天都沒有比賽,沒有需要換人的球員。順便修正傷兵清單:Quickley 的受傷部位更正為右大腿後肌(原誤植左側),Morant、Kawhi 回歸日與狀態核對後維持不變。"
+   ]
+  },
   {
    "v": "v2.20",
    "date": "11/8",
@@ -3531,6 +3538,11 @@
    "lv": "留意",
    "t": "Quickley 目前 ESPN 為 DTD,週日放在 UTIL",
    "d": "ESPN 讀到 11/8(美東)Quickley 狀態 DTD,預計 11/9 前後回歸。他在 UTIL 先發,TOR 當天若沒有比賽就不影響得分;下週一再決定去留。"
+  },
+  {
+   "lv": "留意",
+   "t": "早間出賽確認:今天沒有需要換人的球員",
+   "d": "ESPN 比賽日 11/8(美東,scoring period 20)。今天有比賽的球隊:DET、LAL(Cunningham、Kessler 先發,皆 ACTIVE)、PHI(Maxey 先發,ACTIVE)、LAC(Garland 先發,ACTIVE)、MIA(Klay Thompson 先發,ACTIVE)。其餘先發/UTIL(Murray、Mobley、Boozer、Lendeborg)今天球隊沒比賽但狀態皆 ACTIVE。替補(Wagner、Okongwu、Hartenstein)與 IR(Morant、Kawhi 仍 OUT)今天都沒有比賽,沒有人從傷癒變成可出賽、也沒有先發轉為 OUT。Quickley 仍 DTD,但 TOR 今天沒有比賽,不影響先發。"
   }
  ],
  "sleepers": {
