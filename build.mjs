@@ -155,6 +155,16 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
   const hot = FAL.filter(p => p.injuryStatus !== 'OUT' && rest(p.proTeamId) >= 1).map(p => ({ p, e: blend(p), l7: avgPts(p, '012027'), s27: avgPts(p, '002027') }))
     .filter(x => x.e != null && weak != null && ((x.l7 != null && x.s27 != null && x.l7 - x.s27 >= 5) || x.e >= weak - 3) && x.e >= 17).sort((a, b) => b.e - a.e).slice(0, 12)
     .map(x => { const p = x.p, pos = A.cmp.map(l => l.split('|')).find(a => a[0] == p.id); return [p.fullName, abbr[p.proTeamId], p.own, r1(p.ownership && p.ownership.percentOwned), x.s27, x.l7, avgPts(p, '002026'), rest(p.proTeamId), next(p.proTeamId), pos ? pos[3] : '', r1(x.e - weak), inj(p)]; });
+  // (c2) this-week opponent streaming watch: who they might drop (bench players with no games
+  // left this week) vs who from the FA pool they might grab for tomorrow's slate -- the pattern
+  // Leo flagged where an opponent swaps in fresh streamers right after today's games finish.
+  const futureGames = tid => { let n = 0; for (let sp = today + 1; sp < base + 7; sp++) n += has(tid, sp); return n; };
+  const oppRoster = (RO[opId] || []).filter(p => p.slot !== 13);
+  const oppDropCand = oppRoster.filter(p => p.slot === 12 && futureGames(p.proTeamId) === 0)
+    .map(p => [p.fullName, abbr[p.proTeamId], r1(blend(p)), inj(p)]).sort((a, b) => (a[2] || 0) - (b[2] || 0));
+  const oppPickupCand = FAL.filter(p => p.injuryStatus !== 'OUT' && has(p.proTeamId, today + 1))
+    .map(p => ({ p, e: blend(p) })).filter(x => x.e != null && x.e >= 15).sort((a, b) => b.e - a.e).slice(0, 8)
+    .map(x => [x.p.fullName, abbr[x.p.proTeamId], r1(x.e), r1(x.p.ownership && x.p.ownership.percentOwned)]);
   // (d) per-day detail (past and current days)
   const dd = { me: {}, op: {} };
   for (let sp = base; sp <= today && sp < base + 7; sp++) {
@@ -212,8 +222,8 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
     }
   } catch (e) { log.push('next-week opp FAIL ' + e.message); }
 
-  A.insights = Object.assign({}, A.insights, { LU, INJ, hot, weak: r1(weak), opp: OPP, win: { next: WINNEXT }, clearedBench });
-  log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length + ' nextOpp ' + (OPP ? OPP.name : 'none') + ' clearedBench ' + clearedBench.length);
+  A.insights = Object.assign({}, A.insights, { LU, INJ, hot, weak: r1(weak), opp: OPP, win: { next: WINNEXT }, clearedBench, oppStream: { drop: oppDropCand, pickup: oppPickupCand } });
+  log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length + ' nextOpp ' + (OPP ? OPP.name : 'none') + ' clearedBench ' + clearedBench.length + ' oppDrop ' + oppDropCand.length + ' oppPickup ' + oppPickupCand.length);
 } catch (e) { log.push('decision FAIL ' + e.message); }
 
 try { // v2: full-season matchup schedule + playoff standings context (used by the v2 tab's playoff & future-opponent sections)
