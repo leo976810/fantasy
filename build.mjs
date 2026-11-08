@@ -144,6 +144,13 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
   RO[meId].forEach(p => { if (slotNow[p.id] != null) p.slot = slotNow[p.id]; });
   const INJ = RO[meId].filter(p => p.injuryStatus === 'OUT' || p.injuryStatus === 'DAY_TO_DAY').map(p => [p.fullName, inj(p), p.slot === 13 ? 'IR' : p.slot === 12 ? 'BN' : '先發', r1(blend(p)), rest(p.proTeamId), next(p.proTeamId),
     p.slot === 13 ? '在 IR,回歸前不佔名額' : inj(p) === 'OUT' ? '目前 OUT,先發要換人' : '上場前確認狀態']);
+  // (b2) cleared-but-benched: compares this run's injury status per player against last run's
+  // (A.injTrack, carried forward in the embedded JSON) to catch someone who was DTD/OUT and is
+  // now cleared but still sitting on the bench -- the "早晨第二次更新" alert from CLAUDE.md.
+  const prevTrack = A.injTrack || {};
+  const clearedBench = RO[meId].filter(p => p.slot === 12 && inj(p) === '' && (prevTrack[p.id] === 'OUT' || prevTrack[p.id] === 'DTD'))
+    .map(p => [p.fullName, r1(blend(p))]);
+  const newTrack = {}; RO[meId].forEach(p => { newTrack[p.id] = inj(p); }); A.injTrack = newTrack;
   // (c) free-agent hot list
   const hot = FAL.filter(p => p.injuryStatus !== 'OUT' && rest(p.proTeamId) >= 1).map(p => ({ p, e: blend(p), l7: avgPts(p, '012027'), s27: avgPts(p, '002027') }))
     .filter(x => x.e != null && weak != null && ((x.l7 != null && x.s27 != null && x.l7 - x.s27 >= 5) || x.e >= weak - 3) && x.e >= 17).sort((a, b) => b.e - a.e).slice(0, 12)
@@ -205,8 +212,8 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
     }
   } catch (e) { log.push('next-week opp FAIL ' + e.message); }
 
-  A.insights = Object.assign({}, A.insights, { LU, INJ, hot, weak: r1(weak), opp: OPP, win: { next: WINNEXT } });
-  log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length + ' nextOpp ' + (OPP ? OPP.name : 'none'));
+  A.insights = Object.assign({}, A.insights, { LU, INJ, hot, weak: r1(weak), opp: OPP, win: { next: WINNEXT }, clearedBench });
+  log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length + ' nextOpp ' + (OPP ? OPP.name : 'none') + ' clearedBench ' + clearedBench.length);
 } catch (e) { log.push('decision FAIL ' + e.message); }
 
 try { // v2: full-season matchup schedule + playoff standings context (used by the v2 tab's playoff & future-opponent sections)
