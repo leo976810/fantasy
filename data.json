@@ -3117,8 +3117,15 @@
    "11/8"
   ]
  },
- "version": "v2.21",
+ "version": "v2.22",
  "changelog": [
+  {
+   "v": "v2.22",
+   "date": "11/8",
+   "items": [
+    "修正待辦裡「湖人→塞爾提克→獨行俠」洗場次鏈的建議:對照 ESPN League Settings 確認這個聯盟 C 資格球員上限是 4 人,而你陣容的 Mobley、Kessler、Okongwu、Hartenstein 剛好卡滿 4 個 C——原建議要加入的 Mitchell Robinson 是 C,會超過上限,必須先丟掉現有 4 個 C 其中一個才能加入,之前的待辦沒有提到這點,現已補上提醒與替代方案"
+   ]
+  },
   {
    "v": "v2.21",
    "date": "11/8",
@@ -3523,7 +3530,7 @@
   {
    "lv": "建議",
    "t": "11/9 新的一週可考慮:用 Klay 的格位跑「湖人→塞爾提克→獨行俠」洗場次鏈",
-   "d": "來源:@fantasy.moose 的週策略文,今天重新確認三位球員(Grimes、Mitchell Robinson、Risacher)仍在自由市場。湖人週一、週二(背靠背)@底特律/@亞特蘭大;塞爾提克週三、週四 @76人/@暴龍;獨行俠週五、週日 @灰狼/@騎士。依序接:週一加湖人的 Quentin Grimes(FA,約 30% 持有,今年 13.8 分)→週三換成塞爾提克的 Mitchell Robinson(FA,C,約 13% 持有,今年 16.3 分,近 7 場降到 15)→週五換成獨行俠的 Zaccharie Risacher(FA,SF,約 11% 持有,今年 21.2 分,但近 7 場轉冷到 6 分)。3 次異動吃 6 場比賽,但和上面放 Vassell 的建議用的是同一個格位,兩個只能選一個,除非額外放 Garland 騰位置。"
+   "d": "來源:@fantasy.moose 的週策略文,今天重新確認三位球員(Grimes、Mitchell Robinson、Risacher)仍在自由市場。湖人週一、週二(背靠背)@底特律/@亞特蘭大;塞爾提克週三、週四 @76人/@暴龍;獨行俠週五、週日 @灰狼/@騎士。依序接:週一加湖人的 Quentin Grimes(FA,約 30% 持有,今年 13.8 分)→週三換成塞爾提克的 Mitchell Robinson(FA,C,約 13% 持有,今年 16.3 分,近 7 場降到 15)→週五換成獨行俠的 Zaccharie Risacher(FA,SF,約 11% 持有,今年 21.2 分,但近 7 場轉冷到 6 分)。3 次異動吃 6 場比賽,但和上面放 Vassell 的建議用的是同一個格位,兩個只能選一個,除非額外放 Garland 騰位置。⚠️ 規則提醒(對照 ESPN League Settings 確認):這個聯盟 C 資格球員上限 4 人,你陣容現在 Mobley、Kessler、Okongwu、Hartenstein 剛好卡滿 4 個 C資格——要加 Mitchell Robinson(C)這一段前,必須先丟掉其中一個 C 才加得進來(不能只丟非 C 的球員)。如果不想動現有的 4 個 C,這段可以改成找塞爾提克另一個非 C 的自由球員代替,或接受先丟一個 C 再補回來。"
   },
   {
    "lv": "留意",
