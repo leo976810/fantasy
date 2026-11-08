@@ -111,5 +111,13 @@ D.matchupDays = Object.assign({}, D.matchupDays, { opp: oppName, me: counts(mine
 
 D.doneSp = dayDone(today) ? today : today - 1;
 D.autoAsof = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
+// Records the latest executed-transaction timestamp this run has accounted for, so gate.mjs
+// can tell a fresh add/drop/trade from one it already picked up and force an out-of-slot run
+// when something new has landed (instead of waiting up to ~4h for the next regular slot).
+try {
+  const txj = await get(L + '?view=mTransactions2&scoringPeriodId=' + today);
+  const times = (txj.transactions || []).filter(t => t.status === 'EXECUTED').map(t => t.processDate || t.proposedDate || 0);
+  if (times.length) D.lastTxSeen = Math.max(D.lastTxSeen || 0, ...times);
+} catch (e) { /* non-fatal: gate just keeps using whatever D.lastTxSeen already had */ }
 fs.writeFileSync('data.json', JSON.stringify(D, null, 1));
 console.log('updated', D.autoAsof, 'period', cur, 'today', today, 'base', base, 'opp', oppName, 'past days', nPast);
