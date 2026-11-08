@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-08 20:23(台北時間)",
+ "asof": "2026-11-09 06:47(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2380,12 +2380,6 @@
    "11/9"
   ],
   [
-   "dtd",
-   "Trey Murphy III",
-   "膝傷,週五對 MIN 列 probable。",
-   "11/6"
-  ],
-  [
    "out",
    "Josh Hart",
    "右腳踝痠痛,週六對 CLE 確定缺陣。",
@@ -2393,26 +2387,14 @@
   ],
   [
    "out",
-   "Nic Claxton",
-   "大腿後肌,預計週日對 PHI 首度登場。",
-   "11/8"
-  ],
-  [
-   "out",
    "Kon Knueppel",
-   "左大腿後肌舊傷復發,賽季初登場就受傷,球團還沒說明缺多久。",
-   "11/9"
+   "左大腿後肌拉傷,11/8(週日)確診新傷,ESPN 預計 4 週後重新評估。",
+   "12/12"
   ],
   [
    "out",
    "Jalen Suggs",
    "右膝輕度骨挫傷,兩週後重新評估。",
-   "11/10"
-  ],
-  [
-   "out",
-   "Keegan Murray",
-   "腳踝,10 到 14 天後重新評估。",
    "11/10"
   ],
   [
@@ -2431,7 +2413,7 @@
    "out",
    "Kristaps Porzingis",
    "離隊中,球團已停薪,本人考慮退休。這個日期是 ESPN 的預設值,實際可能不會回來。",
-   "12/1(不確定)"
+   "1/2(不確定)"
   ],
   [
    "out",
@@ -3134,8 +3116,16 @@
    "11/8"
   ]
  },
- "version": "v2.22",
+ "version": "v2.23",
  "changelog": [
+  {
+   "v": "v2.23",
+   "date": "11/9",
+   "items": [
+    "早間出賽確認(鎖陣前):scoring period 20(11/8 美東,週日)先發 10 人全為 ACTIVE 或 DTD(Quickley),今天有比賽的 DET(Cunningham)、PHI(Maxey)、LAL(Kessler)、LAC(Garland)、MIA(Thompson)都已在先發;沒有比賽的 DEN(Murray)、CLE(Mobley)、GS(Lendeborg)、MEM(Boozer)、TOR(Quickley)不受影響;替補(Wagner、Okongwu、Hartenstein)與 IR 的 Morant(左大腿後肌,預計 12/1 回歸)、Kawhi Leonard(左膝,預計 11/23 回歸)皆仍 OUT 且今天都沒有比賽,陣容不需調整",
+    "傷兵清單核對更新:Kon Knueppel 11/8 確診新的左大腿後肌拉傷,回歸日由 11/9 更新為 12/12(ESPN 預計 4 週後重新評估);Kristaps Porzingis 的 ESPN 預設回歸日由 12/1 順延到 1/2(仍不確定是否復出);Trey Murphy III、Nic Claxton、Keegan Murray 已不在 ESPN 傷兵名單上(皆已恢復出賽),從清單移除"
+   ]
+  },
   {
    "v": "v2.22",
    "date": "11/8",
@@ -3553,6 +3543,11 @@
    "lv": "留意",
    "t": "Quickley 目前 ESPN 為 DTD,預計 11/9 回歸",
    "d": "ESPN 讀到 11/8(美東)Quickley 狀態仍為 DTD,預計 11/9 前後回歸,今天在 UTIL 先發。下週一視回歸狀況再決定去留。"
+  },
+  {
+   "lv": "已確認",
+   "t": "早間檢查:今天沒有需要換人的球員",
+   "d": "11/8(美東,週日)鎖陣前用 Claude in Chrome 重新連線 ESPN 確認:先發 10 人(Cunningham/DET、Maxey/PHI、Thompson/MIA、Mobley/CLE、Kessler/LAL、Garland/LAC、Lendeborg/GS、Murray/DEN、Boozer/MEM、Quickley/TOR)全為 ACTIVE 或 DTD(Quickley);今天有比賽的 DET、PHI、LAL、LAC、MIA 五隊球員都已經在先發,沒有人卡在替補或 IR 卻能上場;沒有比賽的 DEN、CLE、GS、MEM、TOR 不受影響;替補(Wagner、Okongwu、Hartenstein)與 IR(Morant、Kawhi,皆 OUT)今天也都沒有比賽。陣容不需調整。"
   }
  ],
  "sleepers": {
