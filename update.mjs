@@ -49,8 +49,8 @@ function verdict(slot, s27, l7, s26, inj) {
   if (l7 != null && s27 != null) { if (l7 - s27 >= 6) p.push('近 7 場升溫'); else if (l7 - s27 <= -6) p.push('近 7 場降溫'); }
   return p.join('。') + '。';
 }
-async function roster(id) {
-  const j = await get(L + '?view=mRoster&scoringPeriodId=' + today + '&forTeamId=' + id);
+async function roster(id, sp) {
+  const j = await get(L + '?view=mRoster&scoringPeriodId=' + (sp || today) + '&forTeamId=' + id);
   const t = j.teams.find(x => x.id === id);
   return t.roster.entries.map(e => {
     const p = e.playerPoolEntry.player;
@@ -96,18 +96,30 @@ const DAYS = D.matchupDays.days;
 // today's scoring period is still in progress (or not started), so it counts as not finished
 const pickPts = g => DAYS.map((_, i) => { const v = (g.pointsByScoringPeriod || {})[String(base + i)]; return v == null || !dayDone(base + i) ? null : r1(v); });
 const act = { me: pickPts(mm.me), op: pickPts(mm.other) };
-const counts = arr => DAYS.map((_, i) => arr.filter(x => x.slot !== 'IR' && hasGame(x.tid, base + i)).length);
 const val = x => x.l7 != null ? x.l7 : x.l15 != null ? x.l15 : x.s27 != null ? x.s27 : x.s26 != null ? x.s26 : 0;
-const dayPts = (arr, i) => { const p = arr.filter(x => x.slot !== 'IR' && x.inj !== 'OUT' && hasGame(x.tid, base + i)); return [Math.min(p.length, 10), r1(sumTop(p.map(val)))]; };
 const nPast = act.me.filter(v => v != null).length;
 const rem = DAYS.map((_, i) => i).filter(i => act.me[i] == null);
 const mine = R[meId], theirs = R[oppId];
+// ESPN's roster membership is effective-dated: an add/drop made today can take effect starting
+// tomorrow (e.g. a streaming swap), so a single "today" roster snapshot under- or over-counts a
+// future day's games whenever either side's bench has already changed for that day. For each day
+// still ahead (rem), fetch that day's own effective roster instead of reusing today's snapshot --
+// this is what caught Leo's opponent picking up Hachimura/Dunn (effective tomorrow, not today).
+const dayRoster = { me: {}, op: {} };
+for (const i of rem) {
+  const sp = base + i;
+  dayRoster.me[i] = sp === today ? mine : await roster(meId, sp);
+  dayRoster.op[i] = sp === today ? theirs : await roster(oppId, sp);
+}
+const arrFor = (side, i, fallback) => (dayRoster[side] && dayRoster[side][i]) || fallback;
+const counts = (side, fallback) => DAYS.map((_, i) => arrFor(side, i, fallback).filter(x => x.slot !== 'IR' && hasGame(x.tid, base + i)).length);
+const dayPts = (side, fallback, i) => { const p = arrFor(side, i, fallback).filter(x => x.slot !== 'IR' && x.inj !== 'OUT' && hasGame(x.tid, base + i)); return [Math.min(p.length, 10), r1(sumTop(p.map(val)))]; };
 const weekChanged = D.matchupDays.opp !== oppName;
 D.matchup = Object.assign({}, D.matchup, { me: ME, opp: oppName, meScore: Math.round(mm.s), oppScore: Math.round(mm.o), daysLeft: rem.map(i => DAYS[i].replace('週', '週')).join('、') });
 if (weekChanged) D.matchup.oppNote = '新的一週,對手評語由每日分析更新。';
-D.matchupDays = Object.assign({}, D.matchupDays, { opp: oppName, me: counts(mine), op: counts(theirs), actual: act,
-  proj: Object.assign({}, D.matchupDays.proj, { days: rem.map(i => DAYS[i]), me: rem.map(i => dayPts(mine, i)), op: rem.map(i => dayPts(theirs, i)) }),
-  estPast: { me: DAYS.map((_, i) => act.me[i] != null ? dayPts(mine, i)[1] : null), op: DAYS.map((_, i) => act.op[i] != null ? dayPts(theirs, i)[1] : null) } });
+D.matchupDays = Object.assign({}, D.matchupDays, { opp: oppName, me: counts('me', mine), op: counts('op', theirs), actual: act,
+  proj: Object.assign({}, D.matchupDays.proj, { days: rem.map(i => DAYS[i]), me: rem.map(i => dayPts('me', mine, i)), op: rem.map(i => dayPts('op', theirs, i)) }),
+  estPast: { me: DAYS.map((_, i) => act.me[i] != null ? dayPts('me', mine, i)[1] : null), op: DAYS.map((_, i) => act.op[i] != null ? dayPts('op', theirs, i)[1] : null) } });
 
 D.doneSp = dayDone(today) ? today : today - 1;
 D.autoAsof = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
