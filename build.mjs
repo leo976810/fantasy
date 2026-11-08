@@ -389,18 +389,37 @@ try { // per-game logs for every rostered player and the top free agents
     rows.sort((a, b) => b.diff - a.diff);
     const up = rows.filter(r => r.diff > 0).slice(0, 10);
     const down = rows.filter(r => r.diff < 0).sort((a, b) => a.diff - b.diff).slice(0, 10);
-    const prevWeek = (A.burstWeek && A.burstWeek.base === base) ? A.burstWeek : { base, tally: {} };
+    // 週報(points raised by Leo): when the matchup week turns over (base changes), freeze a
+    // summary of the week that just ended -- final score (from B.lastWeekResult, captured by
+    // update.mjs right before it overwrote D.matchup for the new week) plus the top burst/bust
+    // players from that week's tally (A.burstWeek, about to be reset below) -- something
+    // concrete to look back on when planning next week's roster moves.
+    if (A.burstWeek && A.burstWeek.base !== base && B.lastWeekResult) {
+      const oldTally = Object.values(A.burstWeek.tally || {});
+      const topUp = oldTally.filter(t => t.up > 0).sort((a, b) => b.up - a.up || b.best - a.best).slice(0, 5).map(t => [t.name, t.up, r1(t.best)]);
+      const topDown = oldTally.filter(t => t.down > 0).sort((a, b) => b.down - a.down || a.worst - b.worst).slice(0, 5).map(t => [t.name, t.down, r1(t.worst)]);
+      const W = B.lastWeekResult;
+      A.weekReport = { opp: W.opp, meScore: W.meScore, oppScore: W.oppScore, result: W.meScore >= W.oppScore ? '勝' : '敗', burstTop: topUp, bustTop: topDown };
+      log.push('weekReport opp ' + W.opp + ' result ' + A.weekReport.result);
+    }
+    // A week can see several build runs that all land on the same completed day (the normal
+    // 4-hour slot, a transaction-triggered run, a manual dispatch) -- tally only once per
+    // calendar day (lastDay), not once per build run, or a busy day would get double/triple
+    // counted toward the weekly total below.
+    const prevWeek = (A.burstWeek && A.burstWeek.base === base) ? A.burstWeek : { base, tally: {}, lastDay: null };
     const tally = prevWeek.tally;
-    const bump = (r, dir) => { const t = tally[r.id] = tally[r.id] || { name: r.name, up: 0, down: 0, best: 0, worst: 0 };
-      if (dir > 0) { t.up++; t.best = Math.max(t.best, r.diff); } else { t.down++; t.worst = Math.min(t.worst || 0, r.diff); } };
-    up.forEach(r => bump(r, 1)); down.forEach(r => bump(r, -1));
+    if (prevWeek.lastDay !== dayLabel) {
+      const bump = (r, dir) => { const t = tally[r.id] = tally[r.id] || { name: r.name, up: 0, down: 0, best: 0, worst: 0 };
+        if (dir > 0) { t.up++; t.best = Math.max(t.best, r.diff); } else { t.down++; t.worst = Math.min(t.worst || 0, r.diff); } };
+      up.forEach(r => bump(r, 1)); down.forEach(r => bump(r, -1));
+    }
     const notable = Object.values(tally).filter(t => t.up >= 2 || t.down >= 2).sort((a, b) => (b.up - b.down) - (a.up - a.down));
     const weekComment = notable.slice(0, 4).map(t => t.up >= 2 && t.up > t.down
       ? t.name + ' 本週已 ' + t.up + ' 次登上爆走榜(單場最高 +' + r1(t.best) + ')'
       : t.down >= 2 && t.down > t.up
         ? t.name + ' 本週已 ' + t.down + ' 次爆胎(單場最差 ' + r1(t.worst) + ')'
         : t.name + ' 本週忽冷忽熱,爆走 ' + t.up + ' 次、爆胎 ' + t.down + ' 次').join('；');
-    A.burstWeek = { base, tally };
+    A.burstWeek = { base, tally, lastDay: dayLabel };
     A.burst = { day: dayLabel, up, down, weekComment: weekComment || null };
     log.push('burst up ' + up.length + ' down ' + down.length + ' weekTally ' + Object.keys(tally).length);
   } catch (e) { log.push('burst FAIL ' + e.message); }

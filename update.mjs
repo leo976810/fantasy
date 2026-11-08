@@ -115,6 +115,10 @@ const arrFor = (side, i, fallback) => (dayRoster[side] && dayRoster[side][i]) ||
 const counts = (side, fallback) => DAYS.map((_, i) => arrFor(side, i, fallback).filter(x => x.slot !== 'IR' && hasGame(x.tid, base + i)).length);
 const dayPts = (side, fallback, i) => { const p = arrFor(side, i, fallback).filter(x => x.slot !== 'IR' && x.inj !== 'OUT' && hasGame(x.tid, base + i)); return [Math.min(p.length, 10), r1(sumTop(p.map(val)))]; };
 const weekChanged = D.matchupDays.opp !== oppName;
+// Capture last week's final score before D.matchup gets overwritten below with this week's --
+// build.mjs picks this up (alongside the burst/bust weekly tally it already keeps) to assemble
+// a 週報 (weekly report) summarizing the week that just ended, for next week's strategy.
+if (weekChanged && D.matchup.opp) D.lastWeekResult = { opp: D.matchup.opp, meScore: D.matchup.meScore, oppScore: D.matchup.oppScore };
 D.matchup = Object.assign({}, D.matchup, { me: ME, opp: oppName, meScore: Math.round(mm.s), oppScore: Math.round(mm.o), daysLeft: rem.map(i => DAYS[i].replace('週', '週')).join('、') });
 if (weekChanged) D.matchup.oppNote = '新的一週,對手評語由每日分析更新。';
 D.matchupDays = Object.assign({}, D.matchupDays, { opp: oppName, me: counts('me', mine), op: counts('op', theirs), actual: act,
