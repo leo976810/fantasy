@@ -114,16 +114,29 @@ for (const i of rem) {
 const arrFor = (side, i, fallback) => (dayRoster[side] && dayRoster[side][i]) || fallback;
 const counts = (side, fallback) => DAYS.map((_, i) => arrFor(side, i, fallback).filter(x => x.slot !== 'IR' && hasGame(x.tid, base + i)).length);
 const dayPts = (side, fallback, i) => { const p = arrFor(side, i, fallback).filter(x => x.slot !== 'IR' && x.inj !== 'OUT' && hasGame(x.tid, base + i)); return [Math.min(p.length, 10), r1(sumTop(p.map(val)))]; };
-const weekChanged = D.matchupDays.opp !== oppName;
+// Detect the matchup week turning over by the scoring-period anchor (base), not by opponent name --
+// a name comparison misses the turnover whenever this week's opponent happens to be the same team
+// as last week's (which is exactly what happened at the Matchup 3 -> 4 turnover), silently leaving
+// 上週戰報 (weekReport) stuck empty forever for that week. base is unambiguous: it only matches when
+// it's genuinely the same matchup period.
+const weekChanged = D.matchupBase !== base;
+// matchupDays.dates was a frozen MM/DD snapshot that nothing in the pipeline ever refreshed, so it
+// silently went stale every single week turnover (stuck showing last week's calendar dates in the
+// 戰況 tab). Recompute it fresh every run from base: scoring period 14 = Mon 11/2/2026 (see the
+// `base` comment above), and every matchup period is a consecutive 7-day block from there.
+const ANCHOR_SP = 14, ANCHOR_MS = Date.UTC(2026, 10, 2);
+const spDate = sp => { const dt = new Date(ANCHOR_MS + (sp - ANCHOR_SP) * 86400000); return (dt.getUTCMonth() + 1) + '/' + dt.getUTCDate(); };
+const DATES = DAYS.map((_, i) => spDate(base + i));
 // Capture last week's final score before D.matchup gets overwritten below with this week's --
 // build.mjs picks this up (alongside the burst/bust weekly tally it already keeps) to assemble
 // a 週報 (weekly report) summarizing the week that just ended, for next week's strategy.
 if (weekChanged && D.matchup.opp) D.lastWeekResult = { opp: D.matchup.opp, meScore: D.matchup.meScore, oppScore: D.matchup.oppScore };
 D.matchup = Object.assign({}, D.matchup, { me: ME, opp: oppName, meScore: Math.round(mm.s), oppScore: Math.round(mm.o), daysLeft: rem.map(i => DAYS[i].replace('週', '週')).join('、') });
 if (weekChanged) D.matchup.oppNote = '新的一週,對手評語由每日分析更新。';
-D.matchupDays = Object.assign({}, D.matchupDays, { opp: oppName, me: counts('me', mine), op: counts('op', theirs), actual: act,
+D.matchupDays = Object.assign({}, D.matchupDays, { opp: oppName, dates: DATES, me: counts('me', mine), op: counts('op', theirs), actual: act,
   proj: Object.assign({}, D.matchupDays.proj, { days: rem.map(i => DAYS[i]), me: rem.map(i => dayPts('me', mine, i)), op: rem.map(i => dayPts('op', theirs, i)) }),
   estPast: { me: DAYS.map((_, i) => act.me[i] != null ? dayPts('me', mine, i)[1] : null), op: DAYS.map((_, i) => act.op[i] != null ? dayPts('op', theirs, i)[1] : null) } });
+D.matchupBase = base;
 
 D.doneSp = dayDone(today) ? today : today - 1;
 D.autoAsof = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
