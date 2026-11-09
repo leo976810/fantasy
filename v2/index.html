@@ -157,6 +157,18 @@ ul.list.inj li { grid-template-columns: auto 1fr auto; }
 .src small { color: var(--muted); }
 table.mx td.hi { color: var(--accent); font-weight: 700; }
 .rtbl td{vertical-align:top}
+@media (max-width: 640px) {
+  table.rtbl, table.rtbl thead, table.rtbl tbody, table.rtbl tr, table.rtbl td { display: block; width: auto; }
+  table.rtbl { border: 0; }
+  table.rtbl thead { position: absolute; top: -9999px; left: -9999px; }
+  table.rtbl tbody tr { display: flex; flex-wrap: wrap; gap: 2px 10px; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  table.rtbl tbody tr td { border: 0; padding: 2px 0; flex: 0 0 auto; }
+  table.rtbl td:nth-child(1) { order: -3; font-weight: 700; flex-basis: 100%; }
+  table.rtbl td.name { order: -2; flex-basis: 100%; font-size: 15px; }
+  table.rtbl td:last-child { order: -1; flex-basis: 100%; margin-bottom: 2px; }
+  table.rtbl td[data-th]::before { content: attr(data-th) "："; color: var(--muted); font-size: 11px; margin-right: 3px; }
+  table.rtbl td[data-th] { flex-basis: auto; min-width: 46%; }
+}
 
 .pane { display: flex; flex-direction: column; gap: 20px; }
 .pane[hidden] { display: none; }
@@ -425,10 +437,10 @@ body.locked > :not(#pwgate){display:none !important}
       var x = RX[p[1]] || {}, md = (x.m7 != null && x.m27 != null) ? Math.round((x.m7 - x.m27) * 10) / 10 : null;
       var inj = x.inj ? '<span class="chip c-drop">' + esc(x.inj) + '</span>' : '';
       return '<tr data-i="' + ri + '" data-s="' + [p[3], p[4], x.m7, p[5], p[6]].map(function (v) { return v == null ? '' : v; }).join('|') + '"><td>' + esc(p[0]) + '</td><td class="name">' + esc(p[1]) + '<small>' + esc(p[2]) + '</small>' + inj + (x.note ? '<small class="injn">' + esc(x.note) + '</small>' : '') + '</td>' +
-        '<td class="n fp">' + f1(p[3]) + '</td><td class="n ' + (p[4] >= p[3] ? 'up' : 'down') + '">' + f1(p[4]) + '</td>' +
-        '<td class="n newc">' + (x.m7 == null ? '—' : Math.round(x.m7) + (md == null ? '' : ' <small class="' + (md > 0 ? 'up' : md < 0 ? 'down' : 'muted') + '">(' + (md > 0 ? '+' : '') + Math.round(md) + ')</small>')) + '</td>' +
-        '<td class="n">' + f1(p[5]) + '</td><td class="n">' + f1(p[6]) + '</td>' +
-        '<td>' + days(p[7]) + '</td><td class="n">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
+        '<td class="n fp" data-th="今年">' + f1(p[3]) + '</td><td class="n ' + (p[4] >= p[3] ? 'up' : 'down') + '" data-th="近7場">' + f1(p[4]) + '</td>' +
+        '<td class="n newc" data-th="分鐘">' + (x.m7 == null ? '—' : Math.round(x.m7) + (md == null ? '' : ' <small class="' + (md > 0 ? 'up' : md < 0 ? 'down' : 'muted') + '">(' + (md > 0 ? '+' : '') + Math.round(md) + ')</small>')) + '</td>' +
+        '<td class="n" data-th="去年">' + f1(p[5]) + '</td><td class="n" data-th="持有%">' + f1(p[6]) + '</td>' +
+        '<td data-th="本週">' + days(p[7]) + '</td><td class="n" data-th="下週">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
     }).join('') + '</tbody></table></div>' +
     '<div class="callout">' + esc(D.fridayLineup) + '</div>';
 
@@ -523,7 +535,7 @@ body.locked > :not(#pwgate){display:none !important}
       return '<details class="tm"><summary><div class="hd"><b>' + esc(r[0]) + '</b><span class="chip c-ok">' + esc(r[1]) + '</span><span class="more">展開陣容</span></div><p><span class="lbl">核心</span>' + esc(r[5]) + '</p></summary><div class="body"><p><span class="lbl">判斷</span>' + esc(r[6]) + '</p><p><span class="lbl">對你</span>' + esc(r[7]) + '</p>' +
         '<div class="scroll"><table class="rtbl"><thead><tr><th>位置</th><th>球員</th><th class="n">今年</th><th class="n">近7場</th><th class="n">去年</th><th class="n">持有%</th><th>本週</th><th class="n">下週</th><th>判斷</th></tr></thead><tbody>' +
         rows.map(function (p) {
-          return '<tr><td>' + esc(p[0]) + '</td><td class="name">' + esc(p[1]) + '<small>' + esc(p[2]) + '</small></td><td class="n fp">' + f1(p[3]) + '</td><td class="n ' + (p[3] != null && p[4] != null ? (p[4] >= p[3] ? 'up' : 'down') : '') + '">' + f1(p[4]) + '</td><td class="n">' + f1(p[5]) + '</td><td class="n">' + f1(p[6]) + '</td><td>' + days(p[7]) + '</td><td class="n">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
+          return '<tr><td>' + esc(p[0]) + '</td><td class="name">' + esc(p[1]) + '<small>' + esc(p[2]) + '</small></td><td class="n fp" data-th="今年">' + f1(p[3]) + '</td><td class="n ' + (p[3] != null && p[4] != null ? (p[4] >= p[3] ? 'up' : 'down') : '') + '" data-th="近7場">' + f1(p[4]) + '</td><td class="n" data-th="去年">' + f1(p[5]) + '</td><td class="n" data-th="持有%">' + f1(p[6]) + '</td><td data-th="本週">' + days(p[7]) + '</td><td class="n" data-th="下週">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
         }).join('') + '</tbody></table></div></div></details>';
     }).join('') + '</div>';
   $('foot').innerHTML = D.foot.map(function (t) { return '<div>' + esc(t) + '</div>'; }).join('');
