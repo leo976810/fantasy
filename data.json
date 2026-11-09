@@ -2498,6 +2498,13 @@
     "post": "/@fantasy_baskets_/post/DfZFhAtmqjb",
     "age": "約 16 分鐘前",
     "sum": "11/6 爆發與爆胎整理。你的 Wagner(15 分 8 板 15 助 4 抄)和 Lendeborg(17 分 8 板 6 助 3 抄)上了爆發組;爆胎組有 Wiggins、Jalen Green、Ighodaro、Portis。"
+   },
+   {
+    "handle": "emilyca95112",
+    "label": "灣區小市民(傷兵輪替觀察)",
+    "post": "/@emilyca95112/post/DfgkgvaG8tE",
+    "age": "約 1 小時前",
+    "sum": "第四週傷兵輪替預覽:本週 21 組背靠背,週二四六比賽較少;尼克本週賽程最友善(對公鹿、騎士、溜馬、暴龍)。重點觀察:AD/Ayton 缺陣時留意 Middleton、Alex Sarr;暴龍 Barnes/Quickley 缺陣時留意 Jamal Shead、Collin Murray-Boyles;黃蜂 Miller/Diabaté 缺陣時留意 Sion James、Ryan Kalkbrenner;火箭 Adams/Capela 缺陣時 Sengun 禁區時間增加,Jabari Smith Jr. 可能客串五號位。"
    }
   ],
   "search": [
@@ -3126,8 +3133,15 @@
    "11/8"
   ]
  },
- "version": "v2.26",
+ "version": "v2.27",
  "changelog": [
+  {
+   "v": "v2.27",
+   "date": "11/9",
+   "items": [
+    "Threads 追蹤清單新增 @emilyca95112(灣區小市民,專注傷兵輪替分析,每日傷兵名單另發在 IG);依 Leo 在對話裡傳的帳號加入,其餘追蹤帳號與關鍵字搜尋內容不變,交給每天 18:00 的 Threads 排程任務之後接手更新"
+   ]
+  },
   {
    "v": "v2.26",
    "date": "11/9",
