@@ -98,10 +98,12 @@ try { // cmp: every rostered player + top free agents
   } else log.push('cmp too few');
 } catch (e) { log.push('cmp FAIL ' + e.message); }
 
+let FULL = null; // populated by the decision-data block below; the v2 block reuses it to skip a redundant identical fetch
 try { // decision data: best lineup per day, injuries, free-agent hot list, per-day detail
   if (!CTX) throw new Error('no ctx');
   const { abbr, games, today, base, has, rest, next, avgPts, RO, FAL, nm } = CTX;
   const full = await get(L + '?view=mTeam&view=mMatchupScore&view=mSettings');
+  FULL = full;
   const cur = full.status.currentMatchupPeriod;
   const meT = full.teams.find(t => nm(t) === 'aespa'); const meId = meT.id;
   const g = full.schedule.find(x => x.matchupPeriodId === cur && x.away && (x.home.teamId === meId || x.away.teamId === meId));
@@ -227,7 +229,7 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
 } catch (e) { log.push('decision FAIL ' + e.message); }
 
 try { // v2: full-season matchup schedule + playoff standings context (used by the v2 tab's playoff & future-opponent sections)
-  const full2 = await get(L + '?view=mTeam&view=mMatchupScore&view=mSettings');
+  const full2 = FULL || await get(L + '?view=mTeam&view=mMatchupScore&view=mSettings'); // reuse the decision block's fetch of the same view when it's already in hand
   const nm2 = t => t.name || ((t.location || '') + ' ' + (t.nickname || '')).trim();
   const idToName = {}; full2.teams.forEach(t => idToName[t.id] = nm2(t));
   const cur = full2.status.currentMatchupPeriod;
@@ -418,7 +420,7 @@ try { // per-game logs for every rostered player and the top free agents
       ? t.name + ' 本週已 ' + t.up + ' 次登上爆走榜(單場最高 +' + r1(t.best) + ')'
       : t.down >= 2 && t.down > t.up
         ? t.name + ' 本週已 ' + t.down + ' 次爆胎(單場最差 ' + r1(t.worst) + ')'
-        : t.name + ' 本週忽冷忽熱,爆走 ' + t.up + ' 次、爆胎 ' + t.down + ' 次').join('；');
+        : t.name + ' 本週忽冷忽熱,爆走 ' + t.up + ' 次、爆胎 ' + t.down + ' 次').join(';');
     A.burstWeek = { base, tally, lastDay: dayLabel };
     A.burst = { day: dayLabel, up, down, weekComment: weekComment || null };
     log.push('burst up ' + up.length + ' down ' + down.length + ' weekTally ' + Object.keys(tally).length);
