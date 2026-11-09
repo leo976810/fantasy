@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-09 13:46(台北時間)",
+ "asof": "2026-11-09 14:20(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -9,7 +9,7 @@
    3215,
    "1498–1381 Chicago",
    "Cunningham 41/47/46、Maxey 41/37/46、Kessler 44/47/41、Murray 42/39/42",
-   "陣容強度(取先發前 10 名今年加去年平均)聯盟最高,Cunningham、Maxey、Murray、Kessler 四個核心穩定在 40 以上,本週把 Hartenstein 換成 Alex Sarr,補強側翼深度。"
+   "陣容強度(取先發前 10 名今年加去年平均)聯盟最高,Cunningham、Maxey、Murray、Kessler 四個核心穩定在 40 以上。"
   ],
   "teams": [
    [
@@ -2703,7 +2703,7 @@
    ],
    4,
    "watch",
-   "輪換。兩季穩定。"
+   "輪換。今年 27.6、去年 32.2 接近,近 7 場回升到 31,持有率只有 46.6%。OKC 三名主力(Holmgren、J.Williams、Wallace)長期缺陣,上場時間值得觀察,仍是你 C 位置第 4 人。"
   ],
   [
    "UTIL",
@@ -2803,7 +2803,7 @@
    "own": 75.9,
    "games": "本週 4 場",
    "next": 4,
-   "why": "自由市場可以直接加入。今年 24.4、去年 29.9 都紮實,近 7 場回升到 30,右腳踝只是輕微 DTD,可以直接接 Klay 的 SF/G 位置,NY 本週 4 場。",
+   "why": "自由市場可以直接加入。今年 24.4、去年 29.9 都紮實,近 7 場回升到 30,右腳踝只是輕微 DTD,是補側翼深度的好選項,NY 本週 4 場。",
    "first": true
   },
   {
@@ -2816,7 +2816,7 @@
    "own": 47.4,
    "games": "本週 4 場",
    "next": 4,
-   "why": "去年 35.6 是這份名單最高,近 7 場回升到 23.7,MEM 本週 4 場。但你 C 資格已滿 4 人(Mobley、Kessler、Okongwu、Sarr),要先丟一個才能加。",
+   "why": "去年 35.6 是這份名單最高,近 7 場回升到 23.7,MEM 本週 4 場。但你 C 資格已滿 4 人(Mobley、Kessler、Okongwu、Hartenstein),要先丟一個才能加。",
    "first": false
   },
   {
@@ -2835,14 +2835,14 @@
   {
    "name": "Devin Vassell",
    "pos": "SG/SF · SA",
-   "status": "Waiver(11/15 清出)",
+   "status": "Waiver(你已送出申請,等待處理)",
    "s27": 25.1,
    "l7": 26.5,
    "s26": 23.3,
    "own": 40.9,
    "games": "本週 4 場",
    "next": 3,
-   "why": "今年 25.1 高於去年 23.3,近 7 場 26.5,SA 本週 4 場。目前在 waiver(這聯盟每週日 08:00 美東才批次清出),要等到 11/15 才能加。",
+   "why": "今年 25.1 高於去年 23.3,近 7 場 26.5,SA 本週 4 場。ESPN 顯示你已經送出一筆用 Vassell 換 Klay Thompson 的 waiver 申請,目前狀態是 PENDING,一旦清出會自動執行,不用再手動操作。",
    "first": false
   },
   {
@@ -2859,8 +2859,8 @@
    "first": false
   }
  ],
- "pickNote": "Klay Thompson 今年 16.9、去年 13.6 兩季一致偏低(近 7 場靠單場 49 分衝到 28.3,算異常值),是目前陣容最弱的一環,但這週還沒換他。自由市場 Josh Hart 是最適合直接頂上 SF/G 的選項。想補大個子的話,C 資格已經卡滿 4 人(Mobley、Kessler、Okongwu、Sarr),Edey、Robinson、Gafford 都要先丟一個現有 C 才能加。",
- "acqNote": "本週(11/9 起,matchup 4)異動額度 2/7,已經用在把 Isaiah Hartenstein 換成 Alex Sarr,還有 5 次可用,不是額滿週。Waiver 狀態的球員(Vassell、Gafford 等)要等下週日(11/15)美東 08:00 才批次清出;Hart、Edey、Robinson 是可以直接加入的自由球員。這個網站只讀取資料,不會替你改陣容。",
+ "pickNote": "Klay Thompson 今年 16.9、去年 13.6 兩季一致偏低(近 7 場靠單場 49 分衝到 28.3,算異常值),是目前陣容最弱的一環。你已經送出一筆 waiver 申請要用 Devin Vassell 換掉 Klay,目前 PENDING 等待處理;Josh Hart 是另一個可以直接從自由市場加入、補側翼深度的選項。想補大個子的話,C 資格已經卡滿 4 人(Mobley、Kessler、Okongwu、Hartenstein),Edey、Robinson、Gafford 都要先丟一個現有 C 才能加。",
+ "acqNote": "本週(11/9 起,matchup 4)異動額度 2/7,還有 5 次可用,不是額滿週。你有一筆 Devin Vassell 換 Klay Thompson 的 waiver 申請目前是 PENDING,等清出就會自動執行。ESPN 交易記錄顯示你上週(matchup 3)曾經來回操作過 Hartenstein/Morez Johnson Jr./Alex Sarr,但目前陣容與上週相同,Hartenstein 仍在,Sarr 不在你隊上。其餘 Waiver 狀態的球員(Gafford 等)要等下週日(11/15)美東 08:00 才批次清出;Hart、Edey、Robinson 是可以直接加入的自由球員。這個網站只讀取資料,不會替你改陣容。",
  "sched": {
   "rest": [
    [
@@ -2935,7 +2935,8 @@
   "傷兵回歸日取自 ESPN 傷兵資料,是 ESPN 的預估日期,球團公布新消息後會變。",
   "Threads 來源是你已追蹤的帳號與關鍵字搜尋,其中 @nbafantasybible 用 Yahoo 的資料;Threads 區塊由另一個每天 18:00 的排程任務維護,這次沒有動。",
   "ESPN 的 currentMatchupPeriod 這次讀取時還停在上週(vs Chicago Firebugs),雖然新的一週(vs 原住民山莊)已經可以交易、也已經看到對手的賽程,但正式的對戰分數與逐日陣容還沒切換,所以這次沒有手動改 matchup 與 matchupDays,交給下一次自動更新接手切換。",
-  "陣容評估、聯盟成員判斷、增補建議、Streaming、潛力發掘、賽程統計、賽後摘要、傷兵清單這次都重新核對過一輪;Threads 區塊未動(另一個排程任務負責)。"
+  "陣容評估、聯盟成員判斷、增補建議、Streaming、潛力發掘、賽程統計、賽後摘要、傷兵清單這次都重新核對過一輪;Threads 區塊未動(另一個排程任務負責)。",
+  "先前一版曾誤以為你本週把 Hartenstein 換成了 Alex Sarr,這次重新核對 ESPN 的即時陣容與交易記錄後更正:你目前陣容與上週相同,Hartenstein 仍在隊上,Sarr 不在;交易記錄顯示上週有過幾次來回操作但最終恢復原陣容。另外發現一筆 Devin Vassell 換 Klay Thompson 的 waiver 申請目前 PENDING,已加入 todo。"
  ],
  "stream": {
   "note": "條件:自由市場(FA,不用等 waiver)、週五到週日打 2 場、沒有傷停,依今年與去年平均的平均排序。持有率只當輔助。",
@@ -3125,8 +3126,17 @@
    "11/8"
   ]
  },
- "version": "v2.24",
+ "version": "v2.25",
  "changelog": [
+  {
+   "v": "v2.25",
+   "date": "11/9",
+   "items": [
+    "修正 v2.24 的錯誤:上一版誤判你本週把 Isaiah Hartenstein 換成了 Alex Sarr,重新核對 ESPN 即時陣容與交易記錄後確認你目前陣容與上週相同(Hartenstein 仍在隊上,Sarr 不在),roster、league.you、picks、pickNote、acqNote、todo、foot 相關文字已全部更正",
+    "新發現:你有一筆 Devin Vassell 換 Klay Thompson 的 waiver 申請目前是 PENDING(等待清出自動執行),已加入 todo 與 acqNote 提醒,不需要再手動操作",
+    "C 資格上限 4 人的提醒改回正確名單(Mobley、Kessler、Okongwu、Hartenstein)"
+   ]
+  },
   {
    "v": "v2.24",
    "date": "11/9",
@@ -3550,19 +3560,19 @@
  ],
  "todo": [
   {
-   "lv": "建議",
-   "t": "本週異動額度還沒用滿(2/7),可以考慮用自由球員 Josh Hart 換掉 Klay Thompson",
-   "d": "週一已經用 2 次把 Hartenstein 換成 Alex Sarr,還有 5 次可用,不是額滿週。Klay 今年 16.9、去年 13.6 兩季一致偏低(近 7 場靠單場 49 分衝到 28.3,是異常值);Josh Hart 是自由市場可以直接加入的 SG/SF,今年 24.4、去年 29.9,NY 本週 4 場。"
+   "lv": "留意",
+   "t": "你有一筆 Devin Vassell 換 Klay Thompson 的 waiver 申請正在 PENDING,會自動處理",
+   "d": "ESPN 顯示這筆申請還沒清出(狀態 PENDING),不用再手動操作,等清出資格日就會自動執行。若想在那之前額外補強,自由市場的 Josh Hart(今年 24.4、去年 29.9)也是可以直接加入的側翼選項,本週異動額度還有 5 次可用(2/7)。"
   },
   {
    "lv": "留意",
    "t": "Murray 與 Quickley 今天(11/9)都是 DTD,上場前要再確認",
-   "d": "Murray 右下肢傷勢、Quickley 右大腿後肌,兩人預計都在今天回歸,DEN 與 TOR 今天都有比賽。兩人目前都在你的先發,若賽前被列為 OUT,替補 Wagner、Okongwu、Sarr 都可以頂上。"
+   "d": "Murray 右下肢傷勢、Quickley 右大腿後肌,兩人預計都在今天回歸,DEN 與 TOR 今天都有比賽。兩人目前都在你的先發,若賽前被列為 OUT,替補 Wagner、Okongwu、Hartenstein 都可以頂上。"
   },
   {
    "lv": "留意",
-   "t": "C 資格已經卡滿 4 人(Mobley、Kessler、Okongwu、Sarr),想加大個子要先丟一個",
-   "d": "這聯盟 C 資格上限 4 人,你陣容剛好卡滿。自由市場的 Zach Edey(去年 35.6)、Mitchell Robinson(近 7 場 24.5)都是不錯的 C 選項,但要先決定丟哪個現有的 C 才能加入。"
+   "t": "C 資格已經卡滿 4 人(Mobley、Kessler、Okongwu、Hartenstein),想加大個子要先丟一個",
+   "d": "這聯盟 C 資格上限 4 人,你陣容剛好卡滿(Mobley、Kessler、Okongwu、Hartenstein)。自由市場的 Zach Edey(去年 35.6)、Mitchell Robinson(近 7 場 24.5)都是不錯的 C 選項,但要先決定丟哪個現有的 C 才能加入。"
   }
  ],
  "sleepers": {
