@@ -15,7 +15,7 @@ const A = JSON.parse(html.match(RE)[2]);
 const B = JSON.parse(fs.readFileSync('data.json', 'utf8'));
 const log = [];
 // 1) overlay data.json
-const OVER = ['asof', 'league', 'record', 'matchup', 'recap', 'injuries', 'threads', 'roster', 'picks', 'pickNote', 'acqNote', 'sched', 'foot', 'stream', 'todo', 'sleepers', 'autoAsof', 'version', 'changelog', 'handAsof'];
+const OVER = ['asof', 'league', 'record', 'matchup', 'recap', 'injuries', 'threads', 'roster', 'sched', 'foot', 'stream', 'todo', 'autoAsof', 'version', 'changelog', 'handAsof'];
 OVER.forEach(k => { if (B[k] !== undefined) A[k] = B[k]; });
 if (B.matchupDays) A.matchupDays = Object.assign({}, A.matchupDays, B.matchupDays);
 log.push('overlay');
@@ -91,7 +91,7 @@ try { // cmp: every rostered player + top free agents
   const filt = { players: { filterStatus: { value: ['FREEAGENT', 'WAIVERS'] }, limit: 200, sortPercOwned: { sortPriority: 1, sortAsc: false }, filterStatsForTopScoringPeriodIds: { value: 5, additionalValue: ['002027', '012027', '022027', '002026'] } } };
   const fa = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(filt) });
   (fa.players || []).forEach(x => { const p = x.player || x.playerPoolEntry.player; if (x.onTeamId === 0 || x.status === 'FREEAGENT' || x.status === 'WAIVERS' || x.onTeamId == null) { out.push(line(p, x.status === 'WAIVERS' ? 'Waiver' : 'FA', p.eligibleSlots)); FAL.push(Object.assign({}, p, { own: x.status === 'WAIVERS' ? 'Waiver' : 'FA' })); } });
-  CTX = { abbr, games, today, base, has, rest, next, avgPts, RO, FAL, nm };
+  CTX = { abbr, games, today, base, has, rest, next, avgPts, mins, posOf, RO, FAL, nm };
   if (out.length > 150) {
     A.cmp = out; log.push('cmp ' + out.length);
     // inj and note are live too: the note used to be hand-written once (e.g. "(11/4 消息)") and never refreshed.
@@ -292,9 +292,14 @@ try { // Streaming plan: add a free agent, drop one of mine, compare per-day top
   const pool = RO[meId].filter(p => p.slot !== 13 && p.injuryStatus !== 'OUT').map(p => ({ p, e: blend(p) })).filter(x => x.e != null);
   const dayTot = (list, sps) => sps.reduce((a, sp) => a + list.filter(x => has(x.p.proTeamId, sp)).map(x => x.e).sort((x, y) => y - x).slice(0, 10).reduce((u, v) => u + v, 0), 0);
   const cands = FAL.filter(p => p.injuryStatus !== 'OUT').map(p => ({ p, e: blend(p) })).filter(x => x.e != null && x.e >= 15);
+  // League rule: at most 4 C-eligible players on a roster (IR included). With 4 already, a C-eligible add
+  // may only replace another C-eligible player; this used to suggest e.g. "drop Burries (G), add Sarr (C)".
+  const isC = p => (p.eligibleSlots || []).includes(4);
+  const C_LIMIT = 4, myC = RO[meId].filter(isC).length;
+  const swapOK = (c, o) => !(isC(c.p) && !isC(o.p) && myC >= C_LIMIT);
   const mk = sps => { const b0 = dayTot(pool, sps); const rows = [];
     cands.forEach(c => { const g = sps.filter(sp => has(c.p.proTeamId, sp)).length; if (!g) return; let bestG = 0, bo = null;
-      pool.forEach(o => { const nl = pool.filter(x => x !== o).concat([c]); const gain = dayTot(nl, sps) - b0; if (gain > bestG) { bestG = gain; bo = o; } });
+      pool.forEach(o => { if (!swapOK(c, o)) return; const nl = pool.filter(x => x !== o).concat([c]); const gain = dayTot(nl, sps) - b0; if (gain > bestG) { bestG = gain; bo = o; } });
       if (bo) rows.push([c.p.fullName, abbr[c.p.proTeamId], c.p.own, r1(c.p.ownership && c.p.ownership.percentOwned), r1(c.e), g, bo.p.fullName, r1(bo.e), sps.filter(sp => has(bo.p.proTeamId, sp)).length, r1(bestG), avgPts(c.p, '002027'), avgPts(c.p, '012027'), avgPts(c.p, '002026')]); });
     return rows.sort((a, b) => b[9] - a[9]).slice(0, 8); };
   const dn = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
@@ -308,11 +313,54 @@ try { // Streaming plan: add a free agent, drop one of mine, compare per-day top
   // to swap out ("Klay 每次都是最適合換掉的人"), which stayed on the site after that player was gone.
   const outs = {}; w.forEach(x => x.rows.forEach(r => { outs[r[6]] = (outs[r[6]] || 0) + 1; }));
   const topOut = Object.entries(outs).sort((a, b) => b[1] - a[1])[0];
-  const note = '增加分數的算法:每天取陣容裡有比賽的球員,依預估場均排出前 10 名加總;把自由市場球員加進來、換掉一位你的球員,比較前後的總分差。預估場均是今年、去年、近 7 場平均的平均(缺哪個就不算哪個)。這裡不看位置限制與上場時間,也假設傷兵不會回來,只能當粗估。每個候選球員都已試過換掉你陣容裡的每一位,表中顯示增加最多的那一個。' +
+  const note = '增加分數的算法:每天取陣容裡有比賽的球員,依預估場均排出前 10 名加總;把自由市場球員加進來、換掉一位你的球員,比較前後的總分差。預估場均是今年、去年、近 7 場平均的平均(缺哪個就不算哪個)。這裡不看位置限制與上場時間,也假設傷兵不會回來,只能當粗估。每個候選球員都已試過換掉你陣容裡的每一位,表中顯示增加最多的那一個。C 資格最多 4 人:你已有 ' + myC + ' 人' + (myC >= C_LIMIT ? ',所以有 C 資格的球員只會配對換掉你的 C。' : '。') +
     (topOut ? '這次最常被換掉的是 ' + topOut[0] + '(' + topOut[1] + ' 次)。' : '');
   A.streamPlan = Object.assign({}, A.streamPlan, { note, asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' }) + '(台北時間)', windows: w });
   log.push('streamPlan ' + w.map(x => x.rows.length).join('/'));
 } catch (e) { log.push('streamPlan FAIL ' + e.message); }
+
+try { // auto judgments: picks/pickNote/acqNote/sleepers/fridayLineup are rule-based, so they are
+  // rebuilt every run instead of being hand-written (saves the daily Claude pass, never goes stale).
+  if (!CTX) throw new Error('no ctx');
+  const { abbr, today, base, has, rest, next, avgPts, mins, posOf, RO, FAL, nm } = CTX;
+  const me = meta.teams.find(t => nm(t) === 'aespa'); const meId = me.id;
+  const isC = p => (p.eligibleSlots || []).includes(4);
+  const mine = RO[meId], myCs = mine.filter(isC).map(p => p.fullName);
+  const W = (A.streamPlan || {}).windows || [];
+  const byName = {}; FAL.forEach(p => { byName[p.fullName] = p; });
+  // picks: best free agents from the streaming plan (already respects the C limit), unique by name
+  const seen = new Set(), picks = [];
+  W.forEach(w => w.rows.forEach(r => { if (picks.length >= 4 || seen.has(r[0]) || !byName[r[0]]) return; seen.add(r[0]); const p = byName[r[0]];
+    const s27 = avgPts(p, '002027'), l7 = avgPts(p, '012027'), s26 = avgPts(p, '002026');
+    picks.push({ name: r[0], pos: posOf(p, p.eligibleSlots) + ' · ' + abbr[p.proTeamId], status: p.own, s27, l7, s26, own: r1(p.ownership && p.ownership.percentOwned),
+      games: '本週剩 ' + rest(p.proTeamId) + ' 場', next: next(p.proTeamId), first: picks.length === 0 || undefined,
+      why: w.label.replace(/(.*?)(\(.*)/, '$1') + '換掉 ' + r[6] + ' 預估多 ' + r[9] + ' 分。' + (isC(p) ? 'C 資格,只能換掉一個 C。' : '') + (p.own === 'Waiver' ? '在 waiver,要申請、等處理完才會進來。' : '自由球員,加了立刻生效。') }); }));
+  A.picks = picks;
+  const weakest = mine.filter(p => p.slot !== 13).map(p => [p.fullName, [avgPts(p, '002027'), avgPts(p, '002026'), avgPts(p, '012027')].filter(x => x != null)]).filter(x => x[1].length).map(x => [x[0], r1(x[1].reduce((a, b) => a + b, 0) / x[1].length)]).sort((a, b) => a[1] - b[1])[0];
+  A.pickNote = 'C 資格(上限 4 人)目前 ' + myCs.length + ' 人:' + myCs.join('、') + '。' + (myCs.length >= 4 ? '有 C 資格的自由球員只能換掉其中一個。' : '') + (weakest ? '陣容裡預估場均最低的非 IR 球員是 ' + weakest[0] + '(' + weakest[1] + ')。' : '') + '下面的名單依 streaming 試算的增加分數排序,每次更新自動重算。';
+  // acqNote: ESPN acquisition settings + this matchup's count + whether I already added today
+  const acq = meta.settings.acquisitionSettings || {}, cur = meta.status && meta.status.currentMatchupPeriod;
+  const used = ((me.transactionCounter || {}).matchupAcquisitionTotals || {})[String(cur)] || 0;
+  let addedToday = null;
+  try { const tj = await get(L + '?view=mTransactions2&scoringPeriodId=' + today);
+    addedToday = (tj.transactions || []).some(t => t.teamId === meId && t.status === 'EXECUTED' && (t.items || []).some(i => i.type === 'ADD')); } catch (e) {}
+  A.acqNote = (acq.matchupLimitPerScoringPeriod ? '這個聯盟每個比賽日最多加 ' + acq.matchupAcquisitionLimit + ' 人' : '本週最多加 ' + acq.matchupAcquisitionLimit + ' 人') + '(ESPN 設定),ESPN 記錄你本週(第 ' + cur + ' 輪)已經加入 ' + used + ' 次。' +
+    (addedToday === null ? '' : addedToday ? '今天已經加過人了。' : '今天還沒加人。') + 'Waiver 狀態的球員要申請、等處理;自由球員加了立刻生效。';
+  // sleepers: free agents whose last-7 minutes rose 4+ over their season average while their team has someone OUT
+  const outBy = {}; Object.values(RO).flat().concat(FAL).forEach(p => { if (p.injuryStatus === 'OUT') { const d = (A.injDates || {})[p.fullName]; (outBy[p.proTeamId] = outBy[p.proTeamId] || []).push(p.fullName + (d && d[1] ? '(' + d[1] + ')' : '')); } });
+  const sl = FAL.filter(p => p.injuryStatus !== 'OUT' && outBy[p.proTeamId]).map(p => ({ p, m7: mins(p, '012027'), m27: mins(p, '002027'), l7: avgPts(p, '012027') }))
+    .filter(x => x.m7 != null && x.m27 != null && x.m7 - x.m27 >= 4 && (x.l7 || 0) >= 12).sort((a, b) => (b.m7 - b.m27) - (a.m7 - a.m27)).slice(0, 5);
+  A.sleepers = { note: '自動整理:自由市場裡近 7 場上場分鐘比今年平均多 4 分鐘以上、近 7 場至少 12 分、而且球隊有主力 OUT 的人。樣本很小,主力回歸後分鐘可能掉回去。',
+    rows: sl.map(x => { const p = x.p, s27 = avgPts(p, '002027'), s26 = avgPts(p, '002026');
+      return [p.fullName, abbr[p.proTeamId], r1(p.ownership && p.ownership.percentOwned), x.m7, x.m27, x.l7, s27, s26, outBy[p.proTeamId].slice(0, 3).join('、') + ' OUT',
+        '分鐘多了 ' + r1(x.m7 - x.m27) + ' 分鐘。' + (s26 == null ? '沒有去年樣本。' : '') + (p.injuryStatus === 'DAY_TO_DAY' ? '本人 DTD。' : '') + (isC(p) ? 'C 資格。' : '')]; }) };
+  // fridayLineup (陣容檢查): from the best-lineup check per remaining day
+  const LU = (A.insights || {}).LU || [];
+  const bad = LU.filter(d => d.best - d.cur > 0.05);
+  A.fridayLineup = '陣容檢查(自動):' + (!LU.length ? '沒有取得每日陣容資料。' : bad.length ? bad.map(d => d.d + ' 要換上 ' + (d.ins.join('、') || '—') + '、換下 ' + (d.outs.join('、') || '—')).join(';') + '。' : '本週剩下每一天的先發都已經是最佳排法,不用調整。') +
+    (LU[0] ? LU[0].d + ' 有比賽 ' + LU[0].n + ' 人' + (LU[0].idle.length ? ',沒比賽:' + LU[0].idle.join('、') : '') + '。' : '');
+  log.push('auto judgments picks ' + picks.length + ' sleepers ' + sl.length + ' C ' + myCs.length);
+} catch (e) { log.push('auto judgments FAIL ' + e.message); }
 
 try { // league activity: adds/drops in the last 3 days
   if (!CTX) throw new Error('no ctx');

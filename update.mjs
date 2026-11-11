@@ -193,8 +193,8 @@ try {
 
 // hand-written judgment sections each carry the date they were last written (handAsof). The site shows
 // a "written on X" notice on any section older than today, so fresh numbers never sit next to old advice
-// without saying so. Whoever edits todo/picks/threads/sleepers/fridayLineup must update its date.
-if (!D.handAsof) { const d0 = String(D.asof || '').slice(0, 10); D.handAsof = { todo: d0, picks: d0, threads: d0, sleepers: d0, fridayLineup: d0 }; }
+// without saying so. Whoever edits todo or threads must update its date (apply-hand.mjs does it).
+if (!D.handAsof) { const d0 = String(D.asof || '').slice(0, 10); D.handAsof = { todo: d0, threads: d0 }; }
 
 D.doneSp = dayDone(today) ? today : today - 1;
 D.autoAsof = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' });
