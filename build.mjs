@@ -60,7 +60,7 @@ try { // schedules + points allowed
   else log.push('sch too few');
 } catch (e) { log.push('sch FAIL ' + e.message); }
 
-let CTX = null;
+let CTX = null, FULLP = null;
 try { // cmp: every rostered player + top free agents
   if (!meta || !cal) throw new Error('no meta');
   const abbr = {}, games = {};
@@ -227,6 +227,37 @@ try { // decision data: best lineup per day, injuries, free-agent hot list, per-
     }
   } catch (e) { log.push('next-week opp FAIL ' + e.message); }
 
+  // ---- prediction check (預測檢驗): weekly win estimate + daily lineup estimate vs what happened ----
+  // Weekly: the next-week estimate keeps being overwritten until that week starts, so the stored
+  // value is the last pre-week call; settled from ESPN's final scores once the week is over.
+  // Daily: the estimate is frozen on the day itself (later runs would leak that day's games into
+  // the recent averages), and the actual score is filled in once update.mjs marks the day done.
+  // Report only -- nothing is auto-adjusted from these yet (too few weeks to fit anything).
+  try {
+    const PT = A.predTrack || { win: {}, days: {} };
+    if (WINNEXT) PT.win[cur + 1] = { opp: WINNEXT.opp, p: WINNEXT.p, meEst: WINNEXT.meEst, opEst: WINNEXT.opEst };
+    Object.keys(PT.win).map(Number).filter(mp => mp < cur && !PT.win[mp].res).forEach(mp => {
+      const gm = full.schedule.find(x => x.matchupPeriodId === mp && x.away && (x.home.teamId === meId || x.away.teamId === meId)); if (!gm) return;
+      const ms = gm.home.teamId === meId ? gm.home : gm.away, os = gm.home.teamId === meId ? gm.away : gm.home;
+      if (ms.totalPoints == null || os.totalPoints == null) return;
+      PT.win[mp].res = { me: r1(ms.totalPoints), op: r1(os.totalPoints), won: ms.totalPoints > os.totalPoints ? 1 : 0 }; });
+    const ti = today - base; if (ti >= 0 && ti < 7 && dd.me[ti] && dd.op[ti] && today > (B.doneSp || 0)) PT.days[today] = Object.assign(PT.days[today] || {}, { d: dstr(ti), me: dd.me[ti].est, op: dd.op[ti].est });
+    Object.keys(PT.days).map(Number).filter(sp => sp <= (B.doneSp || 0) && sp >= base && PT.days[sp].meAct == null).forEach(sp => { const i = sp - base;
+      if (dd.me[i] && dd.op[i]) { PT.days[sp].meAct = dd.me[i].act; PT.days[sp].opAct = dd.op[i].act; } });
+    const wk = Object.keys(PT.win).map(Number).sort((x, y) => x - y).filter(mp => PT.win[mp].res).map(mp => Object.assign({ mp }, PT.win[mp]));
+    const dy = Object.keys(PT.days).map(Number).sort((x, y) => x - y).map(sp => PT.days[sp]).filter(d => d.meAct != null);
+    const err = []; dy.forEach(d => { err.push([d.me, d.meAct], [d.op, d.opAct]); });
+    A.predCheck = {
+      win: { n: wk.length, hit: wk.length ? Math.round(100 * wk.filter(w => (w.p >= 50 ? 1 : 0) === w.res.won).length / wk.length) : null,
+        brier: wk.length ? Math.round(1000 * wk.reduce((a, w) => a + Math.pow(w.p / 100 - w.res.won, 2), 0) / wk.length) / 1000 : null,
+        rows: wk.slice(-6).map(w => [w.mp, w.opp, w.p, w.meEst, w.opEst, w.res.me, w.res.op, w.res.won]) },
+      day: { n: dy.length, mae: err.length ? r1(err.reduce((a, e) => a + Math.abs(e[1] - e[0]), 0) / err.length) : null,
+        ratio: err.length ? Math.round(100 * err.reduce((a, e) => a + e[1], 0) / Math.max(1, err.reduce((a, e) => a + e[0], 0))) / 100 : null,
+        rows: dy.slice(-7).map(d => [d.d, d.me, d.meAct, d.op, d.opAct]) } };
+    const keepDays = Object.keys(PT.days).map(Number).sort((x, y) => y - x).slice(0, 120); PT.days = Object.fromEntries(keepDays.map(k => [k, PT.days[k]]));
+    A.predTrack = PT;
+    log.push('predCheck win ' + wk.length + ' days ' + dy.length + ' pendingToday ' + (PT.days[today] ? 1 : 0));
+  } catch (e) { log.push('predCheck FAIL ' + e.message); }
   A.insights = Object.assign({}, A.insights, { LU, INJ, hot, weak: r1(weak), opp: OPP, win: { next: WINNEXT }, clearedBench, oppStream: { drop: oppDropCand, pickup: oppPickupCand } });
   log.push('decision LU ' + LU.length + ' INJ ' + INJ.length + ' hot ' + hot.length + ' dayDetail ' + Object.keys(dd.me).length + ' nextOpp ' + (OPP ? OPP.name : 'none') + ' clearedBench ' + clearedBench.length + ' oppDrop ' + oppDropCand.length + ' oppPickup ' + oppPickupCand.length);
 } catch (e) { log.push('decision FAIL ' + e.message); }
@@ -410,17 +441,38 @@ try { // per-game logs for every rostered player and the top free agents
     return [gp, r1(usg), tsOf(st), r1(per100), tsOf(a26 && a26.stats), a26 && a26.stats ? a26.stats['42'] : null, r1(pts / tm.pts * 100), r1(tm.poss)]; };
   const all = {}; Object.values(RO).forEach(a => a.forEach(p => all[p.id] = p)); FAL.slice(0, 30).forEach(p => all[p.id] = p);
   const ids = Object.keys(all).map(Number); const LG = {};
-  for (let k = 0; k < ids.length; k += 30) {
-    const f = { players: { filterIds: { value: ids.slice(k, k + 30) }, filterStatsForTopScoringPeriodIds: { value: 10, additionalValue: ['002027', '012027', '022027', '002026'] } } };
-    const j = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(f) });
-    (j.players || []).forEach(x => { const p = x.player; const base0 = all[p.id] || p;
+  // One full-season fetch shared by the game logs here and the teammate splits (mates) below:
+  // the top 450 players by roster% plus any rostered/top-FA player outside that group.
+  const FULL = {}; const flt = extra => ({ players: Object.assign({ filterStatsForTopScoringPeriodIds: { value: CTX.today + 1, additionalValue: ['002027', '012027', '022027', '002026'] } }, extra) });
+  for (let off = 0; off < 450; off += 150) {
+    const j = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(flt({ limit: 150, offset: off, sortPercOwned: { sortPriority: 1, sortAsc: false } })) });
+    (j.players || []).forEach(x => { FULL[x.player.id] = x.player; }); }
+  const missIds = ids.filter(id => !FULL[id]);
+  for (let k = 0; k < missIds.length; k += 50) {
+    const j = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(flt({ filterIds: { value: missIds.slice(k, k + 50) } })) });
+    (j.players || []).forEach(x => { FULL[x.player.id] = x.player; }); }
+  FULLP = FULL; log.push('full pool ' + Object.keys(FULL).length + ' (extra ' + missIds.length + ')');
+  // every pooled player gets a log so the site search can open anyone in the top 450, not just rostered + top FA
+  Array.from(new Set(ids.concat(Object.keys(FULL).map(Number)))).map(id => FULL[id]).filter(Boolean).forEach(p => { const base0 = all[p.id] || p;
       const gl = (p.stats || []).filter(s => s.statSplitTypeId === 5 && s.seasonId === 2027 && s.stats && s.stats['40'] != null && s.stats['40'] > 0).sort((a, b) => b.scoringPeriodId - a.scoringPeriodId).slice(0, 10).map(s => {
         const gm = ((games[s.proTeamId] || {})[String(s.scoringPeriodId)] || [])[0]; const opp = gm ? (gm.homeProTeamId === s.proTeamId ? 'vs ' + abbr[gm.awayProTeamId] : '@ ' + abbr[gm.homeProTeamId]) : '';
         const v = i => s.stats[String(i)] == null ? 0 : Math.round(s.stats[String(i)]);
         return [dd(s.scoringPeriodId), opp, r1(s.appliedTotal), v(0), v(6), v(3), v(2), v(1), v(11), v(40)]; });
       try { const ad = advOf(p, abbr[p.proTeamId]); if (ad) ADV[p.id] = ad; } catch (e) {}
       LG[p.id] = [p.fullName, abbr[p.proTeamId], avgPts(p, '002027'), avgPts(p, '012027'), avgPts(p, '022027'), avgPts(p, '002026'), r1((base0.ownership || p.ownership || {}).percentOwned), p.injuryStatus || null, gl]; });
-  }
+  // roleAlerts: your own players whose last-3-game minutes moved 5+ from the rest of their season
+  // (needs 6+ games) -- role changes show up in minutes before they show up in the averages.
+  try {
+    const myIds = (A.cmp || []).map(l => l.split('|')).filter(a => a[4] === 'aespa').map(a => +a[0]);
+    A.roleAlerts = myIds.map(id => FULL[id]).filter(Boolean).map(p => {
+      const g = (p.stats || []).filter(s => s.statSplitTypeId === 5 && s.seasonId === 2027 && s.stats && s.stats['40'] > 0).sort((a, b) => b.scoringPeriodId - a.scoringPeriodId);
+      if (g.length < 6) return null; const av = (a, f) => a.reduce((x, y) => x + f(y), 0) / a.length;
+      const l3 = g.slice(0, 3), rest = g.slice(3), m3 = av(l3, s => s.stats['40']), mr = av(rest, s => s.stats['40']);
+      if (Math.abs(m3 - mr) < 5) return null;
+      return [p.fullName, abbr[p.proTeamId], r1(m3), r1(mr), r1(av(l3, s => s.appliedTotal || 0)), r1(av(rest, s => s.appliedTotal || 0)), rest.length];
+    }).filter(Boolean).sort((a, b) => (a[2] - a[3]) - (b[2] - b[3]));
+    log.push('roleAlerts ' + A.roleAlerts.length);
+  } catch (e) { log.push('roleAlerts FAIL ' + e.message); }
   if (LGAV && Object.keys(ADV).length > 50) { A.adv = ADV; A.advLg = LGAV; log.push('adv ' + Object.keys(ADV).length + ' lg ' + JSON.stringify(LGAV)); } else log.push('adv too few ' + Object.keys(ADV).length);
   if (Object.keys(LG).length > 100) { A.logs = LG; log.push('logs ' + Object.keys(LG).length + ' sample games ' + JSON.stringify(Object.values(LG)[0][8].slice(0, 2))); } else log.push('logs too few');
 
@@ -483,6 +535,159 @@ try { // per-game logs for every rostered player and the top free agents
     log.push('burst up ' + up.length + ' down ' + down.length + ' weekTally ' + Object.keys(tally).length);
   } catch (e) { log.push('burst FAIL ' + e.message); }
 } catch (e) { log.push('logs FAIL ' + e.message); }
+
+try { // playoffSched: how many NBA games each team (and each of your players) has in each fantasy playoff round
+  // Rounds come from ESPN's scheduleSettings.matchupPeriods (keys past the regular-season count; a
+  // round can span 2 weeks). Week w starts on the Monday scoring period base + 7 * (w - current week).
+  if (!CTX || !meta) throw new Error('no ctx');
+  const { abbr, games, base, has } = CTX; const ss = meta.settings.scheduleSettings, cur = meta.status.currentMatchupPeriod;
+  const dd = sp => { const d = new Date(Date.UTC(2026, 10, 2 + (sp - 14))); return (d.getUTCMonth() + 1) + '/' + d.getUTCDate(); };
+  const rounds = Object.keys(ss.matchupPeriods).map(Number).filter(k => k > ss.matchupPeriodCount).sort((x, y) => x - y).map((k, i) => {
+    const wks = ss.matchupPeriods[k], sps = []; wks.forEach(w => { for (let d = 0; d < 7; d++) sps.push(base + 7 * (w - cur) + d); });
+    return { label: '第 ' + (i + 1) + ' 輪', weeks: wks, from: dd(sps[0]), to: dd(sps[sps.length - 1]), sps }; });
+  const T = {}; Object.keys(abbr).forEach(tid => { if (!abbr[tid] || abbr[tid] === 'FA') return; T[abbr[tid]] = rounds.map(r => r.sps.reduce((n, sp) => n + has(+tid, sp), 0)); });
+  const vals = Object.values(T); if (vals.length < 25 || !vals.some(v => v.some(x => x > 0))) throw new Error('no playoff games in schedule');
+  const avg = rounds.map((r, i) => r1(vals.reduce((a, v) => a + v[i], 0) / vals.length));
+  const mine = (A.cmp || []).map(l => l.split('|')).filter(x => x[4] === 'aespa').map(x => { const t = T[x[2]] || rounds.map(() => 0);
+    const est = [x[6], x[9]].filter(v => v !== '').map(Number); return [x[1], x[2], ...t, t.reduce((a, b) => a + b, 0), est.length ? r1(est.reduce((a, b) => a + b, 0) / est.length) : null, x[5]]; })
+    .sort((p, q) => q[q.length - 3] - p[p.length - 3]);
+  A.playoffSched = { rounds: rounds.map(r => [r.label, r.from, r.to, r.weeks.length]), avg, teams: T, mine };
+  log.push('playoffSched rounds ' + rounds.length + ' avg ' + avg.join('/'));
+} catch (e) { log.push('playoffSched FAIL ' + e.message); }
+
+try { // tradeIdeas: 1-for-1 swaps where you send depth at a position you are strong in and get back a
+  // similar-value player at your weakest position, from a team that is weak where you are strong.
+  // Value = mean of this season and last season fantasy avg (same as the rest of the site). Position
+  // strength = value of the 2nd-best non-IR player eligible there, compared with the league average.
+  // Skips injured (OUT) players, your top 3, and any swap that breaks the 4-C limit on either side.
+  if (!CTX || !meta) throw new Error('no ctx');
+  const { RO, abbr, nm, posOf } = CTX; const POS = ['PG', 'SG', 'SF', 'PF', 'C'];
+  const val = p => { const v = [CTX.avgPts(p, '002027'), CTX.avgPts(p, '002026')].filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  const teams = meta.teams.map(t => ({ id: t.id, name: nm(t), ro: (RO[t.id] || []).filter(p => p.slot !== 13).map(p => ({ p, v: val(p), pos: posOf(p, p.eligibleSlots).split('/').filter(Boolean), c: (p.eligibleSlots || []).includes(4) })).filter(x => x.v != null) }));
+  const str = t => { const o = {}; POS.forEach(ps => { const v = t.ro.filter(x => x.pos.includes(ps)).map(x => x.v).sort((a, b) => b - a); o[ps] = v[1] != null ? v[1] : (v[0] || 0) / 2; }); return o; };
+  teams.forEach(t => { t.s = str(t); });
+  const lg = {}; POS.forEach(ps => { lg[ps] = teams.reduce((a, t) => a + t.s[ps], 0) / teams.length; });
+  const need = t => { const o = {}; POS.forEach(ps => { o[ps] = lg[ps] - t.s[ps]; }); return o; };
+  const me = teams.find(t => t.name === 'aespa'); if (!me) throw new Error('no me');
+  // for you, 'need' is relative to your own average position strength: a contender is above the
+  // league average everywhere, so its holes are the positions it is weakest at compared with itself
+  const myAvg = POS.reduce((a, ps) => a + me.s[ps], 0) / POS.length, myN = {}; POS.forEach(ps => { myN[ps] = myAvg - me.s[ps]; });
+  const myTop = new Set(me.ro.slice().sort((a, b) => b.v - a.v).slice(0, 3).map(x => x.p.id));
+  const myC = me.ro.filter(x => x.c).length;
+  const PO = (A.playoffSched || {}).teams || {}, poOf = p => (PO[abbr[p.proTeamId]] || []).reduce((a, b) => a + b, 0);
+  const fit = (n, pos) => Math.max(0, ...pos.map(ps => n[ps]));
+  const ideas = [];
+  teams.filter(t => t !== me).forEach(t => { const thN = need(t), thC = t.ro.filter(x => x.c).length;
+    me.ro.filter(x => !myTop.has(x.p.id) && x.p.injuryStatus !== 'OUT' && x.v >= 18).forEach(A0 => t.ro.filter(x => x.p.injuryStatus !== 'OUT').forEach(B0 => {
+      if (B0.v < A0.v - 1 || B0.v > A0.v + 4) return;                      // roughly fair, never a clear downgrade for you
+      if (myC - (A0.c ? 1 : 0) + (B0.c ? 1 : 0) > 4 || thC - (B0.c ? 1 : 0) + (A0.c ? 1 : 0) > 4) return;
+      const mine = fit(myN, B0.pos) - fit(myN, A0.pos), theirs = fit(thN, A0.pos) - fit(thN, B0.pos);
+      if (mine <= 1 || theirs <= 1) return;                                 // both sides must fill a real hole
+      const po = poOf(B0.p) - poOf(A0.p);
+      ideas.push({ team: t.name, give: A0, get: B0, mine: r1(mine), theirs: r1(theirs), po, score: (B0.v - A0.v) + 0.5 * mine + 0.3 * theirs + 0.5 * po });
+    })); });
+  ideas.sort((a, b) => b.score - a.score);
+  const per = {}, pick = []; ideas.forEach(x => { if (pick.length >= 5 || (per[x.team] || 0) >= 2 || pick.some(y => y.get.p.id === x.get.p.id || y.give.p.id === x.give.p.id)) return; per[x.team] = (per[x.team] || 0) + 1; pick.push(x); });
+  const weak = POS.filter(ps => myN[ps] > 1).sort((a, b) => myN[b] - myN[a]);
+  const weakAvg = r1(myAvg);
+  A.tradeIdeas = { myAvg: weakAvg, weak: weak.map(ps => [ps, r1(me.s[ps]), r1(lg[ps])]), rows: pick.map(x => [x.team, x.give.p.fullName, abbr[x.give.p.proTeamId], x.give.pos.join('/'), r1(x.give.v), x.get.p.fullName, abbr[x.get.p.proTeamId], x.get.pos.join('/'), r1(x.get.v), x.mine, x.theirs, x.po]) };
+  log.push('tradeIdeas ' + pick.length + ' (of ' + ideas.length + ') weak ' + weak.join(','));
+} catch (e) { log.push('tradeIdeas FAIL ' + e.message); }
+
+try { // mates: how a player's fantasy score moves when a key teammate sits (player modal "隊友影響")
+  // Key teammates = the top 5 by minutes per game on each NBA team (this season, or last season
+  // when the player has fewer than 3 games -- catches stars hurt since opening night). For every
+  // player in A.logs, split his games this season by whether each key teammate played, and keep
+  // the split only when the teammate is OUT right now (score should rise while he sits) or came
+  // back within the last 7 days (score may drop). Needs >= 3 games on each side and a >= 3 point gap.
+  if (!CTX || !A.logs) throw new Error('no ctx/logs');
+  const { abbr, games, today } = CTX;
+  const dd = sp => { const d = new Date(Date.UTC(2026, 10, 2 + (sp - 14))); return (d.getUTCMonth() + 1) + '/' + d.getUTCDate(); };
+  if (!FULLP) throw new Error('no full pool'); const POOL = FULLP;
+  const played = p => { const m = {}; (p.stats || []).forEach(s => { if (s.statSplitTypeId === 5 && s.seasonId === 2027 && s.stats && s.stats['40'] > 0) m[s.scoringPeriodId] = s; }); return m; };
+  const mpg = (p, id) => { const s = (p.stats || []).find(x => x.id === id); const gp = s && s.stats && s.stats['42']; return gp ? { gp, m: s.stats['40'] / gp } : { gp: 0, m: 0 }; };
+  const byTeam = {};
+  Object.values(POOL).forEach(p => { if (!p.proTeamId) return; const a = mpg(p, '002027'), b = mpg(p, '002026');
+    (byTeam[p.proTeamId] = byTeam[p.proTeamId] || []).push({ p, g: played(p), m: a.gp >= 3 ? a.m : b.m }); });
+  const MATES = {}; let nPairs = 0;
+  Object.keys(byTeam).forEach(tid => {
+    const T = +tid, sps = Object.keys(games[T] || {}).map(Number).filter(sp => sp < today && (games[T][String(sp)] || []).length).sort((a, b) => a - b);
+    const onTeam = x => { const other = Object.values(x.g).filter(s => s.proTeamId !== T).map(s => s.scoringPeriodId); const from = other.length ? Math.max(...other) + 1 : 0; return sps.filter(sp => sp >= from); };
+    const key = byTeam[T].filter(x => x.m > 0).sort((a, b) => b.m - a.m).slice(0, 5);
+    key.forEach(k => {
+      const ksp = onTeam(k), out = ksp.filter(sp => !k.g[sp]);
+      if (!out.length) return;
+      let kind = null, when = '';
+      if (k.p.injuryStatus === 'OUT') kind = 'out';
+      else { const last = ksp[ksp.length - 1]; let i = ksp.length - 1; while (i >= 0 && k.g[ksp[i]]) i--;
+        if (i >= 0 && i < ksp.length - 1 && ksp[i + 1] >= today - 7 && last != null) { kind = 'back'; when = dd(ksp[i + 1]); } }
+      if (!kind) return;
+      byTeam[T].forEach(s => {
+        if (s.p.id === k.p.id || !A.logs[s.p.id]) return;
+        const mine = onTeam(s).filter(sp => s.g[sp] && ksp.includes(sp)); const w = [], wo = [];
+        mine.forEach(sp => (k.g[sp] ? w : wo).push(s.g[sp].appliedTotal || 0));
+        if (w.length < 3 || wo.length < 3) return;
+        const av = a => r1(a.reduce((x, y) => x + y, 0) / a.length), aWo = av(wo), aW = av(w);
+        if (Math.abs(aWo - aW) < 3) return;
+        (MATES[s.p.id] = MATES[s.p.id] || []).push([k.p.fullName, kind, when, aWo, wo.length, aW, w.length, k.p.injuryStatus || '', [k.p.id]]); nPairs++;
+      });
+    });
+  });
+  Object.keys(MATES).forEach(id => { const g = {}; // teammates who sat the exact same games give identical splits: merge into one line
+    MATES[id].forEach(m => { const k = [m[1], m[2], m[3], m[4], m[5], m[6]].join('|'); if (g[k]) { g[k][0] += '、' + m[0]; g[k][8] = g[k][8].concat(m[8]); } else g[k] = m.slice(); });
+    MATES[id] = Object.values(g); });
+  Object.values(MATES).forEach(a => a.sort((x, y) => Math.abs(y[3] - y[5]) - Math.abs(x[3] - x[5])));
+  // ---- prediction tracking + calibration ----
+  // Each new line is snapshotted once: pred = the shown "other state" gap (back: avg with the mate
+  // minus avg without; out: avg without minus avg with), base = the avg it is measured from. Then
+  // the subject's next games in the predicted state (mate playing for 'back', still sitting for
+  // 'out') are averaged: settled at 5 games, or at >= 2 if the mate's status flips / 30 days pass.
+  // k = least-squares slope of actual vs predicted gap (through 0), applied on the site once a kind
+  // has >= 15 settled predictions. Rules themselves (top 5, thresholds) are never changed here.
+  const TR = A.matesTrack && A.matesTrack.open ? A.matesTrack : { open: {}, done: [] };
+  Object.keys(MATES).forEach(sid => MATES[sid].forEach(m => { const key = sid + '|' + m[8].join(',') + '|' + m[1] + '|' + m[2];
+    if (!TR.open[key] && !TR.done.some(d => d[6] === key)) TR.open[key] = { sid: +sid, mids: m[8], sn: A.logs[sid][0], mate: m[0], kind: m[1], sp0: today,
+      base: m[1] === 'back' ? m[3] : m[5], pred: m[1] === 'back' ? r1(m[5] - m[3]) : r1(m[3] - m[5]) }; }));
+  Object.keys(TR.open).forEach(key => { const t = TR.open[key], sp = POOL[t.sid]; if (!sp) return;
+    const sg = played(sp), mg = t.mids.map(id => POOL[id] ? played(POOL[id]) : null); if (mg.some(x => !x)) return;
+    const after = Object.keys(sg).map(Number).filter(x => x >= t.sp0).sort((a, b) => a - b), got = []; let flip = false;
+    for (const x of after) { const ok = mg.every(g => t.kind === 'out' ? !g[x] : !!g[x]); if (!ok) { flip = true; break; } got.push(sg[x].appliedTotal || 0); if (got.length >= 5) break; }
+    const old = today - t.sp0 > 30;
+    if (got.length >= 5 || ((flip || old) && got.length >= 2)) { const act = r1(got.reduce((a, b) => a + b, 0) / got.length - t.base);
+      TR.done.push([t.kind, t.pred, act, t.sn, t.mate, dd(t.sp0), key, got.length]); delete TR.open[key]; }
+    else if (flip || old) delete TR.open[key]; });
+  TR.done = TR.done.slice(-300);
+  const calOf = list => { if (!list.length) return { n: 0 }; const sp2 = list.reduce((a, d) => a + d[1] * d[1], 0), sap = list.reduce((a, d) => a + d[1] * d[2], 0);
+    const k = sp2 > 0 ? Math.max(0, Math.min(1.5, sap / sp2)) : 1;
+    return { n: list.length, k: Math.round(k * 100) / 100, hit: Math.round(100 * list.filter(d => Math.sign(d[1]) === Math.sign(d[2])).length / list.length),
+      mae: r1(list.reduce((a, d) => a + Math.abs(d[2] - d[1]), 0) / list.length), maeK: r1(list.reduce((a, d) => a + Math.abs(d[2] - k * d[1]), 0) / list.length) }; };
+  A.matesTrack = TR;
+  A.matesCal = { back: calOf(TR.done.filter(d => d[0] === 'back')), out: calOf(TR.done.filter(d => d[0] === 'out')), all: calOf(TR.done), open: Object.keys(TR.open).length, min: 15 };
+  log.push('matesTrack open ' + A.matesCal.open + ' done ' + TR.done.length + ' cal ' + JSON.stringify(A.matesCal.all));
+  // ---- feed the teammate splits into 增補建議 (picks) and 潛力發掘 (sleepers) ----
+  // Only 'out' lines where the free agent scores more while the teammate sits, and only the
+  // biggest one per player. Sleepers also get up to 3 extra free agents found only this way.
+  try {
+    const kOf = kind => { const c = A.matesCal[kind]; return c && c.n >= A.matesCal.min ? c.k : 1; };
+    const boost = id => { const b = (MATES[id] || []).filter(m => m[1] === 'out' && m[3] - m[5] >= 3)[0]; return b ? { b, d: r1((b[3] - b[5]) * kOf('out')) } : null; };
+    const sent = x => x.b[0] + ' 缺陣的 ' + x.b[4] + ' 場他平均 ' + x.b[3] + ' 分(有上場時 ' + x.b[5] + '),缺陣期間可能多 ' + x.d + ' 分左右。';
+    const idOf = {}; Object.keys(A.logs).forEach(id => { idOf[A.logs[id][0]] = id; });
+    let nP = 0, nS = 0;
+    (A.picks || []).forEach(p => { const x = idOf[p.name] && boost(idOf[p.name]); if (x && p.why) { p.why += '隊友影響:' + sent(x); nP++; } });
+    const S = A.sleepers && A.sleepers.rows;
+    if (S) {
+      S.forEach(r => { const x = idOf[r[0]] && boost(idOf[r[0]]); if (x) { r[9] += '隊友影響:' + sent(x); nS++; } });
+      const have = new Set(S.map(r => r[0]));
+      CTX.FAL.filter(p => !have.has(p.fullName) && p.injuryStatus !== 'OUT' && boost(p.id)).map(p => ({ p, x: boost(p.id) }))
+        .sort((a, b) => b.x.d - a.x.d).slice(0, 3).forEach(({ p, x }) => { const q = POOL[p.id] || p;
+          S.push([p.fullName, abbr[p.proTeamId], r1(p.ownership && p.ownership.percentOwned), CTX.mins(q, '012027'), CTX.mins(q, '002027'), CTX.avgPts(q, '012027'), CTX.avgPts(q, '002027'), CTX.avgPts(q, '002026'), x.b[0] + ' OUT', '隊友影響:' + sent(x)]); nS++; });
+      A.sleepers.note = A.sleepers.note.replace(/(的人。)/, '$1另外也列出「隊友缺陣時明顯多拿分」的自由球員(看球員頁的隊友影響)。');
+    }
+    log.push('mates→picks ' + nP + ' sleepers ' + nS);
+  } catch (e) { log.push('mates→picks FAIL ' + e.message); }
+  if (Object.keys(POOL).length > 300) { A.mates = MATES; log.push('mates pool ' + Object.keys(POOL).length + ' players ' + Object.keys(MATES).length + ' pairs ' + nPairs); }
+  else log.push('mates pool too small ' + Object.keys(POOL).length);
+} catch (e) { log.push('mates FAIL ' + e.message); }
 
 A.builtAt = new Date().toISOString();
 const json = JSON.stringify(A).replace(/</g, '\\u003c');

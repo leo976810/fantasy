@@ -33,7 +33,7 @@ Leo 的 ESPN NBA fantasy 聯盟(TPBL,10 隊,H2H Points,2026-27 季,leagueId 4064
 
 1. 純後端/資料修正可以直接 push `main`;push 後一定要對照 ESPN 或正式網站驗證才算完成。
 2. 會改到畫面(版面、文字、樣式、新功能)先讓 Leo 看過再 push `main`(push 會立刻觸發 Actions 上線)。
-3. 每個版本要更新 `data.json` 的 `version` 與 `changelog`(目前 v2.30)。
+3. 每個版本要更新 `data.json` 的 `version` 與 `changelog`(目前 v2.31)。
 4. **絕對不要記住、輸入或使用 Leo 的 ESPN 密碼**;聯盟已公開,不需要登入。
 5. 查不到的資料(Reddit、Threads 搜尋等)要明說,不要假裝有查到。
 6. 用繁體中文溝通。Leo 用 iPhone,常傳截圖。
