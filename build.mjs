@@ -310,7 +310,7 @@ try { // Streaming plan: add a free agent, drop one of mine, compare per-day top
   const topOut = Object.entries(outs).sort((a, b) => b[1] - a[1])[0];
   const note = '增加分數的算法:每天取陣容裡有比賽的球員,依預估場均排出前 10 名加總;把自由市場球員加進來、換掉一位你的球員,比較前後的總分差。預估場均是今年、去年、近 7 場平均的平均(缺哪個就不算哪個)。這裡不看位置限制與上場時間,也假設傷兵不會回來,只能當粗估。每個候選球員都已試過換掉你陣容裡的每一位,表中顯示增加最多的那一個。' +
     (topOut ? '這次最常被換掉的是 ' + topOut[0] + '(' + topOut[1] + ' 次)。' : '');
-  A.streamPlan = Object.assign({}, A.streamPlan, { note, asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false }) + '(台北時間)', windows: w });
+  A.streamPlan = Object.assign({}, A.streamPlan, { note, asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' }) + '(台北時間)', windows: w });
   log.push('streamPlan ' + w.map(x => x.rows.length).join('/'));
 } catch (e) { log.push('streamPlan FAIL ' + e.message); }
 
@@ -336,7 +336,7 @@ try { // league activity: adds/drops in the last 3 days
     (t.items || []).forEach(i => { const p = known[i.playerId]; if (!p) return; const k = ds + '|' + t.teamId + '|' + (t.id || '') ; const g = grp[k] = grp[k] || { ds, team: teamName[t.teamId], add: [], drop: [] };
       if (i.type === 'ADD') g.add.push(lab(p, t.type === 'WAIVER')); else if (i.type === 'DROP') g.drop.push(lab(p, false)); }); });
   const rows = Object.values(grp).map(g => [g.ds, g.team, [g.add.length ? '撿 ' + g.add.join('、') : '', g.drop.length ? '丟 ' + g.drop.join('、') : ''].filter(Boolean).join(',')]);
-  A.activity = Object.assign({}, A.activity, { note: '最近 3 天聯盟內的撿人、丟人(括號是預估每場分數)。資料時間 ' + new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false }) + '(台北時間)。', rows });
+  A.activity = Object.assign({}, A.activity, { note: '最近 3 天聯盟內的撿人、丟人(括號是預估每場分數)。資料時間 ' + new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' }) + '(台北時間)。', rows });
   log.push('activity ' + rows.length + ' (tx ' + tx.length + ')');
 } catch (e) { log.push('activity FAIL ' + e.message); }
 

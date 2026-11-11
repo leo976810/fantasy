@@ -43,7 +43,7 @@ Leo 參加一個朋友間的 ESPN NBA fantasy 聯盟(TPBL,10 隊,Head to Head Po
 網站上每個區塊只能是下面兩種之一,不能「自動數字配手寫文字」:
 
 - **全自動,每次執行都重算**:戰績、對戰、陣容數字與陣容評語(`update.mjs` 的 `tier`/`verdict`)、傷兵快報(`D.injuries`,ESPN 傷兵狀態 + 回歸日,涵蓋我隊與本週對手)、賽程場次(`D.sched`)、陣容裡的傷病說明(`rosterExtra.inj/note`)、Streaming 試算與說明(`streamPlan`),以及 `build.mjs` 其他衍生欄位。要改這些內容,改產生它的程式,不要手改 `data.json`。
-- **手寫判斷,帶撰寫日期**:`todo`、`picks`/`pickNote`/`acqNote`、`threads`、`recap`、`sleepers`、`fridayLineup`。每個區塊在 `data.json` 的 `handAsof` 裡有自己的日期(`YYYY-MM-DD`,台北時間)。網站會在過了撰寫當天的區塊上標「X/X 寫的判斷」。**改寫任何一個手寫區塊時,一定要同時把 `handAsof` 對應的日期和 `asof` 更新成今天。**
+- **手寫判斷,帶撰寫日期**:`todo`、`picks`/`pickNote`/`acqNote`、`threads`、`sleepers`、`fridayLineup`。(`recap` 不用寫:`#recap` 區塊會被「今天的比賽」即時小工具整個取代,`D.recap` 不會顯示在網站上。)每個區塊在 `data.json` 的 `handAsof` 裡有自己的日期(`YYYY-MM-DD`,台北時間)。網站會在過了撰寫當天的區塊上標「X/X 寫的判斷」。**改寫任何一個手寫區塊時,一定要同時把 `handAsof` 對應的日期和 `asof` 更新成今天。**
 
 頁首顯示兩個時間:「數字更新」= `autoAsof`(每次管線執行),「判斷撰寫」= `asof`(最後一次手寫)。
 

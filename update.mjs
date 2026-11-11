@@ -193,11 +193,11 @@ try {
 
 // hand-written judgment sections each carry the date they were last written (handAsof). The site shows
 // a "written on X" notice on any section older than today, so fresh numbers never sit next to old advice
-// without saying so. Whoever edits todo/picks/threads/recap/sleepers/fridayLineup must update its date.
-if (!D.handAsof) { const d0 = String(D.asof || '').slice(0, 10); D.handAsof = { todo: d0, picks: d0, threads: d0, recap: d0, sleepers: d0, fridayLineup: d0 }; }
+// without saying so. Whoever edits todo/picks/threads/sleepers/fridayLineup must update its date.
+if (!D.handAsof) { const d0 = String(D.asof || '').slice(0, 10); D.handAsof = { todo: d0, picks: d0, threads: d0, sleepers: d0, fridayLineup: d0 }; }
 
 D.doneSp = dayDone(today) ? today : today - 1;
-D.autoAsof = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });
+D.autoAsof = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' });
 // Records the latest executed-transaction timestamp this run has accounted for, so gate.mjs
 // can tell a fresh add/drop/trade from one it already picked up and force an out-of-slot run
 // when something new has landed (instead of waiting up to ~4h for the next regular slot).
