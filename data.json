@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-09 14:20(台北時間)",
+ "asof": "2026-11-12 00:04(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2344,85 +2344,87 @@
   "oppNote": "新的一週,對手評語由每日分析更新。"
  },
  "recap": {
-  "date": "11/8(美東)",
+  "date": "11/10(美東)",
   "games": [
    [
-    "DET 116 – LAL 121",
+    "MIL 85 – NY 117",
     "Final"
    ],
    [
-    "CHI 121 – PHI 127",
+    "BOS 123 – PHI 101",
     "Final"
    ],
    [
-    "SAC 108 – MIA 114",
+    "LAC 110 – PHX 133",
     "Final"
    ],
    [
-    "NO 123 – LAC 139",
+    "MIA 115 – UTAH 109",
+    "Final"
+   ],
+   [
+    "ORL 107 – SAC 100",
+    "Final"
+   ],
+   [
+    "OKC 103 – POR 123",
     "Final"
    ]
   ],
   "mine": [
    [
-    "Cade Cunningham",
-    "DET",
-    "14分4板8助2抄,投6/15,失誤4(DET 輸球)",
-    22
+    "Franz Wagner",
+    "ORL",
+    "33分7板7助2抄,投11/23,罰球10中10",
+    54
    ],
    [
     "Tyrese Maxey",
     "PHI",
-    "27分4板7助,三分3中7,罰球6中6",
-    43
-   ],
-   [
-    "Klay Thompson",
-    "MIA",
-    "23分2板4助2阻,三分7中13",
-    45
-   ],
-   [
-    "Walker Kessler",
-    "LAL",
-    "12分16板4助3阻,7個進攻籌板",
-    49
+    "24分1板4助,投8/12,三分3中4,罰球5中5",
+    33
    ],
    [
     "Darius Garland",
     "LAC",
-    "24分10助,罰球9中12",
-    42
-   ]
-  ],
-  "mineTotal": 201,
-  "others": [
-   [
-    "Kevin Huerter",
-    "DET",
-    "24分5板5助2抄5阻,三分4中8",
-    66,
-    "ESPN 顯示為自由球員,持有率僅 1.7%"
+    "13分5板6助,投5/12,三分1中6,失誤4",
+    14
    ],
    [
-    "Austin Reaves",
-    "LAL",
-    "43分5板4助,投14/27",
-    57,
+    "Brayden Burries",
+    "MIL",
+    "3分3板3助,投1/6",
+    4
+   ]
+  ],
+  "mineTotal": 105,
+  "others": [
+   [
+    "Anthony Black",
+    "ORL",
+    "26分7板5助4抄,失誤4",
+    55,
     "17*3PTS's Pointed Team 的球員"
    ],
    [
-    "Cooper Flagg",
-    "DAL",
-    "25分5板12助1抄,投8/13",
-    56,
-    "原住民山莊的球員"
+    "Paul George",
+    "BOS",
+    "36分5板1助",
+    49,
+    "Podcast P 的球員"
    ],
    [
-    "Giannis Antetokounmpo",
-    "MIA",
-    "29分14板3助2抄2阻",
-    56,
+    "Deni Avdija",
+    "POR",
+    "24分6板8助1抄",
+    45,
+    "Podcast P 的球員"
+   ],
+   [
+    "Zach LaVine",
+    "SAC",
+    "31分3板2助2抄,失誤5",
+    41,
     "桃園台啤永豐雲豹的球員"
    ]
   ]
@@ -2472,84 +2474,53 @@
   ]
  ],
  "threads": {
-  "note": "下方先列追蹤清單裡每位推主的最新貼文,再列「NBA fantasy」關鍵字搜尋(依最近排序)的最新 5 篇。摘要是我用自己的話整理,點連結看原文。",
+  "note": "下方列追蹤清單裡每位推主的最新貼文(11/12 讀取),日期是發文日。摘要是我用自己的話整理,點連結看原文。",
   "accounts": [
    {
     "handle": "fantasy.moose",
     "label": "范特西慕斯(進階數據/選秀分級)",
-    "post": "/@fantasy.moose/post/DfeH9pPFVx1",
-    "age": "約 1 小時前",
-    "sum": "W4 週賽程策略:灰狼、籃網本週只打 2 場,可丟掉不上不下的格位;B2B 多,建議用 2-3 個 move 洗湖人→塞爾提克→獨行俠拿 6 場。Keegan/Demin 預計回歸但偏 streamer;Missi 若健康值得留意;綠塞 PG、獨行俠 Irving 預測 B2B 輪休。新秀 Burries、Flemings 進先發,MJJ 有爆發,12 人盟以上建議留意公鹿/老鷹新秀。"
+    "post": "/@fantasy.moose/post/DfjN8CYlXOa",
+    "age": "11/10",
+    "sum": "買低名單:看上場時間和使用率還在、只是命中率或防守數據暫時偏低的人。點名 Wagner、Bane 等投籃效率下滑組,還有 Edey 這類傷癒回歸要等上場時間拉高的人。"
    },
    {
-    "handle": "fantasytaiwanbaseball",
-    "label": "台灣 fantasy 漲跌幅榜",
-    "post": "/@fantasytaiwanbaseball/post/DfXahbFD09Q",
-    "age": "約 15 小時前",
-    "sum": "11/5 漲跌幅與傷病快報。Wemby 上半場 29 分 15 板 5 阻攻,馬刺險勝;提到 Jarrett Allen 首節退場,建議撿 Hezonja。"
+    "handle": "fantasy.moose",
+    "label": "范特西慕斯(進階數據/選秀分級)",
+    "post": "/@fantasy.moose/post/DfjN8cYFQFI",
+    "age": "11/10",
+    "sum": "續篇:KD、Barnes 等前兩輪球員樣本變多後應該會回升;Derrick White、Trey Murphy 使用率被吃掉,天花板比開季預期低。"
    },
    {
-    "handle": "w.g_balls",
-    "label": "爆走爆胎整理",
-    "post": "/@w.g_balls/post/DfY-qUyE9lC",
-    "age": "約 1 小時前",
-    "sum": "11/6 爆走爆胎榜。爆走:Booker、Curry、Carter Jr.、Brooks;爆胎:Klay Thompson 投 3/10 只拿 11 分。"
-   },
-   {
-    "handle": "nbafantasybible",
-    "label": "Yahoo 熱門加入/交易榜(英文)",
-    "post": "/@nbafantasybible/post/DfYKpl3EWCU",
-    "age": "約 8 小時前",
-    "sum": "Yahoo 11/5 最多人加入:Klay 第 1、Ighodaro 第 2、Bassey 第 3、Brooks 第 4。同日最多人被交易第 1 名是 Lendeborg。"
+    "handle": "fantasy.moose",
+    "label": "范特西慕斯(進階數據/選秀分級)",
+    "post": "/@fantasy.moose/post/DfgsoMblbPB",
+    "age": "11/9",
+    "sum": "W3 總結:Burries 估計能拿到穩定時間,建議至少抱兩週;CMB 是吃到隊友受傷要觀察;Rollins 被下放替補可以丟;Traore 靠不合理命中,命中率一回落價值就掉。"
    },
    {
     "handle": "fantasy_baskets_",
-    "label": "范特西籃球 Podcast",
-    "post": "/@fantasy_baskets_/post/DfZFhAtmqjb",
-    "age": "約 16 分鐘前",
-    "sum": "11/6 爆發與爆胎整理。你的 Wagner(15 分 8 板 15 助 4 抄)和 Lendeborg(17 分 8 板 6 助 3 抄)上了爆發組;爆胎組有 Wiggins、Jalen Green、Ighodaro、Portis。"
+    "label": "范特西籃球 Fantasy Baskets",
+    "post": "/@fantasy_baskets_/post/DfmKd4xmiBz",
+    "age": "11/11",
+    "sum": "11/10 爆發組:Paul George 36 分、Wagner 33 分 7 板 7 助、Anthony Black 26 分 4 抄、LaVine 31 分、Goodwin 投 7 中 6 全是三分。"
    },
    {
-    "handle": "emilyca95112",
-    "label": "灣區小市民(傷兵輪替觀察)",
-    "post": "/@emilyca95112/post/DfgkgvaG8tE",
-    "age": "約 1 小時前",
-    "sum": "第四週傷兵輪替預覽:本週 21 組背靠背,週二四六比賽較少;尼克本週賽程最友善(對公鹿、騎士、溜馬、暴龍)。重點觀察:AD/Ayton 缺陣時留意 Middleton、Alex Sarr;暴龍 Barnes/Quickley 缺陣時留意 Jamal Shead、Collin Murray-Boyles;黃蜂 Miller/Diabaté 缺陣時留意 Sion James、Ryan Kalkbrenner;火箭 Adams/Capela 缺陣時 Sengun 禁區時間增加,Jabari Smith Jr. 可能客串五號位。"
+    "handle": "fantasy_baskets_",
+    "label": "范特西籃球 Fantasy Baskets",
+    "post": "/@fantasy_baskets_/post/DfmKvzAGhiy",
+    "age": "11/11",
+    "sum": "11/10 爆胎組:Sabonis 0 分、Myles Turner 投 7 中 1、Bane 投 19 中 5,你的 Garland 也在名單上(13 分 6 助,三分 6 中 1)。"
+   },
+   {
+    "handle": "fantasy_baskets_",
+    "label": "范特西籃球 Fantasy Baskets",
+    "post": "/@fantasy_baskets_/post/DfmLUpkGq5F",
+    "age": "11/11",
+    "sum": "Darryn Peterson 近 3 場平均 24 分 4.3 板 4 助,命中率很好,榜眼開始打出來。"
    }
   ],
-  "search": [
-   {
-    "handle": "w.g_balls",
-    "post": "/@w.g_balls/post/DfY-qUyE9lC",
-    "age": "54 分鐘",
-    "sum": "爆走爆胎整理,同上方,Klay 投 3/10 只拿 11 分。"
-   },
-   {
-    "handle": "takeoverfantasy",
-    "post": "/@takeoverfantasy/post/DfYFPajiVXs",
-    "age": "9 小時",
-    "sum": "Klay 投進 8 顆三分、拿 49 fantasy 分,但打了 35 分鐘,平常約 24 分鐘 20 分,作者的口氣是別追。"
-   },
-   {
-    "handle": "clutch5.fr",
-    "post": "/@clutch5.fr/post/DfXrAdtjWc6",
-    "age": "13 小時",
-    "sum": "法文,11/4 到 11/5 的薪資帽最佳 5 人:George、SGA、Adebayo、James、Wembanyama(Yahoo 式薪資帽玩法)。"
-   },
-   {
-    "handle": "takeoverfantasy",
-    "post": "/@takeoverfantasy/post/DfXpw7UFlzZ",
-    "age": "13 小時",
-    "sum": "Myles Turner 36 分鐘拿 53 分,來源是籃板、助攻與抄截阻攻,預估平均約 30。"
-   },
-   {
-    "handle": "fantasytaiwanbaseball",
-    "post": "/@fantasytaiwanbaseball/post/DfXahbFD09Q",
-    "age": "15 小時",
-    "sum": "同上方的 11/5 漲跌幅榜。"
-   }
-  ],
-  "skipped": "搜尋結果裡的廣告貼文(miss_williot_only1、nerdsmix 的電玩團購)已略過。"
+  "search": [],
+  "skipped": "關鍵字「NBA fantasy」搜尋這次沒有更新:Threads 在未登入時不能依時間排序,搜到的也大多是一般 NBA 貼文,不是 fantasy 內容。"
  },
  "roster": [
   [
@@ -2808,76 +2779,60 @@
    "低產出。兩季穩定。"
   ]
  ],
- "fridayLineup": "這張表的位置欄是週五的陣容。ESPN 的陣容每天不同,我逐日讀過週六、週日:有比賽的球員都在先發,沒有人在替補卻有比賽。",
+ "fridayLineup": "陣容檢查(11/12):ESPN 上本週剩下每一天(週三到週日)的先發都已經是最佳排法,有比賽的人都在先發,不用調整。今天(美東 11/11)有比賽的 9 人都在先發;Cade、Maxey、Okongwu、Garland 今天沒比賽。Quickley 是 DTD,板凳上今天沒有能頂替他的人。",
  "picks": [
-  {
-   "name": "Josh Hart",
-   "pos": "SG/SF · NY",
-   "status": "FA",
-   "s27": 24.4,
-   "l7": 30,
-   "s26": 29.9,
-   "own": 75.9,
-   "games": "本週 4 場",
-   "next": 4,
-   "why": "自由市場可以直接加入。今年 24.4、去年 29.9 都紮實,近 7 場回升到 30,右腳踝只是輕微 DTD,是補側翼深度的好選項,NY 本週 4 場。",
-   "first": true
-  },
   {
    "name": "Zach Edey",
    "pos": "C · MEM",
    "status": "FA",
-   "s27": 22.6,
-   "l7": 23.7,
+   "s27": 22.2,
+   "l7": 23,
    "s26": 35.6,
-   "own": 47.4,
-   "games": "本週 4 場",
+   "own": 46.7,
+   "games": "本週剩 3 場",
    "next": 4,
-   "why": "去年 35.6 是這份名單最高,近 7 場回升到 23.7,MEM 本週 4 場。但你 C 資格已滿 4 人(Mobley、Kessler、Okongwu、Hartenstein),要先丟一個才能加。",
-   "first": false
+   "first": true,
+   "why": "去年 35.6 是這份名單最高,傷癒回來上場時間還在慢慢拉高。C 資格,要換 Mamukelashvili(C 數維持 4 人)。自由球員,今天就能加。"
   },
   {
-   "name": "Mitchell Robinson",
-   "pos": "C · BOS",
-   "status": "FA",
-   "s27": 20.3,
-   "l7": 24.5,
-   "s26": 27.1,
-   "own": 12.4,
-   "games": "本週 3 場",
-   "next": 4,
-   "why": "今年 20.3、近 7 場 24.5 都在回升,持有率僅 12.4%。同樣受限於 C 資格已滿 4 人的問題。",
-   "first": false
-  },
-  {
-   "name": "Devin Vassell",
-   "pos": "SG/SF · SA",
-   "status": "Waiver(你已送出申請,等待處理)",
-   "s27": 25.1,
+   "name": "Alex Sarr",
+   "pos": "PF/C · WSH",
+   "status": "Waiver",
+   "s27": 24.6,
    "l7": 26.5,
-   "s26": 23.3,
-   "own": 40.9,
-   "games": "本週 4 場",
-   "next": 3,
-   "why": "今年 25.1 高於去年 23.3,近 7 場 26.5,SA 本週 4 場。ESPN 顯示你已經送出一筆用 Vassell 換 Klay Thompson 的 waiver 申請,目前狀態是 PENDING,一旦清出會自動執行,不用再手動操作。",
-   "first": false
+   "s26": 34.9,
+   "own": 76.1,
+   "games": "本週剩 3 場",
+   "next": 4,
+   "why": "三個平均算起來是自由市場最高(約 28.7)。你 11/10 才把他換成 Mamukelashvili,現在在 waiver,要申請、等處理完才會進來。C 資格,一樣只能換掉一個 C。"
   },
   {
-   "name": "Daniel Gafford",
-   "pos": "C · DAL",
-   "status": "Waiver(11/15 清出)",
-   "s27": 29.4,
-   "l7": 27.3,
-   "s26": 25.5,
-   "own": 42.9,
-   "games": "本週 4 場",
+   "name": "Jordan Goodwin",
+   "pos": "PG/SG · PHX",
+   "status": "FA",
+   "s27": 22.8,
+   "l7": 38,
+   "s26": 21.2,
+   "own": 1.1,
+   "games": "本週剩 2 場",
    "next": 3,
-   "why": "今年 29.4 已經高於去年 25.5,DAL 本週 4 場,但在 waiver 要等 11/15,而且同樣要先解決 C 資格已滿的問題。",
-   "first": false
+   "why": "近 7 場 38 是爆量(11/10 投 7 中 6、6 記三分),今年和去年都在 21 到 23,大概會回落。不是 C,可以換 Burries,但只適合短期 streaming。"
+  },
+  {
+   "name": "John Collins",
+   "pos": "PF/C · DET",
+   "status": "FA",
+   "s27": 22.8,
+   "l7": 32.7,
+   "s26": 24.3,
+   "own": 55.6,
+   "games": "本週剩 2 場",
+   "next": 4,
+   "why": "近 7 場 32.7 明顯升溫,下週 4 場。PF/C 資格會算進 C 上限,要換一個 C。"
   }
  ],
- "pickNote": "Klay Thompson 今年 16.9、去年 13.6 兩季一致偏低(近 7 場靠單場 49 分衝到 28.3,算異常值),是目前陣容最弱的一環。你已經送出一筆 waiver 申請要用 Devin Vassell 換掉 Klay,目前 PENDING 等待處理;Josh Hart 是另一個可以直接從自由市場加入、補側翼深度的選項。想補大個子的話,C 資格已經卡滿 4 人(Mobley、Kessler、Okongwu、Hartenstein),Edey、Robinson、Gafford 都要先丟一個現有 C 才能加。",
- "acqNote": "本週(11/9 起,matchup 4)異動額度 2/7,還有 5 次可用,不是額滿週。你有一筆 Devin Vassell 換 Klay Thompson 的 waiver 申請目前是 PENDING,等清出就會自動執行。ESPN 交易記錄顯示你上週(matchup 3)曾經來回操作過 Hartenstein/Morez Johnson Jr./Alex Sarr,但目前陣容與上週相同,Hartenstein 仍在,Sarr 不在你隊上。其餘 Waiver 狀態的球員(Gafford 等)要等下週日(11/15)美東 08:00 才批次清出;Hart、Edey、Robinson 是可以直接加入的自由球員。這個網站只讀取資料,不會替你改陣容。",
+ "pickNote": "C 資格已經卡滿 4 人(Mobley、Kessler、Okongwu、Mamukelashvili)。名單裡的 Edey、Sarr、Collins 都有 C 資格,加進來就要丟一個 C;最順的是 Mamukelashvili(今年 21.0、去年 23.1,持有 5.5%)。不是 C 的 Goodwin 可以換 Burries,但 Burries 是新秀、上場時間穩定,@fantasy.moose 也建議新秀至少抱兩週,要看你想賭上限還是要眼前的分數。",
+ "acqNote": "這個聯盟每個比賽日最多只能加 1 人(ESPN 設定),ESPN 記錄你本週(第 4 輪)已經加入 6 次。今天(美東 11/11)你還沒加人。Sarr 是 waiver 狀態,申請後要等處理;Edey、Goodwin、Collins 是自由球員,加了立刻生效。",
  "sched": {
   "rest": [
    [
@@ -3673,123 +3628,87 @@
  ],
  "todo": [
   {
-   "lv": "留意",
-   "t": "你有一筆 Devin Vassell 換 Klay Thompson 的 waiver 申請正在 PENDING,會自動處理",
-   "d": "ESPN 顯示這筆申請還沒清出(狀態 PENDING),不用再手動操作,等清出資格日就會自動執行。若想在那之前額外補強,自由市場的 Josh Hart(今年 24.4、去年 29.9)也是可以直接加入的側翼選項,本週異動額度還有 5 次可用(2/7)。"
+   "lv": "先做",
+   "t": "自動建議的「放 Burries 加 Sarr」會讓 C 資格變 5 人,超過上限",
+   "d": "Sarr 是 PF/C,你的 C 已經有 Mobley、Kessler、Okongwu、Mamukelashvili 4 人。要加 Sarr(或 Edey、Collins)只能丟一個 C,例如 Mamukelashvili。"
+  },
+  {
+   "lv": "建議",
+   "t": "今天的 1 次加人額度:考慮用 Zach Edey 換 Mamukelashvili",
+   "d": "Edey 是自由球員、加了立刻生效,三個平均都比 Mamukelashvili 高(今年 22.2/去年 35.6 對 21.0/23.1),本週剩 3 場、下週 4 場,C 數維持 4 人。想要更高的話可以申請 waiver 上的 Sarr,但要等處理。"
   },
   {
    "lv": "留意",
-   "t": "Murray 與 Quickley 今天(11/9)都是 DTD,上場前要再確認",
-   "d": "Murray 右下肢傷勢、Quickley 右大腿後肌,兩人預計都在今天回歸,DEN 與 TOR 今天都有比賽。兩人目前都在你的先發,若賽前被列為 OUT,替補 Wagner、Okongwu、Hartenstein 都可以頂上。"
-  },
-  {
-   "lv": "留意",
-   "t": "C 資格已經卡滿 4 人(Mobley、Kessler、Okongwu、Hartenstein),想加大個子要先丟一個",
-   "d": "這聯盟 C 資格上限 4 人,你陣容剛好卡滿(Mobley、Kessler、Okongwu、Hartenstein)。自由市場的 Zach Edey(去年 35.6)、Mitchell Robinson(近 7 場 24.5)都是不錯的 C 選項,但要先決定丟哪個現有的 C 才能加入。"
+   "t": "本週預估只贏約 30 分,對手 Haliburton 預計 11/13 回歸",
+   "d": "目前領先 84 分,但剩下 5 天預估你 968、對手 1018,照這樣算最後大約只贏 30 多分。原住民山莊 11/11 撿了 Kevin Huerter,Haliburton(OUT)預計 11/13 回歸,週末對手的人數會比你多。"
   }
  ],
  "sleepers": {
-  "note": "找自由市場裡近 7 場上場分鐘明顯變多、而且球隊有主力缺陣的人。資料來自 ESPN 的出賽分鐘與傷兵資料,樣本只有 2 到 4 場,主力回歸後分鐘會掉回去。本週異動額度還有 5 次可用,可以直接用。",
+  "note": "找自由市場裡近 7 場上場分鐘比今年平均多 4 分鐘以上、而且球隊有主力 OUT 的人(ESPN 資料,11/12)。樣本很小,主力回歸後分鐘可能會掉回去。",
   "rows": [
    [
-    "Kenrich Williams",
-    "OKC",
-    0.8,
-    25.5,
-    18.4,
-    18,
-    13.5,
-    14,
-    "Holmgren、J.Williams、Wallace 都是長期 OUT",
-    "最值得看。OKC 三個傷兵都要缺到明年,不是短期樣本,近 7 場分鐘多了 7 分鐘。"
+    "Collin Murray-Boyles",
+    "TOR",
+    12.9,
+    28.5,
+    22.2,
+    32,
+    20.8,
+    23.4,
+    "Scottie Barnes OUT(預計 11/12 回歸)、Kawhi Leonard OUT(11/23)",
+    "分鐘和分數都升最多,但本人也是 DTD,Barnes 一回來時間就會被分走。@fantasy.moose 也說他是吃到隊友受傷,要再觀察。"
+   ],
+   [
+    "Ryan Kalkbrenner",
+    "CHA",
+    2,
+    25,
+    18.8,
+    24.7,
+    20.5,
+    24.1,
+    "Kon Knueppel OUT(12/12)、Dennis Schroder OUT(11/25)",
+    "CHA 兩個傷兵都要缺好幾週,空缺比較久。持有只有 2%。C 資格,你的 C 已經滿 4 人。"
    ],
    [
     "Bennett Stirtz",
     "OKC",
-    0.8,
-    21.8,
+    2.5,
+    23.3,
     18,
     24,
-    13.1,
+    13.2,
     null,
-    "Holmgren、J.Williams、Wallace 都是長期 OUT",
-    "同樣吃到 OKC 的傷兵空缺,近 7 場 24 分,但只有新秀樣本,先觀察。"
+    "Chet Holmgren OUT(1/2)、Cason Wallace OUT(3/2)",
+    "OKC 長期傷兵多,分鐘可能撐得住;新秀樣本少,今年平均還低,先觀察。"
    ],
    [
-    "Leaky Black",
-    "SAC",
-    0.9,
-    26.8,
-    19.2,
-    23.8,
-    17.3,
-    15.8,
-    "Sabonis 今天 DTD(左膝)",
-    "分鐘多了 7.6 分鐘,但 Sabonis 只是 DTD,預計 11/10 就可能回歸,增幅可能很短。"
-   ],
-   [
-    "Malik Monk",
-    "SAC",
-    12.3,
-    23.3,
-    16.9,
-    19.8,
-    11.3,
-    18,
-    "Sabonis 今天 DTD(左膝)",
-    "同樣吃到 Sabonis 缺陣,去年 18 分,但 Sabonis 隨時可能回歸,風險跟 Black 一樣。"
-   ],
-   [
-    "Jakob Poeltl",
-    "TOR",
-    35.4,
-    25,
-    21.6,
-    35,
-    19.6,
-    27.9,
-    "Kawhi Leonard(你的 IR)、Scottie Barnes 都缺陣",
-    "近 7 場飆到 35 分,去年 27.9 本來就有底。Kawhi 要到 11/23 才回來,這段時間還有得看。"
-   ],
-   [
-    "Collin Murray-Boyles",
-    "TOR",
-    12,
-    26.3,
-    22.2,
-    25.3,
-    20.8,
-    23.4,
-    "Kawhi Leonard(你的 IR)、Scottie Barnes 都缺陣",
-    "新秀今年 20.8,近 7 場升到 25.3,跟 Poeltl 吃的是同一批傷兵空缺。"
-   ],
-   [
-    "Tristan da Silva",
-    "ORL",
-    10.6,
-    34,
-    30.4,
-    17.8,
-    18.4,
-    18.2,
-    "Banchero、Suggs、Bane 都缺陣",
-    "上場分鐘全名單最高(34 分鐘),但 Suggs 預計 11/10 就回歸,Banchero 11/22,增幅會先縮水再放大。"
-   ],
-   [
-    "Trey Lyles",
-    "MIN",
-    0.4,
+    "Ryan Dunn",
+    "PHX",
+    1.3,
     22.8,
-    18.5,
-    21,
-    14.3,
-    0,
-    "Edwards、DiVincenzo 都是長期 OUT",
-    "Edwards 要到 12/21 才可能回來,這段時間明尼蘇達的空缺算穩定,但去年樣本是 0(沒打)。"
+    17.6,
+    23,
+    17.6,
+    15.5,
+    "Mark Williams OUT(2/3)",
+    "分鐘多了 5 分鐘、近 7 場 23,PHX 的空缺會持續到 2 月。上限不高,偏深盟備選。"
+   ],
+   [
+    "Hannes Steinbach",
+    "CHA",
+    0.6,
+    20,
+    12.6,
+    17.5,
+    9.8,
+    null,
+    "Kon Knueppel OUT(12/12)、Dennis Schroder OUT(11/25)",
+    "新秀,分鐘從 12.6 拉到 20,分數還不夠,只是先記著。"
    ]
   ]
  },
- "autoAsof": "2026/11/11 23:58:29",
+ "autoAsof": "2026/11/12 00:04:44",
  "doneSp": 22,
  "lastTxSeen": 1794400741519,
  "matchupBase": 21,
@@ -3799,11 +3718,11 @@
   "oppScore": 1381
  },
  "handAsof": {
-  "todo": "2026-11-09",
-  "picks": "2026-11-09",
-  "threads": "2026-11-09",
-  "recap": "2026-11-09",
-  "sleepers": "2026-11-09",
-  "fridayLineup": "2026-11-09"
+  "todo": "2026-11-12",
+  "picks": "2026-11-12",
+  "threads": "2026-11-12",
+  "recap": "2026-11-12",
+  "sleepers": "2026-11-12",
+  "fridayLineup": "2026-11-12"
  }
 }
