@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-12 00:19(台北時間)",
+ "asof": "2026-11-12 01:38(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -3515,14 +3515,19 @@
  ],
  "todo": [
   {
+   "lv": "留意",
+   "t": "Rollins 先看兩場上場時間",
+   "d": "11/12 用加人額度撿了 Ryan Rollins、丟掉 Brayden Burries。但范特西慕斯 11/9 的 W3 總結說 Rollins 被下放替補、上場不到 20 分鐘,反而建議 Burries 至少抱兩週。接下來兩場如果 Rollins 時間還是偏少,下一次額度就拿他或 Mamukelashvili 去換。"
+  },
+  {
    "lv": "建議",
-   "t": "今天的 1 次加人額度:Edey 立刻生效,Sarr 要等 waiver",
-   "d": "自動建議排第一的 Sarr(預估多 42.6 分)在 waiver,申請後要等處理;Zach Edey 是自由球員、加了立刻生效(預估多 37.4 分)。兩個都是 C 資格,都要換掉 Mamukelashvili,C 數維持 4 人。"
+   "t": "下一次加人:要 Sarr 就先申請 waiver",
+   "d": "Alex Sarr 仍是增補首選但在 waiver,要等處理完才進來,想趕上週末就要提早申請;Zach Edey 是自由球員,加了立刻生效。兩人都是 C 資格,C 已滿 4 人,只能換 Mamukelashvili(roster% 5.6)。"
   },
   {
    "lv": "留意",
-   "t": "本週預估只贏約 30 分,對手 Haliburton 預計 11/13 回歸",
-   "d": "目前領先 84 分,但剩下 5 天預估你 968、對手 1018,照這樣算最後大約只贏 30 多分。原住民山莊 11/11 撿了 Kevin Huerter,Haliburton(OUT)預計 11/13 回歸,週末對手的人數會比你多。"
+   "t": "對手週末補強:Haliburton 預計 11/13 回歸",
+   "d": "原住民山莊這兩天撿了 Kevin Huerter、John Collins(丟 Myles Turner),Haliburton(OUT)預計 11/13 回來,Keyonte George、Traore 是 DTD。對手後段人數會變多,目前領先但差距會被追,要不要多加人看本週局勢。"
   }
  ],
  "autoAsof": "2026/11/12 01:29:03",
