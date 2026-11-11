@@ -24,7 +24,7 @@ if (H.todo) {
 }
 if (H.threads) {
   const T = H.threads;
-  if (!Array.isArray(T.accounts) || !T.accounts.every(a => a.handle && /^\/@[^/]+\/post\/\w+$/.test(a.post || '') && a.sum)) fail('threads.accounts need handle, post (/@x/post/ID), sum');
+  if (!Array.isArray(T.accounts) || !T.accounts.every(a => a.handle && /^\/@[^/]+\/post\/[\w-]+$/.test(a.post || '') && a.sum)) fail('threads.accounts need handle, post (/@x/post/ID), sum');
   D.threads = { note: T.note || '', accounts: T.accounts.map(a => ({ handle: a.handle, label: a.label || a.handle, post: a.post, age: a.age || '', sum: a.sum })), search: T.search || [], skipped: T.skipped || '' };
   D.handAsof.threads = H.date; done.push('threads ' + T.accounts.length);
 }

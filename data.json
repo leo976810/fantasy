@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-12 01:38(台北時間)",
+ "asof": "2026-11-12 01:51(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2388,7 +2388,7 @@
   ]
  ],
  "threads": {
-  "note": "下方列追蹤清單裡每位推主的最新貼文(11/12 讀取),日期是發文日。摘要是我用自己的話整理,點連結看原文。",
+  "note": "下方列追蹤清單 6 位推主的最新貼文(11/12 讀取),日期是發文日。摘要是我用自己的話整理,點連結看原文。",
   "accounts": [
    {
     "handle": "fantasy.moose",
@@ -2431,6 +2431,62 @@
     "post": "/@fantasy_baskets_/post/DfmLUpkGq5F",
     "age": "11/11",
     "sum": "Darryn Peterson 近 3 場平均 24 分 4.3 板 4 助,命中率很好,榜眼開始打出來。"
+   },
+   {
+    "handle": "fantasytaiwanbaseball",
+    "label": "台灣 fantasy 漲跌幅榜",
+    "post": "/@fantasytaiwanbaseball/post/Dfmq8iGj53-",
+    "age": "11/11",
+    "sum": "11/11 收盤:Franz Wagner 在 Banchero、Suggs 都缺陣下球權全在他手上;Myles Turner 只拿 3 分、Embiid 分數多靠罰球。傷病快報特別提到 Rollins 能撿就撿。"
+   },
+   {
+    "handle": "fantasytaiwanbaseball",
+    "label": "台灣 fantasy 漲跌幅榜",
+    "post": "/@fantasytaiwanbaseball/post/Dfj79d-DyV-",
+    "age": "11/10",
+    "sum": "11/10 漲跌幅:Wemby、Flagg、AD 都有大號表現;湖人換 Reaves 缺陣,撿人優先看 Mamukelashvili。跌幅有 Brooks、Poole。"
+   },
+   {
+    "handle": "w.g_balls",
+    "label": "爆走爆胎整理",
+    "post": "/@w.g_balls/post/Dfl45Exk9RO",
+    "age": "11/11",
+    "sum": "11/11 爆走榜:Paul George 36 分、Wagner 33 分 7 板 7 助、LaVine、Giannis、Acuff、Anthony Black 等;Jaylen Brown 和 Tatum 列在「最熟悉的陌生人」。"
+   },
+   {
+    "handle": "w.g_balls",
+    "label": "爆走爆胎整理",
+    "post": "/@w.g_balls/post/Dfl45mJk0b7",
+    "age": "11/11",
+    "sum": "11/11 爆胎榜:Embiid、Bane、Wagler、Bam、Myles Turner 命中率都很差;SGA 投 22 中 8 列在又爛又強榜。"
+   },
+   {
+    "handle": "nbafantasybible",
+    "label": "Yahoo 熱門加入/交易榜(英文)",
+    "post": "/@nbafantasybible/post/Dfm3bprkfa3",
+    "age": "11/12",
+    "sum": "Yahoo 11/11 最多人丟掉:Achiuwa、Kris Dunn、Dillon Brooks、Monk,你剛丟的 Burries 排第 5,Klay、Wagler 也在榜上。同時發的「最多人加入」榜是圖片,讀不到內容。"
+   },
+   {
+    "handle": "nbafantasybible",
+    "label": "Yahoo 熱門加入/交易榜(英文)",
+    "post": "/@nbafantasybible/post/DfkOjHXkbNY",
+    "age": "11/10",
+    "sum": "Yahoo 11/10 最常被交易:Harden 第一,接著是 Paul George、Dylan Harper、Randle;你的 Walker Kessler 排第 10。"
+   },
+   {
+    "handle": "emilyca95112",
+    "label": "灣區小市民(傷兵輪替觀察)",
+    "post": "/@emilyca95112/post/DfgkgvaG8tE",
+    "age": "11/9",
+    "sum": "Week 4 預覽:這週有 21 組 B2B、週二四六場次少;最看好尼克的 4 場賽程。巫師如果 Ayton 缺陣,會優先觀察 Alex Sarr 吃更多禁區時間。"
+   },
+   {
+    "handle": "emilyca95112",
+    "label": "灣區小市民(傷兵輪替觀察)",
+    "post": "/@emilyca95112/post/DfgkhG-G6SE",
+    "age": "11/9",
+    "sum": "續篇:暴龍如果 Quickley 持續缺陣會先看 Jamal Shead,Barnes 休息時 Murray-Boyles 最受益;火箭兩名中鋒缺陣時 Sengun 要扛更多時間。她說之後每日傷兵更新改發 IG。"
    }
   ],
   "search": [],
