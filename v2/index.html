@@ -336,7 +336,17 @@ body.locked > :not(#pwgate){display:none !important}
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var f1 = function (v) { return v == null ? '—' : Number(v).toFixed(1); };
 
-  $('asof').textContent = '資料截至 ' + D.asof;
+  // Two clocks: numbers refresh on every pipeline run (autoAsof); judgment text is written by hand (asof).
+  $('asof').textContent = '數字更新 ' + (D.autoAsof || D.asof) + ' · 判斷撰寫 ' + D.asof;
+  // A hand-written section older than today (Taipei) gets a notice, so fresh numbers never sit next to
+  // stale advice without saying so. Dates come from D.handAsof, set whenever that section is rewritten.
+  var tpeToday = (function () { try { return new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Taipei' }); } catch (e) { return ''; } })();
+  var stale = function (k) {
+    var d = (D.handAsof || {})[k];
+    if (!d || !tpeToday || d >= tpeToday) return '';
+    var p = d.split('-');
+    return '<p class="note" style="color:#c2410c">⚠ 這區是 ' + (+p[1]) + '/' + (+p[2]) + ' 寫的判斷,上面的數字是最新的,但內容還沒重新評估。</p>';
+  };
   $('leagueline').textContent = 'TPBL · 10 隊 H2H 積分 · 戰績 ' + D.record;
 
   var m = D.matchup, diff = m.meScore - m.oppScore;
@@ -348,7 +358,7 @@ body.locked > :not(#pwgate){display:none !important}
 
   var r = D.recap;
   $('recap').innerHTML =
-    '<h2>昨日賽後<span class="label">' + esc(r.date) + '</span></h2>' +
+    '<h2>昨日賽後<span class="label">' + esc(r.date) + '</span></h2>' + stale('recap') +
     '<div class="games">' + r.games.map(function (g) { return '<div class="game">' + esc(g[0]) + '<small>' + esc(g[1]) + '</small></div>'; }).join('') + '</div>' +
     '<div class="row-lbl">你的球員(合計 ' + r.mineTotal + ' 分)</div>' +
     '<div class="scroll"><table><thead><tr><th>球員</th><th>數據</th><th class="n">得分</th></tr></thead><tbody>' +
@@ -397,7 +407,7 @@ body.locked > :not(#pwgate){display:none !important}
   var TU = 'https://www.threads.com';
   var lk = function (x) { return '<a href="' + TU + esc(x.post) + '" target="_blank" rel="noopener">@' + esc(x.handle) + '</a>'; };
   var T = D.threads;
-  $('threads').innerHTML = '<h2>Threads 動態</h2><p class="note">' + esc(T.note) + '</p>' +
+  $('threads').innerHTML = '<h2>Threads 動態</h2>' + stale('threads') + '<p class="note">' + esc(T.note) + '</p>' +
     '<div class="row-lbl">追蹤清單的最新貼文</div><ul class="list src">' +
     T.accounts.map(function (x) { return '<li><span class="tag t-ok">' + esc(x.label) + '</span><span>' + lk(x) + ' <small>' + esc(x.age) + '</small><br>' + esc(x.sum) + '</span></li>'; }).join('') + '</ul>' +
     '<div class="row-lbl">關鍵字「NBA fantasy」最近 5 篇</div><ul class="list src">' +
@@ -442,7 +452,7 @@ body.locked > :not(#pwgate){display:none !important}
         '<td class="n" data-th="去年">' + f1(p[5]) + '</td><td class="n" data-th="持有%">' + f1(p[6]) + '</td>' +
         '<td data-th="本週">' + days(p[7]) + '</td><td class="n" data-th="下週">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
     }).join('') + '</tbody></table></div>' +
-    '<div class="callout">' + esc(D.fridayLineup) + '</div>';
+    stale('fridayLineup') + '<div class="callout">' + esc(D.fridayLineup) + '</div>';
 
   var tier = function (a, b, c) {
     var v = [a, b].filter(function (x) { return x != null; });
@@ -451,7 +461,7 @@ body.locked > :not(#pwgate){display:none !important}
     var t = m >= 40 ? ['core', '核心'] : m >= 32 ? ['ok', '主力'] : m >= 25 ? ['watch', '輪換'] : ['drop', '低產出'];
     return '<span class="chip c-' + t[0] + '">' + t[1] + '</span>';
   };
-  $('picks').innerHTML = '<h2>增補建議<span class="label">依今年、去年與賽程排序</span></h2>' +
+  $('picks').innerHTML = '<h2>增補建議<span class="label">依今年、去年與賽程排序</span></h2>' + stale('picks') +
     '<div class="callout">' + esc(D.pickNote) + '</div>' +
     '<div class="picks">' + D.picks.map(function (p) {
       return '<div class="pick' + (p.first ? ' first' : '') + '"><div class="hd"><b>' + esc(p.name) + '</b><span class="note">' + esc(p.pos) + '</span>' + tier(p.s27, p.s26, p.l7) + '<span class="chip ' + (p.status === 'FA' ? 'c-ok' : 'c-watch') + '">' + esc(p.status) + '</span></div>' +
@@ -464,12 +474,12 @@ body.locked > :not(#pwgate){display:none !important}
   var chips = function (a, cls) { return '<div class="sched">' + a.map(function (t) { return '<span' + (cls ? ' class="' + cls + '"' : '') + '>' + esc(t) + '</span>'; }).join('') + '</div>'; };
   $('sched').innerHTML = '<h2>賽程場次<span class="label">本週與下週</span></h2>' +
     '<div class="row-lbl">本週剩餘</div><div class="sched">' + s.rest.map(function (x) { return '<span>' + esc(x[0]) + ' ' + esc(x[1]) + '</span>'; }).join('') + '</div>' +
-    '<div class="row-lbl">本週出賽最多:整週 4 場(' + s.full.length + ' 隊)</div>' + chips(s.full, 'hl') +
+    '<div class="row-lbl">本週出賽最多:整週 ' + (s.fullN || 4) + ' 場(' + s.full.length + ' 隊)</div>' + chips(s.full, 'hl') +
     '<p class="note">' + esc(s.done) + '</p>' +
     '<div class="row-lbl">週五到週日還有 2 場的球隊</div>' +
     s.rest2.map(function (r) { return '<div class="note">' + esc(r[0]) + '</div>' + chips(r[1], 'hl'); }).join('') +
     '<p class="note">整週只打 3 場:' + esc(s.three) + '</p>' +
-    '<div class="row-lbl">下週(11/9–11/15)</div><p class="note">打 4 場:' + esc(s.four) + '<br>只打 2 場:' + esc(s.two_next) + '</p>';
+    '<div class="row-lbl">' + esc(s.nextLabel || '下週') + '</div><p class="note">打 4 場:' + esc(s.four) + '<br>只打 2 場:' + esc(s.two_next) + '</p>';
 
   var st = D.stream, SPN = D.streamPlan;
   if (SPN) {
@@ -505,8 +515,10 @@ body.locked > :not(#pwgate){display:none !important}
       (rest.length ? '<details class="lud"><summary>展開更早的版本(共 ' + rest.length + ' 筆)</summary><ul class="list" style="margin-top:8px">' + rest.map(row).join('') + '</ul></details>' : '');
   })();
   var lvCls = { '先做': 'lv-out', '建議': 'lv-ok', '留意': 'lv-dtd' };
+  // The list also gets auto items (always current) merged in later, so mark only the hand-written ones.
+  var todoTag = (function () { var d = (D.handAsof || {}).todo; if (!d || !tpeToday || d >= tpeToday) return ''; var p = d.split('-'); return ' <small style="color:#c2410c">(' + (+p[1]) + '/' + (+p[2]) + ' 寫的,待重新評估)</small>'; })();
   $('todo').innerHTML = '<h2>今天要做的事<span class="label">點標題看理由</span></h2><ol id="todoOl">' +
-    D.todo.map(function (x) { return '<li data-lv="' + esc(x.lv) + '"><span><b class="' + (lvCls[x.lv] || 'lv-ok') + '">' + esc(x.t) + '</b><span class="d2">' + esc(x.d) + '</span></span></li>'; }).join('') + '</ol>';
+    D.todo.map(function (x) { return '<li data-lv="' + esc(x.lv) + '"><span><b class="' + (lvCls[x.lv] || 'lv-ok') + '">' + esc(x.t) + '</b>' + todoTag + '<span class="d2">' + esc(x.d) + '</span></span></li>'; }).join('') + '</ol>';
   var tabs = document.querySelectorAll('.tabs button');
   var show = function (k) {
     tabs.forEach(function (b) { b.setAttribute('aria-selected', b.getAttribute('data-tab') === k ? 'true' : 'false'); });
@@ -517,7 +529,7 @@ body.locked > :not(#pwgate){display:none !important}
   window.__showTab = show;
   try { var sv = sessionStorage.getItem('aespaTab'); if (sv && document.getElementById('pane-' + sv)) show(sv); } catch (e) {}
   var SP = D.sleepers;
-  $('sleep').innerHTML = '<h2>潛力發掘<span class="label">上場分鐘變多 · 球隊有主力缺陣</span></h2><p class="note">' + esc(SP.note) + '</p>' +
+  $('sleep').innerHTML = '<h2>潛力發掘<span class="label">上場分鐘變多 · 球隊有主力缺陣</span></h2>' + stale('sleepers') + '<p class="note">' + esc(SP.note) + '</p>' +
     '<div class="scroll"><table><thead><tr><th>球員</th><th class="n">持有%</th><th class="n">分鐘 近7場/今年</th><th class="n">分 近7場</th><th class="n">今年</th><th class="n">去年</th><th>球隊缺陣</th><th>評語</th></tr></thead><tbody>' +
     SP.rows.map(function (r) { return '<tr><td class="name">' + esc(r[0]) + '<small>' + esc(r[1]) + '</small>' + tier(r[6], r[7], r[5]) + '</td><td class="n">' + f1(r[2]) + '</td><td class="n">' + f1(r[3]) + ' / ' + f1(r[4]) + '</td><td class="n fp">' + f1(r[5]) + '</td><td class="n">' + f1(r[6]) + '</td><td class="n">' + f1(r[7]) + '</td><td>' + esc(r[8]) + '</td><td>' + esc(r[9]) + '</td></tr>'; }).join('') + '</tbody></table></div>';
   var LG = D.league;

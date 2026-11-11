@@ -19,6 +19,8 @@ Leo 參加一個朋友間的 ESPN NBA fantasy 聯盟(TPBL,10 隊,Head to Head Po
 ├── update.mjs          # 從 ESPN API 抓最新數字,寫回 data.json(不碰手寫文字欄位)
 ├── build.mjs           # 把 data.json 疊到 v2/index.html 既有的嵌入資料上,重新產生 v2/index.html
 ├── gate.mjs             # 決定這次排程要不要真的跑 update+build(避免每 30 分跑好幾次無意義的全量更新)
+├── brief.mjs            # build 之後從 v2/index.html 的嵌入資料切出 brief.json(不連網)
+├── brief.json           # 約 4 KB 的精簡簡報,給 Claude 讀;和網站用同一份資料
 ├── README.md            # 目前幾乎是空的,沒有實質內容
 └── v2/
     └── index.html       # 正式版網站,唯一允許自動更新的版本;嵌入一份 <script id="data" type="application/json"> 資料 blob
@@ -36,6 +38,17 @@ Leo 參加一個朋友間的 ESPN NBA fantasy 聯盟(TPBL,10 隊,Head to Head Po
 - `build.mjs` 讀到 `B.lastWeekResult` 且偵測到 `burstWeek.base` 真的變了,才會把上週戰報(最終比分 + 當週爆走/爆胎排行)寫進 `A.weekReport`,前端的「上週戰報」區塊才會有內容。
 - `matchupDays.dates`(每天對應的 MM/DD 顯示用字串)是 `update.mjs` 每次執行都用 `base` 重新算出來的(錨點:scoring period 14 = 2026/11/2,之後每 7 期往後推 7 天),不是凍結快照,所以理論上不會再卡在舊日期。
 
+## 資料一致性規則(v2.29 起)
+
+網站上每個區塊只能是下面兩種之一,不能「自動數字配手寫文字」:
+
+- **全自動,每次執行都重算**:戰績、對戰、陣容數字與陣容評語(`update.mjs` 的 `tier`/`verdict`)、傷兵快報(`D.injuries`,ESPN 傷兵狀態 + 回歸日,涵蓋我隊與本週對手)、賽程場次(`D.sched`)、陣容裡的傷病說明(`rosterExtra.inj/note`)、Streaming 試算與說明(`streamPlan`),以及 `build.mjs` 其他衍生欄位。要改這些內容,改產生它的程式,不要手改 `data.json`。
+- **手寫判斷,帶撰寫日期**:`todo`、`picks`/`pickNote`/`acqNote`、`threads`、`recap`、`sleepers`、`fridayLineup`。每個區塊在 `data.json` 的 `handAsof` 裡有自己的日期(`YYYY-MM-DD`,台北時間)。網站會在過了撰寫當天的區塊上標「X/X 寫的判斷」。**改寫任何一個手寫區塊時,一定要同時把 `handAsof` 對應的日期和 `asof` 更新成今天。**
+
+頁首顯示兩個時間:「數字更新」= `autoAsof`(每次管線執行),「判斷撰寫」= `asof`(最後一次手寫)。
+
+**省 token:** 要了解目前狀況時,先讀 `brief.json`(約 4 KB)。只有需要細節時才讀 `data.json` 的特定欄位,不要整份讀 `v2/index.html`(約 350 KB)。`brief.json` 的 `staleSections` 會列出哪些手寫區塊已經過期。改程式時用局部編輯,不要整份重寫檔案。
+
 ## 自動化管線(GitHub Actions,`.github/workflows/update.yml`)
 
 ```yaml
@@ -49,7 +62,8 @@ jobs:
     - node gate.mjs      # 決定要不要真的跑(輸出 run=true/false)
     - node update.mjs    # 只有 gate 說 true 才跑
     - node build.mjs     # 只有 gate 說 true 才跑
-    - 用 github-actions bot 身份 commit + push data.json 與 v2/index.html(如果真的有變動才 commit)
+    - node brief.mjs     # 只有 gate 說 true 才跑
+    - 用 github-actions bot 身份 commit + push data.json、v2/index.html 與 brief.json(如果真的有變動才 commit)
 ```
 
 **`gate.mjs` 的邏輯**(避免每 30 分鐘都浪費 API quota 跑一次全量更新):只有在排程觸發(`schedule` 事件)才會檢查;手動 dispatch 或 push 觸發一定跑。排程觸發時,只有符合以下任一條件才真的跑 `update.mjs`/`build.mjs`:

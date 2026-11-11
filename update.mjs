@@ -83,11 +83,11 @@ const lg = D.league; lg.rosters = lg.rosters || {};
   if (r[0] !== ME) lg.rosters[r[0]] = rows(R[id], false);
 });
 
-// my roster: refresh numbers, keep hand-written text for players already listed
+// my roster: numbers AND the tier/verdict text are regenerated every run. The text used to be kept
+// from the previous data.json, so it kept quoting old numbers (e.g. "今年 40.9" next to a live 39.7)
+// and old injury status. Judgment about a player belongs in todo/picks, which carry handAsof dates.
 const meId = idByName[ME];
-const old = {}; (D.roster || []).forEach(r => old[r[1]] = r);
-D.roster = R[meId].map(x => { const [c, lbl] = tier(x.slot, x.s27, x.s26, x.l7); const o = old[x.name];
-  return [x.slot, x.name, abbr[x.tid], x.s27, x.l7, x.s26, x.own, x.d, x.nx, o ? o[9] : c, o ? o[10] : lbl + '。' + verdict(x.slot, x.s27, x.l7, x.s26, x.inj)]; });
+D.roster = rows(R[meId], true);
 D.record = byId[meId].record.overall.wins + '-' + byId[meId].record.overall.losses;
 
 // matchup
@@ -137,6 +137,64 @@ D.matchupDays = Object.assign({}, D.matchupDays, { opp: oppName, dates: DATES, m
   proj: Object.assign({}, D.matchupDays.proj, { days: rem.map(i => DAYS[i]), me: rem.map(i => dayPts('me', mine, i)), op: rem.map(i => dayPts('op', theirs, i)) }),
   estPast: { me: DAYS.map((_, i) => act.me[i] != null ? dayPts('me', mine, i)[1] : null), op: DAYS.map((_, i) => act.op[i] != null ? dayPts('op', theirs, i)[1] : null) } });
 D.matchupBase = base;
+
+// ---- schedule summary (賽程場次), fully derived from the NBA calendar every run ----
+// Used to be hand-written, so its dates and team lists froze on the week it was last edited.
+const WD = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
+const teamIds = Object.keys(games).map(Number).filter(t => abbr[t]);
+const nGames = (tid, from, to) => { let n = 0; for (let sp = from; sp <= to; sp++) n += hasGame(tid, sp); return n; };
+const dayGames = sp => teamIds.filter(t => hasGame(t, sp)).length / 2;
+const byCount = (from, to) => { const m = {}; teamIds.forEach(t => { const n = nGames(t, from, to); (m[n] = m[n] || []).push(abbr[t]); }); Object.values(m).forEach(a => a.sort()); return m; };
+const wk = byCount(base, base + 6), nwk = byCount(base + 7, base + 13);
+const maxN = Math.max(...Object.keys(wk).map(Number));
+const fromIdx = Math.max(0, Math.min(6, today - base + (dayDone(today) ? 1 : 0)));
+const restDays = []; for (let i = fromIdx; i < 7; i++) restDays.push([WD[i] + ' ' + DATES[i], dayGames(base + i) + ' 場']);
+// weekend streaming window: teams with exactly 2 games across Fri-Sun, grouped by which days
+const wkend = {}; teamIds.forEach(t => { const ds = [4, 5, 6].filter(i => hasGame(t, base + i)); if (ds.length === 2) { const k = ds.map(i => WD[i]).join('、'); (wkend[k] = wkend[k] || []).push(abbr[t]); } });
+D.sched = {
+  rest: restDays,
+  full: wk[maxN] || [],
+  fullN: maxN,
+  done: restDays.length === 7 ? '新的一週(' + DATES[0] + '–' + DATES[6] + ')剛開始,以下是整週的場次。' : '本週 ' + DATES[0] + '–' + DATES[6] + ',上面只列還沒打完的比賽日。',
+  rest2: Object.entries(wkend).map(([k, v]) => [k, v.sort()]),
+  three: (wk[3] || []).join('、'),
+  four: (nwk[4] || []).join('、') || '無',
+  two_next: (nwk[2] || []).join('、') || '無',
+  nextLabel: '下週(' + spDate(base + 7) + '–' + spDate(base + 13) + ')',
+};
+
+// ---- injury report (傷兵快報), derived every run from ESPN injury status + return dates ----
+// Covers my roster and this week's opponent. Used to be hand-written and kept saying a player
+// "returns today" days after the fact.
+try {
+  const ij = await get('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries');
+  const md = iso => { const d = new Date(iso); return isNaN(d) ? '' : (d.getUTCMonth() + 1) + '/' + d.getUTCDate(); };
+  // ESPN gives side/location/detail in English; translate the common words, keep unknown ones as is
+  const ZH = { Left: '左', Right: '右', Leg: '腿', Knee: '膝', Ankle: '腳踝', Foot: '腳', Hamstring: '大腿後肌', Thigh: '大腿', Calf: '小腿', Achilles: '阿基里斯腱',
+    Hip: '髖部', Groin: '鼠蹊', Back: '背部', Shoulder: '肩膀', Elbow: '手肘', Wrist: '手腕', Hand: '手', Finger: '手指', Toe: '腳趾', Head: '頭部', Neck: '頸部', Abdomen: '腹部', Chest: '胸部',
+    Sprain: '扭傷', Strain: '拉傷', Soreness: '痠痛', Surgery: '手術', Inflammation: '發炎', Contusion: '挫傷', Bruise: '挫傷', Fracture: '骨折', Tear: '撕裂', Tendinitis: '肌腱炎',
+    Illness: '生病', Rest: '休息', Concussion: '腦震盪', Personal: '個人因素', Suspension: '禁賽', Injury: '傷勢' };
+  const zh = s => String(s).split(' ').map(w => ZH[w] || w).join('');
+  const info = {};
+  (ij.injuries || []).forEach(t => (t.injuries || []).forEach(i => { const n = i.athlete && i.athlete.displayName; if (!n) return; const d = i.details || {};
+    info[n] = { ret: md(d.returnDate), what: [d.side, d.location || d.type, d.detail].filter(x => x && x !== 'Not Specified').map(zh).join('') }; }));
+  const list = [];
+  const add = (x, who) => { if (!x.inj || x.inj === 'ACTIVE') return; const out = x.inj === 'OUT' || x.slot === 'IR' && x.inj !== 'DAY_TO_DAY';
+    const k = info[x.name] || {}; const tm = abbr[x.tid];
+    const playsToday = hasGame(x.tid, today) && !dayDone(today);
+    const txt = who + (k.what ? k.what + ',' : '') + 'ESPN 標 ' + (out ? 'OUT' : 'DTD') + (k.ret ? ',預計 ' + k.ret + ' 回歸' : ',回歸日未定') +
+      (who.indexOf('你的') === 0 && !out ? (playsToday ? ';' + tm + ' 今天有比賽,上場前要確認。' : ';' + tm + ' 今天沒有比賽。') : '。');
+    list.push([out ? 'out' : 'dtd', x.name, txt, k.ret || '未定']); };
+  R[meId].forEach(x => add(x, '你的 ' + x.slot + '。'));
+  R[oppId].forEach(x => add(x, '對手 ' + oppName + '。'));
+  const mdv = s => { const m = /^(\d+)\/(\d+)$/.exec(s); return m ? (+m[1] < 7 ? 12 + +m[1] : +m[1]) * 100 + +m[2] : 9999; };
+  D.injuries = list.sort((a, b) => (a[0] === b[0] ? 0 : a[0] === 'dtd' ? -1 : 1) || mdv(a[3]) - mdv(b[3]));
+} catch (e) { console.log('injuries FAIL', e.message); }
+
+// hand-written judgment sections each carry the date they were last written (handAsof). The site shows
+// a "written on X" notice on any section older than today, so fresh numbers never sit next to old advice
+// without saying so. Whoever edits todo/picks/threads/recap/sleepers/fridayLineup must update its date.
+if (!D.handAsof) { const d0 = String(D.asof || '').slice(0, 10); D.handAsof = { todo: d0, picks: d0, threads: d0, recap: d0, sleepers: d0, fridayLineup: d0 }; }
 
 D.doneSp = dayDone(today) ? today : today - 1;
 D.autoAsof = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false });

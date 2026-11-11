@@ -4,7 +4,7 @@ on:
     - cron: '17,47 * * * *'
   workflow_dispatch:
   push:
-    paths: ['data.json', 'build.mjs', 'update.mjs', 'gate.mjs']
+    paths: ['data.json', 'build.mjs', 'update.mjs', 'gate.mjs', 'brief.mjs']
 permissions:
   contents: write
 concurrency:
@@ -24,12 +24,14 @@ jobs:
         run: node update.mjs
       - if: steps.gate.outputs.run == 'true'
         run: node build.mjs
+      - if: steps.gate.outputs.run == 'true'
+        run: node brief.mjs
       - name: Commit if changed
         if: steps.gate.outputs.run == 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "actions@users.noreply.github.com"
-          git add data.json v2/index.html
+          git add data.json v2/index.html brief.json
           git diff --cached --quiet || git commit -m "Auto-update data.json and index.html"
           git pull --rebase origin main
           git push

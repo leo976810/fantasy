@@ -15,7 +15,7 @@ const A = JSON.parse(html.match(RE)[2]);
 const B = JSON.parse(fs.readFileSync('data.json', 'utf8'));
 const log = [];
 // 1) overlay data.json
-const OVER = ['asof', 'league', 'record', 'matchup', 'recap', 'injuries', 'threads', 'roster', 'picks', 'pickNote', 'acqNote', 'sched', 'foot', 'stream', 'todo', 'sleepers', 'autoAsof', 'version', 'changelog'];
+const OVER = ['asof', 'league', 'record', 'matchup', 'recap', 'injuries', 'threads', 'roster', 'picks', 'pickNote', 'acqNote', 'sched', 'foot', 'stream', 'todo', 'sleepers', 'autoAsof', 'version', 'changelog', 'handAsof'];
 OVER.forEach(k => { if (B[k] !== undefined) A[k] = B[k]; });
 if (B.matchupDays) A.matchupDays = Object.assign({}, A.matchupDays, B.matchupDays);
 log.push('overlay');
@@ -86,7 +86,7 @@ try { // cmp: every rostered player + top free agents
     const tt = j.teams.find(x => x.id === t.id);
     RO[t.id] = tt.roster.entries.map(e => Object.assign({}, e.playerPoolEntry.player, { slot: e.lineupSlotId }));
     tt.roster.entries.forEach(e => { const p = e.playerPoolEntry.player; p.eligibleSlots = e.playerPoolEntry.player.eligibleSlots || e.eligibleSlots; out.push(line(p, nm(t), p.eligibleSlots));
-      if (nm(t) === 'aespa') mine[p.fullName] = { m7: mins(p, '012027'), m27: mins(p, '002027') }; });
+      if (nm(t) === 'aespa') mine[p.fullName] = { m7: mins(p, '012027'), m27: mins(p, '002027'), inj: p.injuryStatus === 'OUT' ? 'OUT' : p.injuryStatus === 'DAY_TO_DAY' ? 'DTD' : '' }; });
   }
   const filt = { players: { filterStatus: { value: ['FREEAGENT', 'WAIVERS'] }, limit: 200, sortPercOwned: { sortPriority: 1, sortAsc: false }, filterStatsForTopScoringPeriodIds: { value: 5, additionalValue: ['002027', '012027', '022027', '002026'] } } };
   const fa = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify(filt) });
@@ -94,7 +94,10 @@ try { // cmp: every rostered player + top free agents
   CTX = { abbr, games, today, base, has, rest, next, avgPts, RO, FAL, nm };
   if (out.length > 150) {
     A.cmp = out; log.push('cmp ' + out.length);
-    A.rosterExtra = Object.fromEntries(Object.entries(A.rosterExtra || {}).map(([k, v]) => [k, Object.assign({}, v, mine[k] ? { m7: mine[k].m7, m27: mine[k].m27 } : {})]));
+    // inj and note are live too: the note used to be hand-written once (e.g. "(11/4 消息)") and never refreshed.
+    // It now comes from the injury report update.mjs builds from ESPN each run, minus the "你的 XX。" prefix.
+    const injNote = {}; (B.injuries || []).forEach(i => { injNote[i[1]] = String(i[2]).replace(/^你的 [A-Z]+。/, ''); });
+    A.rosterExtra = Object.fromEntries(Object.entries(mine).map(([k, v]) => [k, Object.assign({}, (A.rosterExtra || {})[k], { m7: v.m7, m27: v.m27, inj: v.inj, note: injNote[k] || '' })]));
   } else log.push('cmp too few');
 } catch (e) { log.push('cmp FAIL ' + e.message); }
 
@@ -301,7 +304,13 @@ try { // Streaming plan: add a free agent, drop one of mine, compare per-day top
   const w = [];
   if (thisSp.length) w.push({ label: '本週剩餘(' + thisSp.length + ' 個比賽日:' + dn[thisSp[0] - base] + '到週日)', rows: mk(thisSp) });
   w.push({ label: '下週 ' + dstr(7) + '–' + dstr(13) + '(本週額度已滿時用這份)', rows: mk(nextSp) });
-  A.streamPlan = Object.assign({}, A.streamPlan, { asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false }) + '(台北時間)', windows: w });
+  // The note is rebuilt every run: it used to be a frozen sentence naming a specific player as the one
+  // to swap out ("Klay 每次都是最適合換掉的人"), which stayed on the site after that player was gone.
+  const outs = {}; w.forEach(x => x.rows.forEach(r => { outs[r[6]] = (outs[r[6]] || 0) + 1; }));
+  const topOut = Object.entries(outs).sort((a, b) => b[1] - a[1])[0];
+  const note = '增加分數的算法:每天取陣容裡有比賽的球員,依預估場均排出前 10 名加總;把自由市場球員加進來、換掉一位你的球員,比較前後的總分差。預估場均是今年、去年、近 7 場平均的平均(缺哪個就不算哪個)。這裡不看位置限制與上場時間,也假設傷兵不會回來,只能當粗估。每個候選球員都已試過換掉你陣容裡的每一位,表中顯示增加最多的那一個。' +
+    (topOut ? '這次最常被換掉的是 ' + topOut[0] + '(' + topOut[1] + ' 次)。' : '');
+  A.streamPlan = Object.assign({}, A.streamPlan, { note, asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false }) + '(台北時間)', windows: w });
   log.push('streamPlan ' + w.map(x => x.rows.length).join('/'));
 } catch (e) { log.push('streamPlan FAIL ' + e.message); }
 
