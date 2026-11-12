@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-12 01:59(台北時間)",
+ "asof": "2026-11-13 06:34(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2371,79 +2371,39 @@
   ]
  ],
  "threads": {
-  "note": "下方列追蹤清單 6 位推主的最新貼文(11/12 讀取),最新的排最上面,日期是發文日。摘要是我用自己的話整理,點連結看原文。",
+  "note": "下方列追蹤清單 6 位推主的最新貼文(11/13 讀取),最新的排最上面,日期是發文日。摘要是我用自己的話整理,點連結看原文。",
   "accounts": [
    {
+    "handle": "fantasytaiwanbaseball",
+    "label": "台灣 fantasy 漲跌幅榜",
+    "post": "/@fantasytaiwanbaseball/post/DfpegClDzN-",
+    "age": "11/13",
+    "time": "2026-11-12T16:23:18Z",
+    "sum": "11/12 收盤:Jokić 27/11/8、Harper 10 助攻 4 抄截、Sengun 9 助攻上榜;Pritchard、Buzelis、Dejounte Murray 下跌。傷病:Curry 腹部等 MRI,有空位可撿 Podziemski。"
+   },
+   {
     "handle": "nbafantasybible",
     "label": "Yahoo 熱門加入/交易榜(英文)",
-    "post": "/@nbafantasybible/post/Dfm3bprkfa3",
+    "post": "/@nbafantasybible/post/DfpIcjWkeqz",
     "age": "11/12",
-    "time": "2026-11-11T16:03:26Z",
-    "sum": "Yahoo 11/11 最多人丟掉:Achiuwa、Kris Dunn、Dillon Brooks、Monk,你剛丟的 Burries 排第 5,Klay、Wagler 也在榜上。同時發的「最多人加入」榜是圖片,讀不到內容。"
-   },
-   {
-    "handle": "fantasytaiwanbaseball",
-    "label": "台灣 fantasy 漲跌幅榜",
-    "post": "/@fantasytaiwanbaseball/post/Dfmq8iGj53-",
-    "age": "11/11",
-    "time": "2026-11-11T14:14:19Z",
-    "sum": "11/11 收盤:Franz Wagner 在 Banchero、Suggs 都缺陣下球權全在他手上;Myles Turner 只拿 3 分、Embiid 分數多靠罰球。傷病快報特別提到 Rollins 能撿就撿。"
+    "time": "2026-11-12T13:10:35Z",
+    "sum": "Yahoo 11/12 最多人交易:Harden、Amen Thompson、Siakam、Lendeborg、Towns 前五;同日加入榜前段是 Daniss Jenkins、Kalkbrenner、Huerter,丟棄榜有 Burries、Kuzma、Bridges。"
    },
    {
     "handle": "fantasy_baskets_",
-    "label": "范特西籃球 Fantasy Baskets",
-    "post": "/@fantasy_baskets_/post/DfmLUpkGq5F",
-    "age": "11/11",
-    "time": "2026-11-11T09:37:59Z",
-    "sum": "Darryn Peterson 近 3 場平均 24 分 4.3 板 4 助,命中率很好,榜眼開始打出來。"
-   },
-   {
-    "handle": "fantasy_baskets_",
-    "label": "范特西籃球 Fantasy Baskets",
-    "post": "/@fantasy_baskets_/post/DfmKvzAGhiy",
-    "age": "11/11",
-    "time": "2026-11-11T09:32:58Z",
-    "sum": "11/10 爆胎組:Sabonis 0 分、Myles Turner 投 7 中 1、Bane 投 19 中 5,你的 Garland 也在名單上(13 分 6 助,三分 6 中 1)。"
-   },
-   {
-    "handle": "fantasy_baskets_",
-    "label": "范特西籃球 Fantasy Baskets",
-    "post": "/@fantasy_baskets_/post/DfmKd4xmiBz",
-    "age": "11/11",
-    "time": "2026-11-11T09:30:31Z",
-    "sum": "11/10 爆發組:Paul George 36 分、Wagner 33 分 7 板 7 助、Anthony Black 26 分 4 抄、LaVine 31 分、Goodwin 投 7 中 6 全是三分。"
+    "label": "范特西籃球 Podcast",
+    "post": "/@fantasy_baskets_/post/DfojQgpGgKW",
+    "age": "11/12",
+    "time": "2026-11-12T07:45:37Z",
+    "sum": "Franz Wagner 連續三場得分破 30。同一天他們的爆發榜有 Wemby、Harper、Harden、Lendeborg;爆胎榜有 Quickley(3/14)、Rollins(5 失誤)、Kuzma、Edey。"
    },
    {
     "handle": "w.g_balls",
     "label": "爆走爆胎整理",
-    "post": "/@w.g_balls/post/Dfl45Exk9RO",
-    "age": "11/11",
-    "time": "2026-11-11T06:56:56Z",
-    "sum": "11/11 爆走榜:Paul George 36 分、Wagner 33 分 7 板 7 助、LaVine、Giannis、Acuff、Anthony Black 等;Jaylen Brown 和 Tatum 列在「最熟悉的陌生人」。"
-   },
-   {
-    "handle": "w.g_balls",
-    "label": "爆走爆胎整理",
-    "post": "/@w.g_balls/post/Dfl45mJk0b7",
-    "age": "11/11",
-    "time": "2026-11-11T06:57:01Z",
-    "sum": "11/11 爆胎榜:Embiid、Bane、Wagler、Bam、Myles Turner 命中率都很差;SGA 投 22 中 8 列在又爛又強榜。"
-   },
-   {
-    "handle": "nbafantasybible",
-    "label": "Yahoo 熱門加入/交易榜(英文)",
-    "post": "/@nbafantasybible/post/DfkOjHXkbNY",
-    "age": "11/10",
-    "time": "2026-11-10T15:27:43Z",
-    "sum": "Yahoo 11/10 最常被交易:Harden 第一,接著是 Paul George、Dylan Harper、Randle;你的 Walker Kessler 排第 10。"
-   },
-   {
-    "handle": "fantasytaiwanbaseball",
-    "label": "台灣 fantasy 漲跌幅榜",
-    "post": "/@fantasytaiwanbaseball/post/Dfj79d-DyV-",
-    "age": "11/10",
-    "time": "2026-11-10T12:45:16Z",
-    "sum": "11/10 漲跌幅:Wemby、Flagg、AD 都有大號表現;湖人換 Reaves 缺陣,撿人優先看 Mamukelashvili。跌幅有 Brooks、Poole。"
+    "post": "/@w.g_balls/post/DfoYoy-k5qY",
+    "age": "11/12",
+    "time": "2026-11-12T06:12:49Z",
+    "sum": "11/12 爆走榜:Wemby、Wagner、Harden、SGA、Jamal Murray(30 分 8 助攻)、Lendeborg;爆胎榜有 Quickley、Kuzma、Murray-Boyles;Tatum 24 分 8 助攻但 6/21 命中。"
    },
    {
     "handle": "fantasy.moose",
@@ -2451,23 +2411,7 @@
     "post": "/@fantasy.moose/post/DfjN8CYlXOa",
     "age": "11/10",
     "time": "2026-11-10T06:03:07Z",
-    "sum": "買低名單:看上場時間和使用率還在、只是命中率或防守數據暫時偏低的人。點名 Wagner、Bane 等投籃效率下滑組,還有 Edey 這類傷癒回歸要等上場時間拉高的人。"
-   },
-   {
-    "handle": "fantasy.moose",
-    "label": "范特西慕斯(進階數據/選秀分級)",
-    "post": "/@fantasy.moose/post/DfjN8cYFQFI",
-    "age": "11/10",
-    "time": "2026-11-10T06:03:11Z",
-    "sum": "續篇:KD、Barnes 等前兩輪球員樣本變多後應該會回升;Derrick White、Trey Murphy 使用率被吃掉,天花板比開季預期低。"
-   },
-   {
-    "handle": "fantasy.moose",
-    "label": "范特西慕斯(進階數據/選秀分級)",
-    "post": "/@fantasy.moose/post/DfgsoMblbPB",
-    "age": "11/9",
-    "time": "2026-11-09T06:33:35Z",
-    "sum": "W3 總結:Burries 估計能拿到穩定時間,建議至少抱兩週;CMB 是吃到隊友受傷要觀察;Rollins 被下放替補可以丟;Traore 靠不合理命中,命中率一回落價值就掉。"
+    "sum": "Buy Low 名單:命中或罰球暫時失準但上場時間穩的人(OG、Wagner、Bane、Randle 等)可低價接手;Traore 靠不合理命中、價值會打折。前一天的第三週總結說 Rollins 被下放替補、Burries/Flemings 值得至少抱兩週。"
    },
    {
     "handle": "emilyca95112",
@@ -2475,19 +2419,11 @@
     "post": "/@emilyca95112/post/DfgkgvaG8tE",
     "age": "11/9",
     "time": "2026-11-09T05:22:39Z",
-    "sum": "Week 4 預覽:這週有 21 組 B2B、週二四六場次少;最看好尼克的 4 場賽程。巫師如果 Ayton 缺陣,會優先觀察 Alex Sarr 吃更多禁區時間。"
-   },
-   {
-    "handle": "emilyca95112",
-    "label": "灣區小市民(傷兵輪替觀察)",
-    "post": "/@emilyca95112/post/DfgkhG-G6SE",
-    "age": "11/9",
-    "time": "2026-11-09T05:22:42Z",
-    "sum": "續篇:暴龍如果 Quickley 持續缺陣會先看 Jamal Shead,Barnes 休息時 Murray-Boyles 最受益;火箭兩名中鋒缺陣時 Sengun 要扛更多時間。她說之後每日傷兵更新改發 IG。"
+    "sum": "第四週預覽:本週 21 組背靠背,尼克四場且對手偏弱;Davis 若缺陣看 Middleton,Quickley 缺陣看 Shead,Miller 缺陣看 Sion James/Kalkbrenner。之後的每日傷兵更新只發在 IG,這裡沒有。"
    }
   ],
   "search": [],
-  "skipped": "關鍵字「NBA fantasy」搜尋這次沒有更新:Threads 在未登入時不能依時間排序,搜到的也大多是一般 NBA 貼文,不是 fantasy 內容。"
+  "skipped": "關鍵字「NBA fantasy」搜尋沒有更新:Threads 未登入時不能依時間排序,搜到的多半是一般 NBA 貼文。"
  },
  "roster": [
   [
@@ -3555,19 +3491,24 @@
  ],
  "todo": [
   {
+   "lv": "建議",
+   "t": "下次加人前先決定丟誰:Green 優先,Mamukelashvili 先留",
+   "d": "兩人都是低產出,但 Reaves 缺陣期間 Mamukelashvili 在 LAL 有上場空間(11/10 漲跌幅榜點名可撿),Green(PHX)沒有類似紅利,且在 Yahoo 11/11 最多人丟掉榜上。增補首選見自動待辦。"
+  },
+  {
    "lv": "留意",
-   "t": "Rollins 先看兩場上場時間",
-   "d": "11/12 用加人額度撿了 Ryan Rollins、丟掉 Brayden Burries。但范特西慕斯 11/9 的 W3 總結說 Rollins 被下放替補、上場不到 20 分鐘,反而建議 Burries 至少抱兩週。接下來兩場如果 Rollins 時間還是偏少,下一次額度就拿他或 Mamukelashvili 去換。"
+   "t": "Rollins 先別急著塞進先發",
+   "d": "11/13 預計回歸但 MIL 今天沒比賽;Moose 提到他被下放替補、上場不到 20 分鐘,昨天 3/10 投籃加 5 失誤。先放板凳看兩場上場時間再決定。"
+  },
+  {
+   "lv": "留意",
+   "t": "Curry 腹部傷勢等 MRI,Lendeborg 短期球權上升",
+   "d": "Lendeborg 昨天 25 分 10 籃板,是 Yahoo 交易榜第 4;他在你的 UTIL,繼續留著。Curry 若缺陣,Podziemski 是 GS 的撿人選項,但優先度低於你自己的增補首選。"
   },
   {
    "lv": "建議",
-   "t": "下一次加人:要 Sarr 就先申請 waiver",
-   "d": "Alex Sarr 仍是增補首選但在 waiver,要等處理完才進來,想趕上週末就要提早申請;Zach Edey 是自由球員,加了立刻生效。兩人都是 C 資格,C 已滿 4 人,只能換 Mamukelashvili(roster% 5.6)。"
-  },
-  {
-   "lv": "留意",
-   "t": "對手週末補強:Haliburton 預計 11/13 回歸",
-   "d": "原住民山莊這兩天撿了 Kevin Huerter、John Collins(丟 Myles Turner),Haliburton(OUT)預計 11/13 回來,Keyonte George、Traore 是 DTD。對手後段人數會變多,目前領先但差距會被追,要不要多加人看本週局勢。"
+   "t": "對手後半週人數多,要不要多加人看本週局勢",
+   "d": "原住民山莊 Mitchell 11/13、Traore 11/14 預計回歸,Haliburton 要到 11/22 才回,所以他們的強項是剩餘場次多。勝負差距見本週局勢;若差距縮小,就把每日 1 人額度用在場次多的人,不要留到下週。"
   }
  ],
  "autoAsof": "2026/11/13 05:08:49",
@@ -3580,7 +3521,7 @@
   "oppScore": 1381
  },
  "handAsof": {
-  "todo": "2026-11-12",
-  "threads": "2026-11-12"
+  "todo": "2026-11-13",
+  "threads": "2026-11-13"
  }
 }
