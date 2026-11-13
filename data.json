@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-14 03:59(台北時間)",
+ "asof": "2026-11-14 06:35(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2377,7 +2377,7 @@
   ]
  ],
  "threads": {
-  "note": "6 個帳號都已讀;最新兩三篇各一句摘要。",
+  "note": "6 個帳號都讀到了;今天重點是 Cade 52 分、增補榜出現 Melton 與 Meleek Thomas。",
   "accounts": [
    {
     "handle": "nbafantasybible",
@@ -2385,7 +2385,7 @@
     "post": "/@nbafantasybible/post/DfrvmVkEYZN",
     "age": "11/13",
     "time": "2026-11-13T13:31:11.000Z",
-    "sum": "Yahoo 11/13 早版熱門加入:Melton、Meleek Thomas、Jaylen Wells、Jalen Smith 等。"
+    "sum": "Yahoo 11/13 早版被撿榜:Melton、Meleek Thomas、Jaylen Wells、Jalen Smith、Cissoko 居前。"
    },
    {
     "handle": "nbafantasybible",
@@ -2393,15 +2393,7 @@
     "post": "/@nbafantasybible/post/DfrvqZtkb0H",
     "age": "11/13",
     "time": "2026-11-13T13:31:45.000Z",
-    "sum": "Yahoo 11/13 早版熱門丟棄:Shead、Kalkbrenner、Ja'Kobe Walter、Huerter 等。"
-   },
-   {
-    "handle": "fantasy_baskets_",
-    "label": "范特西籃球",
-    "post": "/@fantasy_baskets_/post/DfrZK31mheU",
-    "age": "11/13",
-    "time": "2026-11-13T10:15:12.000Z",
-    "sum": "11/13 趣味短文,提到 Oubre 的大頭照笑很燦爛,沒有操作資訊。"
+    "sum": "Yahoo 11/13 早版被丟榜:Shead、Kalkbrenner、Walter、Huerter、Aldama 居前。"
    },
    {
     "handle": "emilyca95112",
@@ -2409,31 +2401,39 @@
     "post": "/@emilyca95112/post/DfrFPxNG1m6",
     "age": "11/13",
     "time": "2026-11-13T07:21:06.000Z",
-    "sum": "Yahoo 重新開放 IL+,盟主可設定 Questionable 等狀態也能放 IL;與 ESPN 無關。"
+    "sum": "Yahoo 重新開放 IL+,盟主可設定 Questionable 等狀態也能放傷兵名單(Yahoo 規則,和我們 ESPN 盟無關)。"
    },
    {
     "handle": "fantasy_baskets_",
-    "label": "范特西籃球",
+    "label": "范特西籃球 Podcast",
     "post": "/@fantasy_baskets_/post/DfrAjnpmhwQ",
     "age": "11/13",
     "time": "2026-11-13T06:40:07.000Z",
-    "sum": "球三近 5 場場均 24.4 分 6.2 助 4.6 三分,灰狼 5 勝 0 敗,健康就好用。"
+    "sum": "球三近 5 場場均 24.4 分、6.2 助攻、4.6 顆三分,灰狼 5 勝 0 敗,健康的球三很好用。"
    },
    {
     "handle": "fantasy_baskets_",
-    "label": "范特西籃球",
+    "label": "范特西籃球 Podcast",
     "post": "/@fantasy_baskets_/post/DfrAAAmGt7T",
     "age": "11/13",
     "time": "2026-11-13T06:35:15.000Z",
-    "sum": "11/13 爆胎組:Kyrie、Clayton Jr.、Naz Reid、Ja'Kobe Walter、Shead 等人命中率慘淡。"
+    "sum": "11/13 爆胎組:Kyrie、Clayton Jr.、Naz Reid、Walter、Shead、Bridges、Robinson 命中率或失誤都很慘。"
+   },
+   {
+    "handle": "fantasy_baskets_",
+    "label": "范特西籃球 Podcast",
+    "post": "/@fantasy_baskets_/post/Dfq-davmp4S",
+    "age": "11/13",
+    "time": "2026-11-13T06:21:48.000Z",
+    "sum": "11/13 爆發組:Cade 52 分 11 助零失誤最神,Ausar 大三元,AD、Trae Young、Booker 也各有亮眼表現。"
    },
    {
     "handle": "w.g_balls",
-    "label": "微尬.Balls",
+    "label": "爆走爆胎整理",
     "post": "/@w.g_balls/post/Dfqy-apE9gN",
     "age": "11/13",
     "time": "2026-11-13T04:41:27.000Z",
-    "sum": "11/13 爆走榜:Cade 52 分 11 助 0 失誤領頭,AD、Sarr、Trae Young、Maxey 也上榜。"
+    "sum": "11/13 神仙打架榜是 Cade 52 分、AD、Sarr、Trae Young;爆走榜有 Maxey 27 分 8 助攻,是我隊的人。"
    },
    {
     "handle": "fantasytaiwanbaseball",
@@ -2441,23 +2441,23 @@
     "post": "/@fantasytaiwanbaseball/post/DfpegClDzN-",
     "age": "11/13",
     "time": "2026-11-12T16:23:18.000Z",
-    "sum": "11/12 收盤:Jokić、Harper、Sengun 漲;Pritchard、Buzelis、Dejounte 跌;Curry 腹部傷勢等 MRI,Podziemski 有空位就撿。"
+    "sum": "11/12 收盤:Jokić、Harper、Sengun 漲,Pritchard、Buzelis、Dejounte 跌;Curry 腹部傷等 MRI,Podziemski 有空位可撿。"
    },
    {
     "handle": "w.g_balls",
-    "label": "微尬.Balls",
-    "post": "/@w.g_balls/post/DfoYoy-k5qY",
+    "label": "爆走爆胎整理",
+    "post": "/@w.g_balls/post/DfoYpMlk6EN",
     "age": "11/12",
-    "time": "2026-11-12T06:12:49.000Z",
-    "sum": "11/12 爆走榜有 Wemby、Wagner、Harden、Lendeborg 等;爆胎榜含 Quickley、Murray-Boyles、Kuzma。"
+    "time": "2026-11-12T06:12:52.000Z",
+    "sum": "11/12 爆胎榜含我隊 Quickley(3-14),Tatum 24 分 8 助攻但 6-21 被列為又爛又強。"
    },
    {
     "handle": "fantasytaiwanbaseball",
     "label": "fantasytaiwan",
-    "post": "/@fantasytaiwanbaseball/post/Dfmq8iGj53-",
-    "age": "11/11",
-    "time": "2026-11-11T14:14:19.000Z",
-    "sum": "雙 11 收盤:Franz、Bam、Avdija 漲;Turner、Embiid 跌;Rollins 能撿就撿。"
+    "post": "/@fantasytaiwanbaseball/post/Dfj79d-DyV-",
+    "age": "11/10",
+    "time": "2026-11-10T12:45:16.000Z",
+    "sum": "11/10 漲跌幅:Wemby、Flagg、AD 漲;Luka 復出、湖人六連勝,Reaves 缺陣時撿人優先看 Mamukelashvili。"
    },
    {
     "handle": "fantasy.moose",
@@ -2465,7 +2465,7 @@
     "post": "/@fantasy.moose/post/DfjN8CYlXOa",
     "age": "11/10",
     "time": "2026-11-10T06:03:07.000Z",
-    "sum": "買低名單:投籃效率下滑、罰球失常、傷癒回歸組;Harden 疑似退化要小心。"
+    "sum": "買低名單:看上場時間和使用率沒掉、只是命中率或防守數據暫時偏低的球員;Harden 可能真的退化。"
    },
    {
     "handle": "fantasy.moose",
@@ -2473,19 +2473,11 @@
     "post": "/@fantasy.moose/post/DfgsoMblbPB",
     "age": "11/9",
     "time": "2026-11-09T06:33:35.000Z",
-    "sum": "W3 總結:Rollins 被下放替補可丟,Traore 靠不合理命中撐著可丟,勇士近況很好。"
-   },
-   {
-    "handle": "emilyca95112",
-    "label": "灣區小市民",
-    "post": "/@emilyca95112/post/DfgkgvaG8tE",
-    "age": "11/9",
-    "time": "2026-11-09T05:22:39.000Z",
-    "sum": "第 4 週預覽:21 組背靠背,尼克 4 場賽程最好;Davis、Ayton 缺陣時看 Middleton、Sarr。"
+    "sum": "W3 總結:Rollins 被下放替補、上場不到 20 分鐘可丟;Traore 靠不合理命中,賽程差可丟;勇士整隊回穩。"
    }
   ],
   "search": [],
-  "skipped": "Threads 關鍵字搜尋未登入無法依時間排序,未查。"
+  "skipped": "關鍵字搜尋未登入無法依時間排序,略過。"
  },
  "roster": [
   [
@@ -3541,18 +3533,23 @@
  "todo": [
   {
    "lv": "建議",
-   "t": "領先約 160 分,不必為追分硬加人",
-   "d": "目前 879 比 596,見本週局勢。對手後半週人數多、還有 Fox、Mitchell 回歸,但差距夠大,把 1 次加人額度留給週末傷兵變化。"
+   "t": "領先有餘但對手剩餘場次佔優,別放太鬆",
+   "d": "目前領先約 280 分,但 brief 顯示對手剩餘產出預估高於我,最終差距見「本週局勢」。對手 Mitchell、Fox、Traore 都是 DTD 可能回歸,Haliburton、Butler 長期缺陣,影響有限。今天額度還在,有明確加分機會再用。"
+  },
+  {
+   "lv": "建議",
+   "t": "增補首選:Claxton 換掉 Mamukelashvili",
+   "d": "Mamukelashvili 在板凳且低產出,streaming 試算本週剩餘首選是 Nic Claxton(CHI,2 場、淨增最高)。他是湖人替補大前鋒,Reaves 回來後價值會掉,趁今天額度換掉比等下週划算。"
   },
   {
    "lv": "留意",
-   "t": "Mobley 今天 OUT,先發空缺別浪費",
-   "d": "PF 缺人時看板凳誰頂,Mamukelashvili 產出低,別因為補位就多丟一個有用的人。"
+   "t": "Mobley 今天 OUT,PF 空缺要補",
+   "d": "ESPN 標 Mobley 11/14 OUT,PF 位置今天沒人打。先看陣容檢查,別讓 UTIL 或板凳球員卡在空位。Rollins 先發先觀察,不用急著頂。"
   },
   {
    "lv": "留意",
-   "t": "Rollins 先留觀察,不急著上先發",
-   "d": "他被傳在輪替中偏後(Moose 提到上場不到 20 分鐘),先看這週上場時間再決定。"
+   "t": "Quickley 與 Jalen Green 的板凳取捨",
+   "d": "微尬 11/12 爆胎榜有 Quickley(3-14),Green 近況也低。兩人都是下週 streaming 試算的被換對象,今天先不丟,看週末表現再決定。"
   }
  ],
  "autoAsof": "2026/11/14 03:59:26",
