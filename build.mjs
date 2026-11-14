@@ -328,9 +328,14 @@ try { // Streaming plan: add a free agent, drop one of mine, compare per-day top
   const isC = p => (p.eligibleSlots || []).includes(4);
   const C_LIMIT = 4, myC = RO[meId].filter(isC).length;
   const swapOK = (c, o) => !(isC(c.p) && !isC(o.p) && myC >= C_LIMIT);
+  // Who may be dropped: only the 4 lowest-value players by the season-long blend. Streaming is about a
+  // short window, but a dropped player is gone for good -- judging the drop only by this week's points
+  // used to suggest dropping a core player who merely had no games left this week (Lendeborg, 11/15).
+  // Ties go to the lower-value player (the list is sorted ascending and a later one must beat it).
+  const DROP_N = 4, drops = pool.slice().sort((a, b) => a.e - b.e).slice(0, DROP_N);
   const mk = sps => { const b0 = dayTot(pool, sps); const rows = [];
     cands.forEach(c => { const g = sps.filter(sp => has(c.p.proTeamId, sp)).length; if (!g) return; let bestG = 0, bo = null;
-      pool.forEach(o => { if (!swapOK(c, o)) return; const nl = pool.filter(x => x !== o).concat([c]); const gain = dayTot(nl, sps) - b0; if (gain > bestG) { bestG = gain; bo = o; } });
+      drops.forEach(o => { if (!swapOK(c, o)) return; const nl = pool.filter(x => x !== o).concat([c]); const gain = dayTot(nl, sps) - b0; if (gain > bestG + 0.05) { bestG = gain; bo = o; } });
       if (bo) rows.push([c.p.fullName, abbr[c.p.proTeamId], c.p.own, r1(c.p.ownership && c.p.ownership.percentOwned), r1(c.e), g, bo.p.fullName, r1(bo.e), sps.filter(sp => has(bo.p.proTeamId, sp)).length, r1(bestG), avgPts(c.p, '002027'), avgPts(c.p, '012027'), avgPts(c.p, '002026')]); });
     return rows.sort((a, b) => b[9] - a[9]).slice(0, 8); };
   const dn = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
@@ -344,7 +349,7 @@ try { // Streaming plan: add a free agent, drop one of mine, compare per-day top
   // to swap out ("Klay 每次都是最適合換掉的人"), which stayed on the site after that player was gone.
   const outs = {}; w.forEach(x => x.rows.forEach(r => { outs[r[6]] = (outs[r[6]] || 0) + 1; }));
   const topOut = Object.entries(outs).sort((a, b) => b[1] - a[1])[0];
-  const note = '增加分數的算法:每天取陣容裡有比賽的球員,依預估場均排出前 10 名加總;把自由市場球員加進來、換掉一位你的球員,比較前後的總分差。預估場均是今年、去年、近 7 場平均的平均(缺哪個就不算哪個)。這裡不看位置限制與上場時間,也假設傷兵不會回來,只能當粗估。每個候選球員都已試過換掉你陣容裡的每一位,表中顯示增加最多的那一個。C 資格最多 4 人:你已有 ' + myC + ' 人' + (myC >= C_LIMIT ? ',所以有 C 資格的球員只會配對換掉你的 C。' : '。') +
+  const note = '增加分數的算法:每天取陣容裡有比賽的球員,依預估場均排出前 10 名加總;把自由市場球員加進來、換掉一位你的球員,比較前後的總分差。預估場均是今年、去年、近 7 場平均的平均(缺哪個就不算哪個)。這裡不看位置限制與上場時間,也假設傷兵不會回來,只能當粗估。只考慮換掉你陣容裡預估場均最低的 ' + DROP_N + ' 人(' + drops.map(x => x.p.fullName).join('、') + '),核心球員就算本週沒比賽也不會被換掉;表中顯示增加最多的那一個,同分時換掉價值較低的。C 資格最多 4 人:你已有 ' + myC + ' 人' + (myC >= C_LIMIT ? ',所以有 C 資格的球員只會配對換掉你的 C。' : '。') +
     (topOut ? '這次最常被換掉的是 ' + topOut[0] + '(' + topOut[1] + ' 次)。' : '');
   A.streamPlan = Object.assign({}, A.streamPlan, { note, asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' }) + '(台北時間)', windows: w });
   log.push('streamPlan ' + w.map(x => x.rows.length).join('/'));
