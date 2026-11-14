@@ -481,6 +481,93 @@ try { // per-game logs for every rostered player and the top free agents
   if (LGAV && Object.keys(ADV).length > 50) { A.adv = ADV; A.advLg = LGAV; log.push('adv ' + Object.keys(ADV).length + ' lg ' + JSON.stringify(LGAV)); } else log.push('adv too few ' + Object.keys(ADV).length);
   if (Object.keys(LG).length > 100) { A.logs = LG; log.push('logs ' + Object.keys(LG).length + ' sample games ' + JSON.stringify(Object.values(LG)[0][8].slice(0, 2))); } else log.push('logs too few');
 
+  // ---------- 超級球探榜 (A.scout) ----------
+  // Free agents / waivers whose game-by-game numbers jumped: the average of their last 5 games actually
+  // played (minutes > 0) is at least 20 and 10+ above last season's average or above their other games this season, or they
+  // recently moved into the starting lineup (started 2 of the last 3 games after starting under a third of
+  // their earlier games) with minutes up 8+. Top 10 by the scoring jump. Pool: the 200 most-owned free agents
+  // plus the 100 with the most fantasy points over the last 7 days, so a breakout nobody owns yet still shows.
+  try {
+    const avail = {}; CTX.FAL.forEach(p => { avail[p.id] = p.own === 'Waiver' ? 'Waiver' : 'FA'; });
+    const PS = {}; Object.values(FULL).forEach(p => { if (avail[p.id]) PS[p.id] = p; });
+    const fx = await get(L + '?view=kona_player_info', { 'x-fantasy-filter': JSON.stringify({ players: { filterStatus: { value: ['FREEAGENT', 'WAIVERS'] }, limit: 100,
+      sortAppliedStatTotal: { sortPriority: 1, sortAsc: false, value: '012027' }, filterStatsForTopScoringPeriodIds: { value: CTX.today + 1, additionalValue: ['002027', '012027', '022027', '002026'] } } }) });
+    (fx.players || []).forEach(x => { const p = x.player; if (!p) return; if (!avail[p.id]) avail[p.id] = x.status === 'WAIVERS' ? 'Waiver' : 'FA'; if (!PS[p.id]) PS[p.id] = p; });
+    const av = a => a.reduce((x, y) => x + y, 0) / a.length;
+    const SC_MIN = 20, SC_JUMP = 10; // last-5 average must be at least SC_MIN; a "jump" is SC_JUMP+ points
+    const SC = [];
+    Object.values(PS).forEach(p => {
+      if (p.injuryStatus === 'OUT') return;
+      const g = (p.stats || []).filter(s => s.statSplitTypeId === 5 && s.seasonId === 2027 && s.stats && s.stats['40'] > 0).sort((a, b) => b.scoringPeriodId - a.scoringPeriodId);
+      if (g.length < 5) return;
+      const pts = s => s.appliedTotal || 0, l5 = g.slice(0, 5), early = g.slice(5);
+      // a 0 last-season average means ESPN has no games for him last season, not a real 0
+      const p5 = av(l5.map(pts)), s26 = avgPts(p, '002026') || null, pe = early.length >= 3 ? av(early.map(pts)) : null;
+      const d26 = s26 != null ? p5 - s26 : null, dE = pe != null ? p5 - pe : null;
+      const l3 = g.slice(0, 3), e3 = g.slice(3);
+      const gs3 = l3.filter(s => s.stats['41'] > 0).length, gsE = e3.length ? e3.filter(s => s.stats['41'] > 0).length / e3.length : null;
+      const m3 = av(l3.map(s => s.stats['40'])), mE = e3.length ? av(e3.map(s => s.stats['40'])) : null;
+      const starter = e3.length >= 3 && gs3 >= 2 && gsE < 1 / 3 && m3 - mE >= 8;
+      const up26 = d26 != null && d26 >= SC_JUMP, upE = dE != null && dE >= SC_JUMP;
+      if (p5 < SC_MIN || (!up26 && !upE && !starter)) return;
+      const why = [];
+      if (up26) why.push('近 5 場比去年多 ' + r1(d26) + ' 分');
+      if (upE) why.push('比今年其他 ' + early.length + ' 場多 ' + r1(dE) + ' 分');
+      if (starter) why.push('近 3 場先發 ' + gs3 + ' 場(之前 ' + Math.round(gsE * e3.length) + '/' + e3.length + '),分鐘 ' + r1(mE) + ' → ' + r1(m3));
+      SC.push({ gain: Math.max(d26 == null ? -99 : d26, dE == null ? -99 : dE), row: [p.fullName, abbr[p.proTeamId], CTX.posOf(p, p.eligibleSlots), avail[p.id],
+        r1(p.ownership && p.ownership.percentOwned), r1(p5), s26, pe == null ? null : r1(pe), r1(m3), mE == null ? null : r1(mE), gs3, starter ? 1 : 0,
+        p.injuryStatus === 'DAY_TO_DAY' ? 'DTD' : '', l5.map(s => Math.round(pts(s))), why.join(';')] });
+    });
+    A.scout = { asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' }),
+      note: '自由市場(含 waiver)裡,真正有上場的最近 5 場平均至少 ' + SC_MIN + ' 分,而且比去年平均、或比今年其他場次多 ' + SC_JUMP + ' 分以上,或最近 3 場有 2 場以上先發(之前先發不到三分之一)、上場時間多 8 分鐘以上的球員,依進步幅度排前 10。只有 5 場樣本,手感起伏很大;上場時間和先發比分數更能說明角色是否真的變了。OUT 的球員不列。',
+      rows: SC.sort((a, b) => b.gain - a.gain).slice(0, 10).map(x => x.row) };
+    log.push('scout pool ' + Object.keys(PS).length + ' hits ' + SC.length);
+  } catch (e) { log.push('scout FAIL ' + e.message); }
+
+  // ---------- Top 100 潛力榜 (A.topN, TOPN = 100) ----------
+  // Who is outside this season's top TOPN (TPBL points per game) now but likely to finish inside it.
+  // Projection = w_e * this season's average + w_p * last season's average + c (rookies: w_r * this season + c_r).
+  // The weights were fitted on last season (2025-26, per-game stats recomputed with this league's scoring,
+  // prior = 2024-25): standing at scoring period `cut`, predict the final average of players with 40+ games.
+  // Later in the season this year's games carry more weight. The probability tiers are the backtest's
+  // top-100 hit rates by how far the projection sits from the projected 100th player (pooled over all cut points).
+  try {
+    const WT = [[15, 0.507, 0.353, 4.117, 0.678, 7.781], [25, 0.613, 0.247, 3.976, 0.746, 6.36], [35, 0.685, 0.196, 3.226, 0.781, 5.792],
+      [50, 0.74, 0.159, 2.715, 0.847, 4.463], [70, 0.821, 0.086, 2.525, 0.838, 4.47], [95, 0.873, 0.05, 2.115, 0.872, 3.358], [125, 0.948, 0.017, 1.045, 0.924, 2.133]];
+    const sp = Math.max(WT[0][0], Math.min(WT[WT.length - 1][0], CTX.today));
+    const i1 = WT.findIndex(w => w[0] >= sp), w1 = WT[i1], w0 = WT[Math.max(0, i1 - 1)];
+    const t = w1[0] === w0[0] ? 0 : (sp - w0[0]) / (w1[0] - w0[0]);
+    const W = w1.map((v, k) => w0[k] + (v - w0[k]) * t); // [cut, we, wp, c, wr, cr]
+    const owner = {}; Object.keys(RO).forEach(tid => { const tm = meta.teams.find(x => String(x.id) === String(tid)); RO[tid].forEach(p => { owner[p.id] = tm ? CTX.nm(tm) : '?'; }); });
+    const PJ = Object.values(FULL).map(p => {
+      const g = (p.stats || []).filter(s => s.statSplitTypeId === 5 && s.seasonId === 2027 && s.stats && s.stats['40'] > 0);
+      if (g.length < 5) return null;
+      const e = g.reduce((a, s) => a + (s.appliedTotal || 0), 0) / g.length;
+      const ps = (p.stats || []).find(s => s.id === '002026'), pgp = ps && ps.stats ? ps.stats['42'] || 0 : 0;
+      const pr = pgp >= 20 && ps.appliedAverage != null ? ps.appliedAverage : null;
+      return { p, e, ne: g.length, pr, pgp, v: pr != null ? W[1] * e + W[2] * pr + W[3] : W[4] * e + W[5] };
+    }).filter(Boolean);
+    const byE = PJ.slice().sort((a, b) => b.e - a.e); byE.forEach((x, i) => { x.cr = i + 1; });
+    const byV = PJ.slice().sort((a, b) => b.v - a.v); byV.forEach((x, i) => { x.prN = i + 1; });
+    delete A.top50; // replaced by A.topN
+    // every pooled player's [projected average, projected season rank, current rank], for the roster table and player pages
+    A.projRank = {}; PJ.forEach(x => { A.projRank[x.p.id] = [r1(x.v), x.prN, x.cr]; });
+    const TOPN = 100, pN = byV[TOPN - 1].v;
+    const TIER = m => m >= 0 ? ['高', 50] : m >= -2 ? ['中', 40] : ['低', 20];
+    // free agents first (they can be picked up today, at most 8 so they don't crowd out the likelier owned
+    // players), then the rostered ones; each group by projection, 25 in all
+    const isFA = x => !owner[x.p.id];
+    const near = PJ.filter(x => x.cr > TOPN && x.v - pN >= -4).sort((a, b) => b.v - a.v);
+    const faC = near.filter(isFA).slice(0, 8), cand = faC.concat(near.filter(x => !isFA(x)).slice(0, 25 - faC.length));
+    A.topN = { n: TOPN, asof: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' }), pN: r1(pN), curN: r1(byE[TOPN - 1].e),
+      note: 'Top ' + TOPN + ' 是指今年每場平均 TPBL 分數的前 ' + TOPN + ' 名(至少要打 40 場)。預測分數 = 今年平均 × ' + W[1].toFixed(2) + ' + 去年平均 × ' + W[2].toFixed(2) + ' + ' + W[3].toFixed(1) +
+        '(沒有去年資料的新秀:今年平均 × ' + W[4].toFixed(2) + ' + ' + W[5].toFixed(1) + '),權重是用去年同一時間點的資料回測出來的,賽季越後面今年的比重越高。回測時這個方法比只看今年平均準(平均誤差約 3.2 分對 4.0 分);去年每個時間點有 16～29 人後來擠進 top ' + TOPN + ',名單前 15 名抓到其中 6～12 人。機率是回測命中率:「高」約 5 成、「中」約 4 成、「低」約 2 成。自由球員(最多 8 位)排在最前面,現在就撿得到;後面是有主的球員,各自依預測分數排。受傷缺陣太多、打不滿 40 場就不算。',
+      rows: cand.map(x => { const p = x.p, [tier, prob] = TIER(x.v - pN);
+        return [p.fullName, abbr[p.proTeamId], CTX.posOf(p, p.eligibleSlots), owner[p.id] || 'FA', r1(x.e), x.ne, x.pr == null ? null : r1(x.pr), x.pgp, r1(x.v), x.cr, x.prN, tier, prob,
+          p.injuryStatus === 'OUT' ? 'OUT' : p.injuryStatus === 'DAY_TO_DAY' ? 'DTD' : '']; }) };
+    log.push('topN pool ' + PJ.length + ' pN ' + r1(pN) + ' cand ' + cand.length + ' w ' + W.map(v => r1(v)).join(','));
+  } catch (e) { log.push('topN FAIL ' + e.message); }
+
   // ---------- daily burst/bust leaderboard + weekly tally ----------
   // Reuses the per-player game logs just built above (no extra API calls). For the day that
   // just finished (B.doneSp, set by update.mjs), compares each player's actual fantasy score

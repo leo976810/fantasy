@@ -81,6 +81,12 @@ td.hl{background:rgba(245,166,35,.16)}
 .livebtn{background:transparent;color:inherit;border:1px solid currentColor;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;opacity:.92;white-space:nowrap}
 .livebtn:hover{opacity:1}.livebtn:disabled{opacity:.55;cursor:default}
 .livenew{border-color:#f97316;color:#f97316;opacity:1;margin-left:6px}
+.t50{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}.t50lbl{grid-column:1/-1;margin:6px 0 0}
+.t50r{border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:6px}
+.t50r .hd{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}.t50r .hd b{font-size:16px}
+.t50rank{font-size:14px}.t50rank b{font-size:18px;color:var(--accent)}
+.t50p{display:flex;align-items:center;gap:8px}.t50p .note{margin:0;white-space:nowrap}
+.t50bar{flex:1;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}.t50bar i{display:block;height:100%;background:var(--accent)}
 .livewrap #livets{opacity:.8;font-size:11px;margin:0}
 .prob{display:flex;gap:12px;flex-wrap:wrap}.pbox{flex:1 1 240px;border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--surface-2)}.pbox .big{font-family:var(--font-display);font-size:34px;font-weight:700;line-height:1.1}.bar{height:8px;border-radius:4px;background:var(--bad-soft);overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--good)}
 .lu{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px}.lu .t{font-weight:700;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}.sl{display:inline-block;min-width:38px;font-size:11px;color:var(--muted)}
@@ -315,6 +321,8 @@ body.locked > :not(#pwgate){display:none !important}
     <section class="panel" id="v2pred"></section>
     <section class="panel" id="v2po"></section>
     <section class="panel" id="stream"></section>
+    <section class="panel" id="scout"></section>
+    <section class="panel" id="topn"></section>
     <section class="panel" id="sleep"></section>
     <section class="panel" id="v2scarcity"></section>
   </div>
@@ -459,9 +467,13 @@ body.locked > :not(#pwgate){display:none !important}
     '</tbody></table></div><p class="note">' + esc(PJ.note) + ' ' + esc(M.estNote) + '</p>';
   var days = function (a) { return '<span class="days">' + ['五', '六', '日'].map(function (l, i) { return '<span class="d' + (a[i] ? ' on' : '') + '">' + l + '</span>'; }).join('') + '</span>'; };
   var RX = D.rosterExtra || {};
+  // predicted end-of-season rank (TPBL points per game) from build.mjs's A.projRank, looked up by name via A.logs
+  var PRK = D.projRank || {}, idByName = {}; Object.keys(D.logs || {}).forEach(function (id) { idByName[D.logs[id][0]] = id; });
+  var projCell = function (nm) { var r = PRK[idByName[nm]]; if (!r) return '—';
+    var d = r[2] - r[1]; return '#' + r[1] + ' <small class="' + (d > 0 ? 'up' : d < 0 ? 'down' : 'muted') + '">(現 #' + r[2] + ')</small>'; };
   $('roster').innerHTML =
     '<h2>陣容評估<span class="label">今年 / 近 7 場 / 去年 平均得分</span></h2>' +
-    '<div class="scroll"><table id="rost" class="rtbl"><thead><tr><th>位置</th><th>球員</th><th class="n sortable" data-k="0">今年<i>⇅</i></th><th class="n sortable" data-k="1">近7場<i>⇅</i></th><th class="n sortable newc" data-k="2">分鐘<i>⇅</i></th><th class="n sortable" data-k="3">去年<i>⇅</i></th><th class="n sortable" data-k="4">持有%<i>⇅</i></th><th>本週</th><th class="n">下週</th><th>判斷</th></tr></thead><tbody>' +
+    '<div class="scroll"><table id="rost" class="rtbl"><thead><tr><th>位置</th><th>球員</th><th class="n sortable" data-k="0">今年<i>⇅</i></th><th class="n sortable" data-k="1">近7場<i>⇅</i></th><th class="n sortable newc" data-k="2">分鐘<i>⇅</i></th><th class="n sortable" data-k="3">去年<i>⇅</i></th><th class="n sortable" data-k="4">持有%<i>⇅</i></th><th>本週</th><th class="n">下週</th><th class="n">預測排名</th><th>判斷</tr></thead><tbody>' +
     D.roster.map(function (p, ri) {
       var x = RX[p[1]] || {}, md = (x.m7 != null && x.m27 != null) ? Math.round((x.m7 - x.m27) * 10) / 10 : null;
       var inj = x.inj ? '<span class="chip c-drop">' + esc(x.inj) + '</span>' : '';
@@ -469,7 +481,8 @@ body.locked > :not(#pwgate){display:none !important}
         '<td class="n fp" data-th="今年">' + f1(p[3]) + '</td><td class="n ' + (p[4] >= p[3] ? 'up' : 'down') + '" data-th="近7場">' + f1(p[4]) + '</td>' +
         '<td class="n newc" data-th="分鐘">' + (x.m7 == null ? '—' : Math.round(x.m7) + (md == null ? '' : ' <small class="' + (md > 0 ? 'up' : md < 0 ? 'down' : 'muted') + '">(' + (md > 0 ? '+' : '') + Math.round(md) + ')</small>')) + '</td>' +
         '<td class="n" data-th="去年">' + f1(p[5]) + '</td><td class="n" data-th="持有%">' + f1(p[6]) + '</td>' +
-        '<td data-th="本週">' + days(p[7]) + '</td><td class="n" data-th="下週">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
+        '<td data-th="本週">' + days(p[7]) + '</td><td class="n" data-th="下週">' + (p[8] == null ? '—' : p[8] + ' 場') + '</td>' +
+        '<td class="n" data-th="預測排名">' + projCell(p[1]) + '</td><td><span class="chip c-' + p[9] + '">' + esc(p[10]) + '</span></td></tr>';
     }).join('') + '</tbody></table></div>' +
     stale('fridayLineup') + '<div class="callout">' + esc(D.fridayLineup) + '</div>';
 
@@ -573,6 +586,47 @@ body.locked > :not(#pwgate){display:none !important}
     }).join('') + '</div>';
   $('foot').innerHTML = D.foot.map(function (t) { return '<div>' + esc(t) + '</div>'; }).join('');
 })();
+</script>
+<script>
+// 超級球探榜:自由市場裡最近 5 場突然變強、或剛升上先發上場時間大增的人(build.mjs 的 A.scout)
+(function () { try {
+  var D = JSON.parse(document.getElementById('data').textContent), S = D.scout, host = document.getElementById('scout');
+  if (!host || !S || !S.rows) return;
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var f1 = function (v) { return v == null ? '—' : Number(v).toFixed(1); };
+  host.innerHTML = '<h2>超級球探榜<span class="label">自由市場 · 近 5 場爆發或新進先發</span></h2>' +
+    '<p class="note">' + esc(S.note) + ' 計算時間 ' + esc(S.asof) + '。</p>' +
+    (!S.rows.length ? '<p class="note">目前沒有符合條件的自由球員。</p>' :
+    '<div class="picks">' + S.rows.map(function (r, i) {
+      return '<div class="pick' + (i === 0 ? ' first' : '') + '"><div class="hd"><b>' + esc(r[0]) + '</b><span class="note">' + esc(r[2]) + ' · ' + esc(r[1]) + '</span>' +
+        '<span class="chip ' + (r[3] === 'Waiver' ? 'c-watch' : 'c-ok') + '">' + (r[3] === 'Waiver' ? 'Waiver' : 'FA') + '</span>' +
+        (r[11] ? '<span class="chip c-core">新進先發</span>' : '') + (r[12] ? '<span class="chip c-drop">' + esc(r[12]) + '</span>' : '') + '</div>' +
+        '<div class="stat">近 5 場 <b>' + f1(r[5]) + '</b> · 去年 ' + f1(r[6]) + ' · 今年其他場 ' + f1(r[7]) + ' · 持有 ' + f1(r[4]) + '%</div>' +
+        '<div class="stat">分鐘 近 3 場 ' + f1(r[8]) + ' / 之前 ' + f1(r[9]) + ' · 近 3 場先發 ' + r[10] + ' 場</div>' +
+        '<div class="stat">近 5 場得分(新→舊):' + esc((r[13] || []).join('、')) + '</div><div>' + esc(r[14]) + '</div></div>';
+    }).join('') + '</div>');
+} catch (e) {} })();
+// Top 70 潛力榜:目前在 top 70 外、預測球季結束會擠進來的人(build.mjs 的 A.topN,n = 70)
+(function () { try {
+  var D = JSON.parse(document.getElementById('data').textContent), T = D.topN, host = document.getElementById('topn');
+  if (!host || !T || !T.rows) return;
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var f1 = function (v) { return v == null ? '—' : Number(v).toFixed(1); };
+  var own = function (o) { return o === 'aespa' ? '<span class="chip c-core">你的</span>' : o === 'FA' ? '<span class="chip c-ok">FA</span>' : '<span class="chip c-ir">' + esc(o) + '</span>'; };
+  var tc = { '高': 'c-ok', '中': 'c-watch', '低': 'c-ir' };
+  host.innerHTML = '<h2>Top ' + T.n + ' 潛力榜<span class="label">預測球季結束擠進前 ' + T.n + ' 的人</span></h2>' +
+    '<p class="note">目前第 ' + T.n + ' 名每場 ' + f1(T.curN) + ' 分,預測球季結束時第 ' + T.n + ' 名約 ' + f1(T.pN) + ' 分。' + esc(T.note) + ' 計算時間 ' + esc(T.asof) + '。</p>' +
+    (!T.rows.length ? '<p class="note">目前沒有接近門檻的球員。</p>' :
+    '<div class="t50">' + T.rows.map(function (r, i) {
+      var lbl = i === 0 && r[3] === 'FA' ? '<div class="row-lbl t50lbl">自由市場(現在就撿得到)</div>' :
+        r[3] !== 'FA' && (i === 0 || T.rows[i - 1][3] === 'FA') ? '<div class="row-lbl t50lbl">已有主(交易目標)</div>' : '';
+      return lbl + '<div class="t50r"><div class="hd"><b>' + esc(r[0]) + '</b><span class="note">' + esc(r[2]) + ' · ' + esc(r[1]) + '</span>' + own(r[3]) +
+        (r[13] ? '<span class="chip c-drop">' + esc(r[13]) + '</span>' : '') + '</div>' +
+        '<div class="t50rank">目前第 <b>' + r[9] + '</b> 名 → 預測第 <b>' + r[10] + '</b> 名</div>' +
+        '<div class="stat">今年 ' + f1(r[4]) + '(' + r[5] + ' 場)· 去年 ' + (r[6] != null ? f1(r[6]) + '(' + r[7] + ' 場)' : r[7] > 0 ? '只打 ' + r[7] + ' 場,不採計' : '沒出賽') + ' → 預測 <b>' + f1(r[8]) + '</b></div>' +
+        '<div class="t50p"><span class="chip ' + tc[r[11]] + '">' + esc(r[11]) + '</span><div class="t50bar"><i style="width:' + r[12] + '%"></i></div><span class="note">回測約 ' + r[12] + '% 進 top ' + T.n + '</span></div></div>';
+    }).join('') + '</div>');
+} catch (e) {} })();
 </script>
 <script>
 (function () {
@@ -861,6 +915,8 @@ body.locked > :not(#pwgate){display:none !important}
   function player(id) {
     var p = LG[id], g = p[8];
     var h = '<div class="sub">今年 ' + f1(p[2]) + ' · 近 7 場 ' + f1(p[3]) + ' · 近 15 場 ' + f1(p[4]) + ' · 去年 ' + f1(p[5]) + ' · 持有 ' + f1(p[6]) + '%</div>';
+    var pk = (D.projRank || {})[id];
+    if (pk) h += '<div class="sub">預測今年每場平均排名 <b>第 ' + pk[1] + ' 名</b>(目前第 ' + pk[2] + ' 名,預測每場 ' + f1(pk[0]) + ' 分)</div>';
     if (p[7]) h += '<div class="inj">' + esc(INJ[p[7]] || p[7]) + '</div>'; h += adv(id); h += ana(id); h += mates(id); h += newsBox(p[0]); h += sched(p[1]);
     if (!g.length) return open('<b>' + esc(p[0]) + '</b> <small class="note">' + esc(p[1]) + '</small>', h + '<p class="note">今年還沒有出賽紀錄。</p>');
     h += '<div class="row-lbl">最近 ' + g.length + ' 場</div><div class="scroll"><table><thead><tr><th>日期</th><th>對手</th><th class="n">分數</th><th class="n">得分</th><th class="n">籃板</th><th class="n">助攻</th><th class="n">抄截</th><th class="n">阻攻</th><th class="n">失誤</th><th class="n">分鐘</th></tr></thead><tbody>' +
@@ -906,7 +962,7 @@ body.locked > :not(#pwgate){display:none !important}
     var b = document.createElement('button'); b.type = 'button'; b.className = 'plb'; b.setAttribute('data-pid', find(nm, team)); b.textContent = nm; el.replaceChild(b, n);
   }
   document.querySelectorAll('td.name').forEach(function (td) { var sm = td.querySelector('small'); var tm = sm ? sm.textContent.split(' · ')[0].trim() : ''; wrapFirst(td, tm); });
-  document.querySelectorAll('.pick .hd b').forEach(function (b) { var n = b.textContent; var id = find(n); if (id) { b.innerHTML = '<button type="button" class="plb" data-pid="' + id + '">' + esc(n) + '</button>'; } });
+  document.querySelectorAll('.pick .hd b, .t50r .hd b').forEach(function (b) { var n = b.textContent; var id = find(n); if (id) { b.innerHTML = '<button type="button" class="plb" data-pid="' + id + '">' + esc(n) + '</button>'; } });
   // names inside activity lines
   var names = Object.keys(LG).map(function (i) { return LG[i][0]; }).sort(function (a, b) { return b.length - a.length; });
   document.querySelectorAll('.act li, .act .callout').forEach(function (el) {
