@@ -11,7 +11,9 @@ model: sonnet
 ## 步驟
 
 1. 在 repo 根目錄 `git pull -q`。
-2. 讀 `brief.json`(約 4 KB)。看 `numbersAsof` 是否是今天;太舊就到 GitHub Actions 手動觸發一次 `update-data`(`gh workflow run update-data`),跑完再 `git pull` 重讀。
+2. 每次都先手動觸發一次 `update-data`,等它跑完再 `git pull`,確保數字包含剛打完的比賽(排程不一定在比賽結束後就重算過)。整段照抄執行,約 1 分鐘:
+   `t=$(date -u +%Y-%m-%dT%H:%M:%SZ); gh workflow run update-data && for i in 1 2 3 4 5 6 7 8 9 10; do id=$(gh run list --workflow update-data --event workflow_dispatch -L 1 --json databaseId,createdAt -q ".[0] | select(.createdAt >= \"$t\") | .databaseId"); [ -n "$id" ] && break; sleep 3; done; gh run watch "$id" --exit-status > /dev/null && git pull -q`
+   失敗就照實回報,不要用舊數字寫判斷。成功後讀 `brief.json`(約 4 KB)。
 3. 需要細節時只取特定欄位,例如:
    `node -e "const h=require('fs').readFileSync('v2/index.html','utf8');const A=JSON.parse(h.match(/<script id=\"data\" type=\"application\/json\">([\s\S]*?)<\/script>/)[1]);console.log(JSON.stringify(A.picks))"`
 4. Threads:追蹤清單共 6 個帳號,每個都要讀(Leo 傳新帳號時加進這份清單):
