@@ -5,7 +5,7 @@ Leo 的 ESPN NBA fantasy 聯盟(TPBL,10 隊,H2H Points,2026-27 季,leagueId 4064
 ## 檔案與資料流
 
 - GitHub Actions(`.github/workflows/update.yml`,排程 + push `data.json`/`*.mjs` 觸發):`gate.mjs` → `update.mjs` → `build.mjs` → `brief.mjs`,再由 bot commit `data.json`、`v2/index.html`、`brief.json`。
-- `update.mjs`:ESPN 數字 → `data.json`(戰績、對戰、陣容與評語、賽程 `sched`、傷兵 `injuries`、`autoAsof`)。
+- `update.mjs`:ESPN 數字 → `data.json`(戰績、對戰、陣容與評語、賽程 `sched`、傷兵 `injuries`、`autoAsof`)。邏輯在 `v2/live.mjs`,網頁打開、切回前景、開著每 2 分鐘、偵測到陣容或撿人變動時,也在瀏覽器裡跑同一份並疊到快照上(快取在 `localStorage` 的 `aespaLive`),所以這部分要改只改 `v2/live.mjs`,而且不能用 Node 專用 API。
 - `build.mjs`:`data.json` 的白名單欄位(`OVER`)疊到 `v2/index.html` 嵌入資料,再算衍生欄位:streaming 試算、增補建議 `picks/pickNote`、異動說明 `acqNote`、潛力發掘 `sleepers`、陣容檢查 `fridayLineup`、傷病說明 `rosterExtra` 等。新欄位要給前端用,記得加進 `OVER`。
 - `brief.mjs`:從網站資料切出約 4 KB 的 `brief.json`(含 `staleSections`)。
 - `apply-hand.mjs hand.json`:把每日手寫判斷(`todo`、`threads`)套進 `data.json`,並更新 `handAsof` 與 `asof`。
@@ -15,7 +15,7 @@ Leo 的 ESPN NBA fantasy 聯盟(TPBL,10 隊,H2H Points,2026-27 季,leagueId 4064
 
 - 只有 `todo` 和 `threads` 是手寫,各有 `handAsof` 撰寫日期;網站會在過期的手寫內容旁標日期。其他區塊全部由程式每次重算,要改內容就改程式,不要手改 `data.json`。
 - `#recap` 會被「今天的比賽」即時小工具取代,不用寫 `recap`。
-- 自動待辦(前端產生)已經涵蓋:先發調整、傷兵先發、增補首選、本週局勢、背靠背。手寫 `todo` 只寫這些沒有涵蓋的策略判斷。
+- 自動待辦(前端產生)已經涵蓋:先發調整、傷兵先發、增補首選、本週局勢、背靠背、上場時間變多/變少。手寫 `todo` 只寫這些沒有涵蓋的策略判斷。
 
 ## 每日更新(省 token)
 
@@ -33,7 +33,7 @@ Leo 的 ESPN NBA fantasy 聯盟(TPBL,10 隊,H2H Points,2026-27 季,leagueId 4064
 
 1. 純後端/資料修正可以直接 push `main`;push 後一定要對照 ESPN 或正式網站驗證才算完成。
 2. 會改到畫面(版面、文字、樣式、新功能)先讓 Leo 看過再 push `main`(push 會立刻觸發 Actions 上線)。
-3. 每個版本要更新 `data.json` 的 `version` 與 `changelog`(目前 v2.31)。
+3. 每個版本要更新 `data.json` 的 `version` 與 `changelog`(目前版本以 `data.json` 為準)。
 4. **絕對不要記住、輸入或使用 Leo 的 ESPN 密碼**;聯盟已公開,不需要登入。
 5. 查不到的資料(Reddit、Threads 搜尋等)要明說,不要假裝有查到。
 6. 用繁體中文溝通。Leo 用 iPhone,常傳截圖。

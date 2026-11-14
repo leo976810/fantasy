@@ -4,7 +4,7 @@ on:
     - cron: '17,47 * * * *'
   workflow_dispatch:
   push:
-    paths: ['data.json', 'build.mjs', 'update.mjs', 'gate.mjs', 'brief.mjs']
+    paths: ['data.json', 'build.mjs', 'update.mjs', 'v2/live.mjs', 'gate.mjs', 'brief.mjs']
 permissions:
   contents: write
 concurrency:
