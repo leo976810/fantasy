@@ -24,7 +24,7 @@ Leo 的 ESPN NBA fantasy 聯盟(TPBL,10 隊,H2H Points,2026-27 季,leagueId 4064
 ## 聯盟規則
 
 - 陣容:PG、SG、SF、PF、C、G、F、3 UTIL、3 板凳、2 IR;每日鎖陣容;有 waivers(24 小時)。
-- 每個比賽日最多加 1 人(ESPN `matchupAcquisitionLimit` 1、`matchupLimitPerScoringPeriod`)。
+- 每週最多加 7 人(ESPN `matchupAcquisitionLimit` 1 × 比賽日數,`matchupLimitPerScoringPeriod`;可以同一天加好幾個)。新的一週從美東週日第一場開打時起算(台灣週一清晨,時間依賽程而變)。
 - **C 資格整隊最多 4 人**(其他位置無上限);streaming 試算已遵守。
 - 計分:PTS 1、FGM 2、FGA -1、FTM 1、FTA -1、3PM 2、3PA -1、OREB 1、REB 1、AST 2、STL 4、BLK 4、TO -2、PF -1、QD 20、Team Win 2。
 - 評估球員要合併上季與本季,roster% 只當輔助。

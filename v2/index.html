@@ -407,7 +407,8 @@ body.locked > :not(#pwgate){display:none !important}
     var maxDiff = Math.max(1, Math.max.apply(null, (Bu.up || []).concat(Bu.down || []).map(function (r) { return Math.abs(r.diff); })));
     function row(r, cls) {
       var pct = Math.min(100, Math.max(5, Math.round(Math.abs(r.diff) / maxDiff * 100)));
-      return '<li><div class="brhead"><span class="brname">' + esc(r.name) + '<small>' + esc(r.team) + ' ' + esc(r.opp) + '</small></span>' +
+      var hd = !r.holder ? '' : r.holder === 'aespa' ? ' <span class="chip c-core">你的</span>' : r.holder === 'FA' ? ' <span class="chip c-ok">FA</span>' : ' <span class="chip c-ir">' + esc(r.holder) + '</span>';
+      return '<li><div class="brhead"><span class="brname">' + esc(r.name) + '<small>' + esc(r.team) + ' ' + esc(r.opp) + '</small>' + hd + '</span>' +
         '<span class="bbarval ' + cls + '">' + (r.diff >= 0 ? '+' : '') + f1(r.diff) + '</span></div>' +
         '<div class="bbar"><i class="' + cls + '" style="width:' + pct + '%"></i></div>' +
         '<div class="brdetail">預期 ' + f1(r.exp) + ' → 實際 ' + f1(r.score) + ' · ' + r.pts + '分 ' + r.reb + '板 ' + r.ast + '助' +

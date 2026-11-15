@@ -380,7 +380,10 @@ try { // auto judgments: picks/pickNote/acqNote/sleepers/fridayLineup are rule-b
   let addedToday = null;
   try { const tj = await get(L + '?view=mTransactions2&scoringPeriodId=' + today);
     addedToday = (tj.transactions || []).some(t => t.teamId === meId && t.status === 'EXECUTED' && (t.items || []).some(i => i.type === 'ADD')); } catch (e) {}
-  A.acqNote = (acq.matchupLimitPerScoringPeriod ? '這個聯盟每個比賽日最多加 ' + acq.matchupAcquisitionLimit + ' 人' : '本週最多加 ' + acq.matchupAcquisitionLimit + ' 人') + '(ESPN 設定),ESPN 記錄你本週(第 ' + cur + ' 輪)已經加入 ' + used + ' 次。' +
+  // matchupLimitPerScoringPeriod: the weekly cap is limit × days in the matchup, usable on any day (several adds in one day is fine)
+  const nDays = ((A.matchupDays || {}).days || []).length || 7;
+  const cap = acq.matchupLimitPerScoringPeriod ? acq.matchupAcquisitionLimit * nDays : acq.matchupAcquisitionLimit;
+  A.acqNote = '本週最多加 ' + cap + ' 人(ESPN 設定' + (acq.matchupLimitPerScoringPeriod ? ':每個比賽日 ' + acq.matchupAcquisitionLimit + ' 次 × ' + nDays + ' 天,可以集中在同一天用' : '') + '),新的一週從美東週日第一場開打時起算(台灣週一清晨)。ESPN 記錄你本週(第 ' + cur + ' 輪)已經加入 ' + used + ' 次' + (used >= cap ? ',已經用完,要等下週。' : ',還能加 ' + (cap - used) + ' 次。') +
     (addedToday === null ? '' : addedToday ? '今天已經加過人了。' : '今天還沒加人。') + 'Waiver 狀態的球員要申請、等處理;自由球員加了立刻生效。';
   // sleepers: free agents whose last-7 minutes rose 4+ over their season average while their team has someone OUT
   const outBy = {}; Object.values(RO).flat().concat(FAL).forEach(p => { if (p.injuryStatus === 'OUT') { const d = (A.injDates || {})[p.fullName]; (outBy[p.proTeamId] = outBy[p.proTeamId] || []).push(p.fullName + (d && d[1] ? '(' + d[1] + ')' : '')); } });
@@ -578,6 +581,7 @@ try { // per-game logs for every rostered player and the top free agents
   // changes) to auto-write a one-line comment on anyone who keeps showing up either way.
   try {
     const dayLabel = dd(B.doneSp);
+    const holder = {}; Object.keys(RO).forEach(tid => { const tm = (meta.teams || []).find(x => String(x.id) === String(tid)); RO[tid].forEach(p => { holder[p.id] = tm ? CTX.nm(tm) : '?'; }); });
     const rows = [];
     Object.keys(all).forEach(id => {
       const p = all[id], L0 = LG[id]; if (!L0) return;
@@ -587,7 +591,7 @@ try { // per-game logs for every rostered player and the top free agents
       const s27 = L0[2], l15 = L0[4], s26 = L0[5];
       const exp = s27 != null ? s27 : (s26 != null ? s26 : l15);
       if (exp == null || exp < 10) return;
-      rows.push({ id: +id, name: p.fullName, team: abbr[p.proTeamId], opp, score, exp: r1(exp), diff: r1(score - exp), pts, reb, ast, stl, blk, to, own: L0[6] });
+      rows.push({ id: +id, name: p.fullName, team: abbr[p.proTeamId], opp, score, exp: r1(exp), diff: r1(score - exp), pts, reb, ast, stl, blk, to, own: L0[6], holder: holder[id] || 'FA' });
     });
     rows.sort((a, b) => b.diff - a.diff);
     const up = rows.filter(r => r.diff > 0).slice(0, 10);
