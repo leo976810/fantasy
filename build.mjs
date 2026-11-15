@@ -423,7 +423,18 @@ try { // league activity: adds/drops in the last 3 days
     (t.items || []).forEach(i => { const p = known[i.playerId]; if (!p) return; const k = ds + '|' + t.teamId + '|' + (t.id || '') ; const g = grp[k] = grp[k] || { ds, team: teamName[t.teamId], add: [], drop: [] };
       if (i.type === 'ADD') g.add.push(lab(p, t.type === 'WAIVER')); else if (i.type === 'DROP') g.drop.push(lab(p, false)); }); });
   const rows = Object.values(grp).map(g => [g.ds, g.team, [g.add.length ? '撿 ' + g.add.join('、') : '', g.drop.length ? '丟 ' + g.drop.join('、') : ''].filter(Boolean).join(',')]);
-  A.activity = Object.assign({}, A.activity, { note: '最近 3 天聯盟內的撿人、丟人(括號是預估每場分數)。資料時間 ' + new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' }) + '(台北時間)。', rows });
+  // grab: players dropped in these 3 days who are still unowned and project 2+ better than my weakest healthy player
+  // (recomputed every run; it used to be a hand-written leftover that never refreshed)
+  const myT = meta.teams.find(t => nm(t) === 'aespa'), owned = new Set(); Object.values(RO).forEach(a => a.forEach(p => owned.add(p.id)));
+  const mineH = (RO[myT && myT.id] || []).filter(p => p.injuryStatus !== 'OUT').map(p => ({ p, e: blend(p) })).filter(x => x.e != null).sort((a, b) => a.e - b.e);
+  const weak = mineH[0], faOwn = {}; FAL.forEach(p => { faOwn[p.id] = p.own; });
+  const gseen = new Set(), grab = [];
+  tx.forEach(t => (t.items || []).forEach(i => { if (i.type !== 'DROP' || gseen.has(i.playerId) || owned.has(i.playerId)) return; gseen.add(i.playerId);
+    const p = known[i.playerId]; const e = p && blend(p); if (!weak || e == null || e < weak.e + 2 || p.injuryStatus === 'OUT') return;
+    const wv = faOwn[p.id] ? faOwn[p.id] === 'Waiver' : (t.processDate || t.proposedDate) > Date.now() - 86400000;
+    grab.push([p.fullName, r1(e), [wv ? 'waiver' : '自由球員', p.injuryStatus === 'DAY_TO_DAY' ? 'DTD' : null].filter(Boolean).join(',')]); }));
+  grab.sort((a, b) => b[1] - a[1]);
+  A.activity = Object.assign({}, A.activity, { grab: weak ? { weak: weak.p.fullName, weakEst: r1(weak.e), rows: grab.slice(0, 5) } : null, note: '最近 3 天聯盟內的撿人、丟人(括號是預估每場分數)。資料時間 ' + new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hourCycle: 'h23' }) + '(台北時間)。', rows });
   log.push('activity ' + rows.length + ' (tx ' + tx.length + ')');
 } catch (e) { log.push('activity FAIL ' + e.message); }
 
