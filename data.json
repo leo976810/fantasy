@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-15 16:35(台北時間)",
+ "asof": "2026-11-16 16:35(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2388,15 +2388,103 @@
   ]
  ],
  "threads": {
-  "note": "未登入讀取 6 個追蹤帳號的公開頁面,各取最新 2 篇。",
+  "note": "6 個追蹤帳號各讀最新 2–3 篇(未登入狀態)。",
   "accounts": [
+   {
+    "handle": "@fantasy_baskets_",
+    "label": "范特西籃球",
+    "post": "/@fantasy_baskets_/post/DfyuYpIGioh",
+    "age": "11/16",
+    "time": "2026-11-16T06:35:15.000Z",
+    "sum": "Mo Bamba 三分 6 投 6 中,恭喜有洗到他的人。"
+   },
+   {
+    "handle": "@fantasy_baskets_",
+    "label": "范特西籃球",
+    "post": "/@fantasy_baskets_/post/DfyuMNBGmwS",
+    "age": "11/16",
+    "time": "2026-11-16T06:33:34.000Z",
+    "sum": "11/16 爆胎組:Brandon Miller、Booker、Jabari Smith Jr.、Acuff(9 失誤)、Josh Hart 0 分等。"
+   },
+   {
+    "handle": "@fantasy_baskets_",
+    "label": "范特西籃球",
+    "post": "/@fantasy_baskets_/post/Dfyt4bqmmnk",
+    "age": "11/16",
+    "time": "2026-11-16T06:30:52.000Z",
+    "sum": "11/16 爆發組:Luka 43 分、SGA 37 分零失誤、Harper 生涯新高 31 分、Tatum 30 分鐘 32 分、Bamba 26 分。"
+   },
+   {
+    "handle": "@w.g_balls",
+    "label": "爆走爆胎整理",
+    "post": "/@w.g_balls/post/Dfyj7tqk3aN",
+    "age": "11/16",
+    "time": "2026-11-16T05:03:56.000Z",
+    "sum": "11/16 爆胎榜:Flagg、Trae 0 分、McCain、Jalen Green、Booker;又爛又強是 Brunson 與 Acuff。"
+   },
+   {
+    "handle": "@w.g_balls",
+    "label": "爆走爆胎整理",
+    "post": "/@w.g_balls/post/Dfyj8IGE9PI",
+    "age": "11/16",
+    "time": "2026-11-16T05:03:59.000Z",
+    "sum": "11/16 爆走榜:Luka、SGA、Tatum、Harper、Barnes、Towns 28+17,Maxey 27 分也在榜上。"
+   },
+   {
+    "handle": "@emilyca95112",
+    "label": "灣區小市民",
+    "post": "/@emilyca95112/post/Dfx2KICGGJz",
+    "age": "11/16",
+    "time": "2026-11-15T22:23:56.000Z",
+    "sum": "Week 5 預覽:週二四六適合補人;Curry 腹斜肌撕裂可能缺約一個月,看 Melton、Podziemski;Reaves 缺陣看 Sexton。"
+   },
+   {
+    "handle": "@emilyca95112",
+    "label": "灣區小市民",
+    "post": "/@emilyca95112/post/Dfx2Kg1GLnv",
+    "age": "11/16",
+    "time": "2026-11-15T22:24:00.000Z",
+    "sum": "續篇:灰熊傷兵多看 Stewart、Hendricks;Murphy 缺陣看 Saddiq Bey;Caleb Wilson 手骨折 4–6 週,Patrick Williams 受益。"
+   },
+   {
+    "handle": "@fantasytaiwanbaseball",
+    "label": "fantasytaiwan",
+    "post": "/@fantasytaiwanbaseball/post/DfxDe1vk2v-",
+    "age": "11/15",
+    "time": "2026-11-15T15:01:07.000Z",
+    "sum": "11/15 收盤:Giannis、Kyrie、Cade 上漲;Wells、Herb Jones、Dëmin 下跌;Dejounte 扭傷又要求交易,建議撿 Fears。"
+   },
+   {
+    "handle": "@nbafantasybible",
+    "label": "NBA Fantasy Bible",
+    "post": "/@nbafantasybible/post/Dfw6zzhkUve",
+    "age": "11/15",
+    "time": "2026-11-15T13:45:21.000Z",
+    "sum": "Week 5 四晚三賽組合:MIN/POR 吃週一二四、DET/LAL/TOR/UTA 吃週二三五等,適合排 stream。"
+   },
+   {
+    "handle": "@nbafantasybible",
+    "label": "NBA Fantasy Bible",
+    "post": "/@nbafantasybible/post/Dfw6mUJEQIw",
+    "age": "11/15",
+    "time": "2026-11-15T13:43:31.000Z",
+    "sum": "Week 5 每日場數:週三 12 場最多,週四只有 4 場,少場日最適合補人。"
+   },
+   {
+    "handle": "@nbafantasybible",
+    "label": "NBA Fantasy Bible",
+    "post": "/@nbafantasybible/post/Dfw6cXvEVu1",
+    "age": "11/15",
+    "time": "2026-11-15T13:42:09.000Z",
+    "sum": "Yahoo 11/15 被丟最多:Jaylen Wells、Bones Hyland、Nolan Traore、Dëmin 等。"
+   },
    {
     "handle": "@w.g_balls",
     "label": "爆走爆胎整理",
     "post": "/@w.g_balls/post/DfwSxaXEd0e",
     "age": "11/15",
     "time": "2026-11-15T07:55:29.000Z",
-    "sum": "W5 場次表:13 隊打 4 場(含 BOS、CHI、DEN、NYK、DET),只有黃蜂 2 場,並列出每組背靠背日期。"
+    "sum": "Week 5 場次表:13 隊 4 場、黃蜂只有 2 場,並列出各隊背靠背日期。"
    },
    {
     "handle": "@fantasy.moose",
@@ -2404,31 +2492,7 @@
     "post": "/@fantasy.moose/post/DfwHNY8FVw8",
     "age": "11/15",
     "time": "2026-11-15T06:14:27.000Z",
-    "sum": "W5 賽程攻略:輪替大致穩定,本週該衝場次;黃蜂只有 2 場,用阿拓/灰狼接鵜鶘/國王的組合 2 到 3 個 move 就能拿 5 到 6 場,並列出可能回歸與 B2B 輪休觀察名單。"
-   },
-   {
-    "handle": "@fantasy_baskets_",
-    "label": "范特西籃球",
-    "post": "/@fantasy_baskets_/post/DfwGjHvmtNz",
-    "age": "11/15",
-    "time": "2026-11-15T06:08:41.000Z",
-    "sum": "11/15 爆胎組:Gobert 0 投 7 中、LaMelo 25 投 7 中、Flagg 三分 0/6,Bey、Giddey、Kuminga 也打鐵。"
-   },
-   {
-    "handle": "@fantasy_baskets_",
-    "label": "范特西籃球",
-    "post": "/@fantasy_baskets_/post/DfwGEntmiS-",
-    "age": "11/15",
-    "time": "2026-11-15T06:04:31.000Z",
-    "sum": "11/15 爆發組:騎士主力輪休讓 Proctor 刷大三元,字母哥連三場 30+,Irving 7 顆三分,Coward、Braun、Sharpe、Huerter 也有亮眼數據。"
-   },
-   {
-    "handle": "@w.g_balls",
-    "label": "爆走爆胎整理",
-    "post": "/@w.g_balls/post/Dfv92qaE-5O",
-    "age": "11/15",
-    "time": "2026-11-15T04:52:42.000Z",
-    "sum": "11/15 爆走榜:字母哥、Irving、Klay、Jokić、Dosunmu、Proctor 領銜,Jamal Murray 23 分 9 助也在榜上。"
+    "sum": "W5 賽程策略:輪替已趨穩,該衝場次;黃蜂只有 2 場,Grayson Allen 淺盟可丟;Murphy、BI 可能本週回歸。"
    },
    {
     "handle": "@fantasytaiwanbaseball",
@@ -2436,7 +2500,7 @@
     "post": "/@fantasytaiwanbaseball/post/DfuuvMVE4gy",
     "age": "11/15",
     "time": "2026-11-14T17:21:22.000Z",
-    "sum": "11/14 收盤:Sengun 43 分、Franz 在 Banchero 缺陣 2 到 4 週期間球權穩、Bam 0 失誤 37 分;跌的是 Watson、Anunoby、Wiggins,附傷病時程表。"
+    "sum": "11/14 收盤:Sengun、Franz(Banchero 缺 2–4 週)、Bam 上漲;Watson、Anunoby、Wiggins 下跌。"
    },
    {
     "handle": "@fantasy.moose",
@@ -2444,51 +2508,11 @@
     "post": "/@fantasy.moose/post/DftqPDnlZTP",
     "age": "11/14",
     "time": "2026-11-14T07:22:48.000Z",
-    "sum": "傷兵潮替代名單分三級:Jenkins、Melton、Holiday、Grayson Allen 等列最高級,Mara、Lopez、Dunn 等次之,並提醒有三星級可撿就不必硬養新秀。"
-   },
-   {
-    "handle": "@nbafantasybible",
-    "label": "NBA Fantasy Bible",
-    "post": "/@nbafantasybible/post/DfszHbmkbbO",
-    "age": "11/14",
-    "time": "2026-11-13T23:21:10.000Z",
-    "sum": "Yahoo 11/13 交易熱門:Harden、RJ Barrett、Castle、Mitchell、Jaylen Brown 居前,作者認為榜上不少是買低對象。"
-   },
-   {
-    "handle": "@nbafantasybible",
-    "label": "NBA Fantasy Bible",
-    "post": "/@nbafantasybible/post/DfrvmVkEYZN",
-    "age": "11/13",
-    "time": "2026-11-13T13:31:11.000Z",
-    "sum": "Yahoo 11/13 熱門加入:Melton、Meleek Thomas、Jaylen Wells、Jalen Smith、Cissoko 前五。"
-   },
-   {
-    "handle": "@emilyca95112",
-    "label": "灣區小市民",
-    "post": "/@emilyca95112/post/DfrFPxNG1m6",
-    "age": "11/13",
-    "time": "2026-11-13T07:21:06.000Z",
-    "sum": "Yahoo 重新開放類似 IL+ 的設定,盟主可讓 Questionable、Doubtful、Probable 的球員也能放進傷兵格(ESPN 聯盟不適用)。"
-   },
-   {
-    "handle": "@fantasytaiwanbaseball",
-    "label": "fantasytaiwan",
-    "post": "/@fantasytaiwanbaseball/post/DfpegClDzN-",
-    "age": "11/13",
-    "time": "2026-11-12T16:23:18.000Z",
-    "sum": "11/12 收盤:Jokić、Harper、Sengun 漲,Pritchard、Buzelis、Dejounte 跌;Curry 腹部受傷等 MRI,建議先撿 Podziemski。"
-   },
-   {
-    "handle": "@emilyca95112",
-    "label": "灣區小市民",
-    "post": "/@emilyca95112/post/DfgkgvaG8tE",
-    "age": "11/9",
-    "time": "2026-11-09T05:22:39.000Z",
-    "sum": "W4 預覽:21 組 B2B、看好尼克 4 場賽程,並整理巫師、暴龍等傷兵的替補人選;之後每日傷兵更新改發 IG。"
+    "sum": "傷兵潮替代名單分三級:必持有含 Jenkins、Melton、Holiday、Grayson Allen;DJJ、Lopez 列建議持有;Missi 回歸會壓縮 Queen。"
    }
   ],
   "search": [],
-  "skipped": "關鍵字搜尋未登入時無法依時間排序,本次未做。@emilyca95112 近 2 天沒有新貼文,沿用最新 2 篇;@fantasy_baskets_ 另一篇「誰昨天換日有撿他」主角在圖片裡、文字讀不到,略過。"
+  "skipped": "關鍵字搜尋在未登入時無法依時間排序,本次未做。"
  },
  "roster": [
   [
@@ -3629,18 +3653,23 @@
  "todo": [
   {
    "lv": "建議",
-   "t": "今天的增補額度拿來布局下週,首選 Pritchard 而不是 Allen",
-   "d": "本週領先 1098 比 847、只剩週日,勝負大致底定(見本週局勢),今天多撿幾分意義不大。Grayson Allen 今天換 Jalen Green 多 8.6 分最多,但黃蜂下週(W5)只有 2 場;Payton Pritchard 今天也有 1 場(+5.5),塞爾提克下週 4 場、試算多 34.9 分,一次兼顧兩週。"
+   "t": "本週要 stream,先拿 Grayson Allen 的格子",
+   "d": "黃蜂本週只有 2 場(全聯盟最少),Allen 今天才撿但本週能貢獻的場次最少;Klay 熱火有 3 場,先留。對手今天剛丟出 Derrick Jones Jr.(快艇 3 場、增補試算第一),要注意他會先進 waivers。"
   },
   {
    "lv": "建議",
-   "t": "Jalen Green 是下週最先該換掉的人",
-   "d": "他是陣容裡預估場均最低的非 IR 球員(18.4),下週 streaming 名單前五(Josh Hart、Christian Braun、Pritchard、Miles McBride、Matas Buzelis)全部打 4 場、試算都比他多 31 到 39 分。週一開始每天只能加 1 人,先換他,再看第二個要不要動 Mamukelashvili 或 Rollins。"
+   "t": "增補挑週二、週四、週六的比賽日",
+   "d": "本週週三有 12 場,陣容容易排不下;週二 5 場、週四只有 4 場、週六 6 場,新撿的人在這幾天最容易真的上場。"
   },
   {
    "lv": "留意",
-   "t": "Kawhi 預計 11/23 回歸,下週末前先想好要空出誰",
-   "d": "Kawhi(11/23)回來要從 IR 移出,陣容得空一格;Ja Morant 12/1 才回。到時候比較 Rollins、Mamukelashvili 跟當週撿來的 streaming 球員,留下週 W6 場次多的人。另外 C 資格已滿 4 人(Mobley、Kessler、Okongwu、Mamukelashvili),撿中鋒時要一換一。"
+   "t": "對手本週火力缺口大,可以把額度花在下週也有用的人",
+   "d": "對手 Edwards 到 12/21、Kyrie 到 11/18 都缺,Jaxson Hayes 也 OUT;差距見本週局勢。領先夠的話,撿人優先挑下週也有 3–4 場的(例如 Jerami Grant、Keldon Johnson),而不是只看本週場次。"
+  },
+  {
+   "lv": "留意",
+   "t": "Kawhi 預計 11/23 回歸,下週一前決定空出誰",
+   "d": "IR 回來要先騰一個陣容格;目前候選是 Allen、Klay、Missi 這三個低產出或輪換位置。Mobley 預計 11/18 回來,不影響格子。"
   }
  ],
  "autoAsof": "2026/11/16 16:33:58",
@@ -3653,7 +3682,7 @@
   "oppScore": 989
  },
  "handAsof": {
-  "todo": "2026-11-15",
-  "threads": "2026-11-15"
+  "todo": "2026-11-16",
+  "threads": "2026-11-16"
  }
 }
