@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-20 16:14(台北時間)",
+ "asof": "2026-11-21 16:35(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2383,87 +2383,79 @@
   ]
  ],
  "threads": {
-  "note": "6 個追蹤帳號都已讀(未登入,只看得到各帳號最新幾篇)。",
+  "note": "六個追蹤帳號都讀過了(未登入,各取最新幾篇)。",
   "accounts": [
    {
     "handle": "@fantasy_baskets_",
     "label": "范特西籃球",
-    "post": "/@fantasy_baskets_/post/Df86g1HGgFZ",
-    "age": "11/20",
-    "time": "2026-11-20T05:33:38.000Z",
-    "sum": "11/20 爆胎組:你的 Lendeborg 3/11 投籃拖累,LaMelo、Fox、Gobert 也表現差。"
+    "post": "/@fantasy_baskets_/post/Df_pXsjGhoP",
+    "age": "11/21",
+    "time": "2026-11-21T07:01:34.000Z",
+    "sum": "11/21 爆胎組:Naz Reid、Keyonte George、Acuff Jr. 命中率崩盤,Giddey 22 分鐘只拿 2 分。"
    },
    {
     "handle": "@fantasy_baskets_",
     "label": "范特西籃球",
-    "post": "/@fantasy_baskets_/post/Df86WGEGmN5",
-    "age": "11/20",
-    "time": "2026-11-20T05:32:10.000Z",
-    "sum": "11/20 爆發組:Wemby、Lillard、Castle、Holiday 領銜,你的 Boozer 6 投全中、16 分 6 板 5 助。"
+    "post": "/@fantasy_baskets_/post/Df_oskemmS5",
+    "age": "11/21",
+    "time": "2026-11-21T06:55:41.000Z",
+    "sum": "11/21 爆發組:Harden 51 分、SGA 40 分、AD 36 分,Aday Mara 22 分 16 板值得注意。"
    },
    {
     "handle": "@w.g_balls",
-    "label": "微尬.Balls",
+    "label": "爆走爆胎整理",
+    "post": "/@w.g_balls/post/Df_jB7Ik7AW",
+    "age": "11/21",
+    "time": "2026-11-21T06:06:10.000Z",
+    "sum": "11/21 爆走爆胎:Harden 單獨領銜爆走,爆胎榜有 K. George、Reid、Walter、Powell。"
+   },
+   {
+    "handle": "@w.g_balls",
+    "label": "爆走爆胎整理",
+    "post": "/@w.g_balls/post/Df_jCexE9uP",
+    "age": "11/21",
+    "time": "2026-11-21T06:06:14.000Z",
+    "sum": "爆走榜續篇:SGA、AD、Franz、Sengun 大三元等,Quickley 也有 18 分 10 助。"
+   },
+   {
+    "handle": "@fantasytaiwanbaseball",
+    "label": "台灣 fantasy 漲跌幅",
+    "post": "/@fantasytaiwanbaseball/post/Df98WE0Dzt-",
+    "age": "11/20",
+    "time": "2026-11-20T15:08:53.000Z",
+    "sum": "11/20 收盤:Wemby、Castle 領漲,Shamet、Dosunmu 領跌;提醒 Turner、Kuzma 都有肩傷。"
+   },
+   {
+    "handle": "@w.g_balls",
+    "label": "爆走爆胎整理",
     "post": "/@w.g_balls/post/Df81cE0E91P",
     "age": "11/20",
     "time": "2026-11-20T04:49:18.000Z",
-    "sum": "11/20 爆走爆胎:Lillard、Wemby、Castle 爆走,Ryan Rollins、Taylor Hendricks 各 4 抄截;Lendeborg 列爆胎。"
+    "sum": "11/20 爆走爆胎:Lillard、Wemby 爆走,Lendeborg 被列進爆胎榜。"
    },
    {
     "handle": "@fantasytaiwanbaseball",
-    "label": "fantasytaiwan",
+    "label": "台灣 fantasy 漲跌幅",
     "post": "/@fantasytaiwanbaseball/post/Df6_7kMD1p-",
     "age": "11/19",
     "time": "2026-11-19T11:42:30.000Z",
-    "sum": "11/19 漲跌:Franz、Flagg、Giannis 領漲,Pritchard 只拿 16.2 列跌幅榜;提到 Maxey 賽前臨時缺陣。"
-   },
-   {
-    "handle": "@fantasy_baskets_",
-    "label": "范特西籃球",
-    "post": "/@fantasy_baskets_/post/Df62Dz7mnmJ",
-    "age": "11/19",
-    "time": "2026-11-19T10:16:15.000Z",
-    "sum": "11/19 爆胎組:你的 Kessler 罰球 4/10、0 阻攻;Luka 9 失誤、Sengun 眼睛受傷提早退場。"
-   },
-   {
-    "handle": "@w.g_balls",
-    "label": "微尬.Balls",
-    "post": "/@w.g_balls/post/Df6bc6Ek_NI",
-    "age": "11/19",
-    "time": "2026-11-19T06:23:44.000Z",
-    "sum": "11/19 爆走榜:Flagg、Franz、Acuff 大號表現,你的 Jamal Murray 21 分外加 4 抄 2 鍋。"
-   },
-   {
-    "handle": "@w.g_balls",
-    "label": "微尬.Balls",
-    "post": "/@w.g_balls/post/Df6bd_tk-HU",
-    "age": "11/19",
-    "time": "2026-11-19T06:23:53.000Z",
-    "sum": "11/19 又爛又強榜:你的 Okongwu 28 分但 5 失誤、Tatum 24 分 6 失誤。"
+    "sum": "11/19:Franz、Flagg、Giannis 領漲,Maxey 賽前臨時缺陣,Sengun 眼睛受傷退場。"
    },
    {
     "handle": "@nbafantasybible",
-    "label": "NBA Fantasy Bible",
-    "post": "/@nbafantasybible/post/Df5uhFDEs29",
+    "label": "Yahoo 熱門榜",
+    "post": "/@nbafantasybible/post/Df5bRXXEdLR",
     "age": "11/19",
-    "time": "2026-11-18T23:51:08.000Z",
-    "sum": "Yahoo 11/18 交易熱門榜:Gobert、Durant、Naz Reid 居前。"
+    "time": "2026-11-18T21:02:57.000Z",
+    "sum": "Yahoo 11/18 最多人丟:Keldon Johnson、Shannon Jr.、DJJ、Poeltl。"
    },
    {
     "handle": "@nbafantasybible",
-    "label": "NBA Fantasy Bible",
+    "label": "Yahoo 熱門榜",
     "post": "/@nbafantasybible/post/Df5bJAYEePx",
     "age": "11/19",
     "time": "2026-11-18T21:01:50.000Z",
-    "sum": "Yahoo 11/18 熱門加入榜:Sensabaugh、Grimes、Javon Small 前三,Mo Bamba、Nolan Traore 也上榜。"
-   },
-   {
-    "handle": "@fantasytaiwanbaseball",
-    "label": "fantasytaiwan",
-    "post": "/@fantasytaiwanbaseball/post/Df4eXjND3_4",
-    "age": "11/18",
-    "time": "2026-11-18T12:10:44.000Z",
-    "sum": "11/18 收盤:Gobert 與 Fox 同日爆胎,Sensabaugh、Grimes 大爆發。"
+    "sum": "Yahoo 11/18 最多人加入:Sensabaugh、Grimes、Javon Small 居前。"
    },
    {
     "handle": "@emilyca95112",
@@ -2471,7 +2463,7 @@
     "post": "/@emilyca95112/post/Dfx2KICGGJz",
     "age": "11/16",
     "time": "2026-11-15T22:23:56.000Z",
-    "sum": "W5 預覽:週二、四、六適合補人;Curry 腹斜肌撕裂可能缺陣近一個月,先看 Melton、Podziemski。"
+    "sum": "W5 預覽:週二四六適合補人;Curry 可能缺陣近一個月,先看 Melton、Podziemski。"
    },
    {
     "handle": "@emilyca95112",
@@ -2479,7 +2471,7 @@
     "post": "/@emilyca95112/post/Dfx2Kg1GLnv",
     "age": "11/16",
     "time": "2026-11-15T22:24:00.000Z",
-    "sum": "續篇:灰熊傷兵多(含 Edey),可看 Isaiah Stewart、Taylor Hendricks;Caleb Wilson 手骨折缺 4-6 週。"
+    "sum": "續篇:灰熊傷兵多(Edey 等),觀察 Stewart、Hendricks;Caleb Wilson 骨折,Patrick Williams 受惠。"
    },
    {
     "handle": "@fantasy.moose",
@@ -2487,7 +2479,7 @@
     "post": "/@fantasy.moose/post/DfwHNY8FVw8",
     "age": "11/15",
     "time": "2026-11-15T06:14:27.000Z",
-    "sum": "W5 賽程:輪替大致穩定,建議洗滿場次;黃蜂本週只有 2 場,並列出 B2B 可能輪休名單。"
+    "sum": "W5 賽程:輪替已穩定,這週主打場次最大化,用 2~3 次 move 換 5~6 場。"
    },
    {
     "handle": "@fantasy.moose",
@@ -2495,11 +2487,11 @@
     "post": "/@fantasy.moose/post/DftqPDnlZTP",
     "age": "11/14",
     "time": "2026-11-14T07:22:48.000Z",
-    "sum": "傷兵潮替代名單分三級,Jenkins、Melton、Holiday 等列為應該有人持有。"
+    "sum": "傷兵潮替代名單分三級,Jenkins、Melton、Holiday 等列為盟裡必須有人持有。"
    }
   ],
   "search": [],
-  "skipped": "未登入時關鍵字搜尋無法依時間排序,所以沒做關鍵字搜尋。"
+  "skipped": "未登入時 Threads 關鍵字搜尋無法依時間排序,所以沒有做搜尋。灣區小市民 11/17 那篇是出差閒聊、沒有 fantasy 內容,沒有收錄;每日傷兵更新她改發在 IG,這裡讀不到。"
  },
  "roster": [
   [
@@ -3575,23 +3567,23 @@
  "todo": [
   {
    "lv": "先做",
-   "t": "今天就把最後 1 次額度用在 McConnell",
-   "d": "之前留額度是怕 Kessler 回不來,他 11/19 已經上場(10 分 11 板),不必再留。本週還落後 111 分(646 比 757),對手週日有 8 人出賽、我只有 6 人,週六更只有 4 人;McConnell 是自由球員、加了立刻生效,本週剩 2 場,近 7 場平均 29,換掉 VanVleet 最划算。Pritchard 持有率 70% 但近 7 場較低,11/19 只拿 16.2。差距細節見本週局勢。"
+   "t": "最後 1 次額度今天用在 Payton Pritchard 換 VanVleet",
+   "d": "昨天建議的 McConnell 沒加,額度還剩 1 次。Pritchard 是自由球員、加了立刻生效,BOS 週末 2 場;Tatum 標 DTD,他若缺陣 Pritchard 的球權只會更多,等於順便替 Tatum 避險。VanVleet 本季還沒上場,丟掉沒有損失。差距與預估見本週局勢。"
   },
   {
    "lv": "建議",
-   "t": "下週一額度重置後先看 Zach Edey 傷勢",
-   "d": "Edey 被 Chicago Firebugs 丟回自由市場,下週 MEM 有 4 場,是下週 streaming 試算第一名;但 ESPN 標 DTD,而且我 C 資格已滿 4 人,要加就得換掉 Missi。週一先確認他能上場再動,不要一開週就用掉額度。"
+   "t": "下週額度重置後,第一個加人給 Zach Edey 換 Yves Missi",
+   "d": "Chicago Firebugs 11/20 把 Edey 丟回市場。他是下週 streaming 首選(MEM 4 場),C 資格已滿 4 人,換掉同為中鋒、產出最低的 Missi 剛好不超過上限。范特西慕斯也把 Edey 列在傷癒回歸的買低名單,上場時間會慢慢拉高。若週一還在 waiver,就先申請。"
   },
   {
    "lv": "建議",
-   "t": "Kawhi 回歸那天把 Morant 移進 IR",
-   "d": "兩個 IR 被 Kawhi、Mobley 占滿,Morant 預計 12/1 才回卻占著板凳;Kawhi 預計 11/27 回歸,一出 IR 就把 Morant 換進去,不必丟人。"
+   "t": "Mobley 11/29 回歸當天把 Morant 移進 IR",
+   "d": "Morant 預計 12/1、Kawhi 12/3 才回來,Mobley 會先回。Mobley 一離開 IR 就把 Morant 放進去,G 位置就能空出來給健康的人,不用白白卡一個先發格。"
   },
   {
    "lv": "留意",
-   "t": "對手剛撿 Kuzma,週末人數比我多",
-   "d": "對手 11/20 撿了 Kyle Kuzma(DTD,預計 11/21 回歸)換掉 Thybulle,週六、週日出賽人數都比我多;Edwards 要到 12/21。我週六只有 4 人有比賽,Maxey 預計 11/21 回歸,記得確認他週六在先發。"
+   "t": "Boozer 本週剩下兩天都不能打",
+   "d": "Boozer 預計 11/23 才回歸,週六、週日的 PF 要靠其他人補。對手 Edwards 長期缺陣、Jalen Smith 也要到 11/22,但對手週末可上場人數仍比我多,這也是今天一定要把最後一次額度用掉的原因。"
   }
  ],
  "autoAsof": "2026/11/21 16:34:17",
@@ -3604,7 +3596,7 @@
   "oppScore": 989
  },
  "handAsof": {
-  "todo": "2026-11-20",
-  "threads": "2026-11-20"
+  "todo": "2026-11-21",
+  "threads": "2026-11-21"
  }
 }
