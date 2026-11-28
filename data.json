@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-27 16:48(台北時間)",
+ "asof": "2026-11-28 16:49(台北時間)",
  "league": {
   "note": "戰績、總得分取自 ESPN。球員數字是『今年/近 7 場/去年』的 fantasy 平均。點隊名可展開陣容,每位球員的評語是依這些數字自動整理(今年對去年、近 7 場趨勢、傷病),球隊整體判斷是我寫的。只有 4 場比賽的樣本,參考就好。",
   "you": [
@@ -2434,8 +2434,48 @@
   ]
  ],
  "threads": {
-  "note": "未登入只看得到各帳號個人頁最新幾篇;范特西慕斯 11/15 之後沒有新貼文。",
+  "note": "未登入只看得到各帳號個人頁最新幾篇;范特西慕斯 11/15 之後、NBA Fantasy Bible 11/25 之後沒有新貼文。",
   "accounts": [
+   {
+    "handle": "@fantasy_baskets_",
+    "label": "范特西籃球",
+    "post": "/@fantasy_baskets_/post/DgR0cWvmsu-",
+    "age": "11/28",
+    "time": "2026-11-28T08:24:39.000Z",
+    "sum": "11/28 爆胎組:Maxey 3 投 13 中、Okongwu 三分 7 投全失,Garland 8 失誤、PG 6 失誤。"
+   },
+   {
+    "handle": "@fantasy_baskets_",
+    "label": "范特西籃球",
+    "post": "/@fantasy_baskets_/post/DgRzyAqGh7Y",
+    "age": "11/28",
+    "time": "2026-11-28T08:18:52.000Z",
+    "sum": "11/28 爆發組:Flagg 5 抄 4 鍋、Quickley 24 分 10 板 14 助大三元、Murray 36 分、Murphy 6 抄。"
+   },
+   {
+    "handle": "@w.g_balls",
+    "label": "微尬.Balls",
+    "post": "/@w.g_balls/post/DgRsC8qE95S",
+    "age": "11/28",
+    "time": "2026-11-28T07:11:17.000Z",
+    "sum": "11/28 爆走榜:Murray 36 分領銜,Flagg、Barnes 各 34 分,Booker、Luka 也有 31 分。"
+   },
+   {
+    "handle": "@w.g_balls",
+    "label": "微尬.Balls",
+    "post": "/@w.g_balls/post/DgRsDZck4pY",
+    "age": "11/28",
+    "time": "2026-11-28T07:11:20.000Z",
+    "sum": "續篇:Quickley 大三元、Giannis 22 分 23 板、Tatum 20 分 9 板 5 抄。"
+   },
+   {
+    "handle": "@w.g_balls",
+    "label": "微尬.Balls",
+    "post": "/@w.g_balls/post/DgRsD76kzQi",
+    "age": "11/28",
+    "time": "2026-11-28T07:11:25.000Z",
+    "sum": "11/28 爆胎榜:Maxey、Siakam、Kuzma、Okongwu 命中率都很差,Paul George 6 失誤。"
+   },
    {
     "handle": "@emilyca95112",
     "label": "灣區小市民",
@@ -2454,47 +2494,15 @@
    },
    {
     "handle": "@fantasytaiwanbaseball",
-    "label": "台灣 fantasy 漲跌幅",
+    "label": "fantasytaiwan",
     "post": "/@fantasytaiwanbaseball/post/DgNQ3C3DxOO",
     "age": "11/26",
     "time": "2026-11-26T13:56:46.000Z",
     "sum": "拿快 42 歲還打出大三元的 LeBron 對比表現平平的 McCain。"
    },
    {
-    "handle": "@fantasy_baskets_",
-    "label": "范特西籃球",
-    "post": "/@fantasy_baskets_/post/DgMnhYNmt4K",
-    "age": "11/26",
-    "time": "2026-11-26T07:55:32.000Z",
-    "sum": "推 Jaden McDaniels:命中率好、失誤少、各項都能補,而且入手價便宜。"
-   },
-   {
-    "handle": "@fantasy_baskets_",
-    "label": "范特西籃球",
-    "post": "/@fantasy_baskets_/post/DgMh2OHGoGF",
-    "age": "11/26",
-    "time": "2026-11-26T07:05:57.000Z",
-    "sum": "11/26 爆發組:Wembanyama 44 分 16 板、McDaniels 連兩場 30+ 零失誤、Caruso 刷出 6 個抄阻。"
-   },
-   {
-    "handle": "@w.g_balls",
-    "label": "爆走爆胎",
-    "post": "/@w.g_balls/post/DgMfoNFkwDX",
-    "age": "11/26",
-    "time": "2026-11-26T06:46:34.000Z",
-    "sum": "11/26 爆走榜:Wembanyama、McDaniels、Sabonis 領銜,Giannis 復出 32 分 14 板,Maxey 30 分。"
-   },
-   {
-    "handle": "@w.g_balls",
-    "label": "爆走爆胎",
-    "post": "/@w.g_balls/post/DgMfoNwEw01",
-    "age": "11/26",
-    "time": "2026-11-26T06:46:34.000Z",
-    "sum": "11/26 爆胎榜:Klay、Jaylen Brown、Derrick Jones Jr.、Miles Bridges 命中率都很差。"
-   },
-   {
     "handle": "@fantasytaiwanbaseball",
-    "label": "台灣 fantasy 漲跌幅",
+    "label": "fantasytaiwan",
     "post": "/@fantasytaiwanbaseball/post/DgK_Pp6j6Rr",
     "age": "11/26",
     "time": "2026-11-25T16:44:21.000Z",
@@ -2502,7 +2510,7 @@
    },
    {
     "handle": "@nbafantasybible",
-    "label": "Yahoo 熱門加入/丟棄",
+    "label": "NBA Fantasy Bible",
     "post": "/@nbafantasybible/post/DgKxhIMlcYi",
     "age": "11/25",
     "time": "2026-11-25T14:44:26.000Z",
@@ -2510,7 +2518,7 @@
    },
    {
     "handle": "@nbafantasybible",
-    "label": "Yahoo 熱門加入/丟棄",
+    "label": "NBA Fantasy Bible",
     "post": "/@nbafantasybible/post/DgKxlpkEnMT",
     "age": "11/25",
     "time": "2026-11-25T14:45:04.000Z",
@@ -2518,7 +2526,7 @@
    },
    {
     "handle": "@nbafantasybible",
-    "label": "Yahoo 熱門加入/丟棄",
+    "label": "NBA Fantasy Bible",
     "post": "/@nbafantasybible/post/DgGmm5bkfX_",
     "age": "11/24",
     "time": "2026-11-23T23:52:07.000Z",
@@ -2539,14 +2547,6 @@
     "age": "11/23",
     "time": "2026-11-23T06:37:01.000Z",
     "sum": "續篇:Kawhi 左膝至少再缺一週、Mobley 連缺 5 場、McCollum 4 週後才重新評估。"
-   },
-   {
-    "handle": "@w.g_balls",
-    "label": "爆走爆胎",
-    "post": "/@w.g_balls/post/DgCT5oCE7Tb",
-    "age": "11/22",
-    "time": "2026-11-22T07:51:41.000Z",
-    "sum": "W6 場次表:台灣時間週五感恩節休兵;MIL、PHI、POR 等 9 隊打 4 場,ATL、DAL、WAS 只有 2 場。"
    },
    {
     "handle": "@fantasy.moose",
@@ -3645,24 +3645,19 @@
  ],
  "todo": [
   {
-   "lv": "建議",
-   "t": "要多吃場次只能動 KPJ 這格,換 Burries/Bassey 不會多出場次",
-   "d": "Boozer(12/21)、Cade(11/29)、Morant(12/1)都在缺,先發格有空洞;丟 Burries 或 Bassey 換人只是同一格換人,多不了出賽數。真正能多出場次的是還沒出賽的 Kevin Porter Jr.。落後幅度見本週局勢:覺得追得到,就拿 KPJ 換本週剩 2 場、加了立刻生效的 Slawson(Haliburton 缺陣受益);覺得追不到,就保留 KPJ 的長線上限,額度留到下週。"
+   "lv": "先做",
+   "t": "週六打完後把 Burries 換成週日有比賽的人",
+   "d": "週日我方健康有比賽的只有 7 人(Cade、KPJ 回不回得來還要看賽前名單),先發一定有空格。Burries 的 MIL 週六有打、週日沒比賽,打完週六再丟最划算,換一個週日有比賽的非 C 自由球員,例如 Collin Gillespie(PHX 週日有比賽,下週還有 3 場)。C 已經 4 人,Nurkic、Vucevic 這類 C 只能換掉 C。本週還能加 4 次,額度不會累積到下週,落後幅度見本週局勢。"
   },
   {
    "lv": "留意",
-   "t": "Giannis 已回歸,對手週末人數不一定縮水",
-   "d": "傷兵表還標 Giannis DTD,但他 11/26 已經上場拿 32 分 14 板。對手剩下的 Anunoby、LaVine、Duren 要看賽前名單,別把對手缺人算進追分本錢。"
-  },
-  {
-   "lv": "建議",
-   "t": "11/29 Cade、Mobley 回歸時重排先發",
-   "d": "Mobley 回來就把 Boozer 移進 IR;Cade 從板凳排回先發。兩人回來後要有人下先發,在 Burries 和 Bassey 之間挑,Bassey 近 7 天 36.3 比較熱,先讓 Burries 下來。"
+   "t": "Vucevic 本季平均很低,加之前先確認狀況",
+   "d": "增補首選 Vucevic 有 2 場,但本季平均只有 10.1,近 7 場 24、上季 32,差距很大,可能是剛傷癒或上場時間還在拉。若要用他換 Bassey,先看週六的上場時間;Bassey 週日 GS 也有比賽,換了只是同一格換人。"
   },
   {
    "lv": "留意",
-   "t": "下週一二背靠背多,額度可以留到下週用",
-   "d": "W7 週一二背靠背有 BOS、DEN、DET、LAL 等隊,我方 Tatum、Murray、Cade、Kessler 都吃得到。下週增補名單上有 Slawson、Gillespie、Buzelis,本週沒用完的判斷可以順延。"
+   "t": "對手週末在洗場次,傷兵只有 Duren 確定缺週日",
+   "d": "對手 11/28 一口氣撿了 Buddy Hield、Jalen Green,週日有 10 人有比賽。Anunoby、LaVine 都標 11/29 回歸,只有 Duren 預計 11/30 才回來,別把對手缺人算進追分本錢。"
   }
  ],
  "autoAsof": "2026/11/28 16:46:36",
@@ -3675,7 +3670,7 @@
   "oppScore": 1010
  },
  "handAsof": {
-  "todo": "2026-11-27",
-  "threads": "2026-11-27"
+  "todo": "2026-11-28",
+  "threads": "2026-11-28"
  }
 }
